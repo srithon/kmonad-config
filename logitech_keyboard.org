@@ -214,10 +214,12 @@ Also, if we hold the key for more than 2 seconds, treat it like we are holding t
   I compiled ~rofi~ from source and put it in ~~/.local/bin~ because the RPM version was too slow for my taste
   Some of the flags are also there for optimization reasons: ~-modi~, ~-noplugins~ and ~--normal-window~
   I noticed that the startup animation was faster with ~--normal-window~, and the other 2 flags stop ~rofi~ from doing unnecessary work
+- [[(discord)]]
+  This command uses ~wmctrl~ to switch to a currently-existing Discord window, and if it fails opens a new instance of Discord
 #+begin_src kbd -r
 (defalias
-  dsc d ;; TODO discord
   win (cmd-button "~/.local/bin/rofi -noplugins -modi window -show window -lines 5 --normal-window") ;; window switcher - layer? (ref:window-switcher)
+  dsc (cmd-button "wmctrl -a discord || /usr/bin/Discord") ;; (ref:discord)
   bri b ;; TODO brightness
   vol v ;; TODO volume layer
   trm t ;; TODO terminal scratchpads
