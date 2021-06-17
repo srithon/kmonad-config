@@ -1,6 +1,124 @@
 #+TITLE: Logitech Keyboard Configuration
 #+PROPERTY: header-args :tangle yes
 
+* Super Keybindings
+I want to be able to use Super like a leader key when tapped
+Each headline represents a key to be pressed after tapping Super
+** Q :: Window Switcher
+Launches the window switcher
+** D :: Discord
+Opens Discord
+** B :: Brightness
+Opens ~BrightnessControl~ GUI *OR* initiates ~BrightnessControl~ layer, where we can manipulate brightness with ~hjkl~
+Also look into [[https://github.com/maoserr/redshiftgui][redshiftgui]] to see if we can use this instead. I left it alone because building it requires a library that isn't in the Fedora repos called "[[https://sourceforge.net/projects/iup/files/3.30/Linux%20Libraries/][IUP]]"
+*** BrightnessControl Layer
+**** H
+Rotate active monitor to the left
+**** L
+Rotate active monitor to the right
+**** K
+Brightness Up
+**** J
+Brightness Down
+**** Esc | Super
+Exit layer
+** V :: Volume
+Opens volume manager
+*** Volume Layer
+**** H
+Rotate current output left
+**** J
+Rotate current output right
+**** K
+Volume up by 5
+**** L
+Volume down by 5
+** T :: Terminal (Scratchpad)
+Opens terminal scratchpad
+*** Hold
+Opens menu with all of the available scratchpads
+*** Tap
++Opens most recently opened scratchpad+
+We can use ~yakuake~ for this basic functionality
+Instead, dedicate this to the *Terminal Layer*?
+*** Terminal Layer
+**** +Super,+​] :: Next
+Next terminal scratchpad (cycle)
+**** +Super,+​[ :: Previous
+Last terminal scratchpad (cycle)
+**** L :: List
+Show all open scratchpads and prompt for which one to open
+**** V :: Vim
+Create a Vim scratchpad that will be deleted immediately after Vim closes
+** R :: Run
+Run a single command in a small popup window
+
+Have it appear at the top of the screen, and have the window expand down as the output fills
+
+This could be super useful for things like ~remind-in 10m Do something~
+*** Layer
+**** Super, Esc (in sequence)
+Exit layer and close ~run~ window
+**** E
+Make window taller
+*** Notes
+**** Keybindings
+In the spawned window, bind Ctrl+R to resize the window to the necessary length, Esc/Enter to revert the size
+
+After you press enter "for real", hand the scrollback buffer to ~pee resizing_program.sh less~
+Might have to use kitty for this
+**** Window Properties
+Source: https://www.reddit.com/r/kde/comments/d5ne9s/can_you_have_no_titlebar_and_frame_but_keep_the/
+Made a window-specific override for the window class "st-runner" that disabled the title bar
+This lets us havae the nice shadow but without the title bar
+** P :: Prompt
+Opens prompt to open ~rofi~ and launch custom actions by typing
+*** thyme
+Opens ~rofi~ with list of ~thyme~ files
+Choose a date and then view the breakdown for that date
+*** incognito
+Turns on VPN
+Disables ~thyme~
+
+If called a second time, disables both of these
+** A :: Agenda
+Opens agenda
+** O :: Open Preset
+*** Tap
+Gives you preset-local shortcuts
+
+Automatically show help for it (this is hard to memorize)
+Emacs ~which-key~ style help
+*** Hold
+Opens ~rofi~ with list of available "presets"
+
+If currently in a preset, exit the preset
+Currently loaded presets should be at the top!
+If you select a preset while another is currently active, disable the old preset
+
+Add support for virtual-desktop-local presets in the future
+*** Presets
+**** leetcode
+***** Left Monitor
+1. Open fullscreen terminal
+2. ~cd ~/Development/leetcode/problems~
+***** Right Monitor
++1. Open firefox+
++2. Navigate to [[https://www.teamblind.com/post/New-Year-Gift---Curated-List-of-Top-75-LeetCode-Questions-to-Save-Your-Time-OaM1orEU][New Year Gift - Curated List of Top 75 LeetCode Questions to Save Your Time]]+
++3.+
+0. Open firefox?
+   This would be so that when you press enter in emacs, it would open the link in the right firefox window
+1. Open ~emacs~
+2. Navigate to "problems.org"
+3. Select a problem
+4. When you press enter, open the link in our firefox window and then close emacs
+***** Preset-Local Shortcuts
+****** O :: Open Problem List
+Opens the ~emacs~ window once again and loops from step #1
+** \ :: Local Leader Key
+Use this in conjunction with presets to have local preset keybindings
+** Super :: Super
+Acts as a regular press of Super (hands it to KDE)
 * Layer Templates
 #+PROPERTY: header-args :tangle no
 ** Passthrough
