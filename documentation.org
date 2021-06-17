@@ -219,7 +219,7 @@ upon. However, for now, these 4 are a good place to begin:
    Finally, it is important to note that the *first* `deflayer` statement in a
    KMonad config will be the layer that is active when KMonad starts up.
 ** Examples
-#+begin_src kbd
+#+begin_example kbd
 (deflayer numbers
   _    _    _    _    _    _    _    _    _    _    _    _    _    _
   _    _    _    _    _    XX   /    7    8    9    -    _    _    _
@@ -236,7 +236,7 @@ upon. However, for now, these 4 are a good place to begin:
   _    _    _              _              _    _    _                    _   _
   _
   )
-#+end_src
+#+end_example
 * Buttons with Modifiers
 Optional: modded buttons
 
@@ -289,7 +289,7 @@ Also, note that although we provide special syntax for certain modifiers,
 these buttons are in no way 'special' in KMonad. There is no concept of 'modifier'.
 (around a (around b c)) ;; Perfectly valid
 ** Examples
-#+begin_src kbd
+#+begin_example kbd
 cpy C-c
 pst C-v
 cut C-x
@@ -299,7 +299,7 @@ md1 (around a (around b c))    ;; abc
 md2 (around a (around lsft b)) ;; aB
 md3 C-A-M-S-l
 md4 (around % b)               ;; BEWARE: %B, not %b, do you see why?
-#+end_src
+#+end_example
 
 Now we define the 'tst' button as opening and closing a bunch of layers at
 the same time. If you understand why this works, you're starting to grok
@@ -314,7 +314,7 @@ it to `rctl`), any button we press when holding `rctl` will be pressed in the
 context of those 4 layers overlayed on the stack. When we release `rctl`, all
 these layers will be popped again.
 
-#+begin_src kbd
+#+begin_example kbd
 (defalias tst (around (layer-toggle macro-test)
                       (around (layer-toggle layer-test)
                               (around (layer-toggle around-next-test)
@@ -328,7 +328,7 @@ these layers will be popped again.
   _    _    @cut @cpy @pst _    _    _    _    _    _    _
   _    _    _              _              _    _    _    _
   )
-#+end_src
+#+end_example
 
 * Sticky Keys
 Optional: sticky keys
@@ -357,11 +357,11 @@ ssc (around
 (sticky-key 500 lctl)))
 ** Examples
 Let's make both shift keys sticky
-#+begin_src kbd
+#+begin_example kbd
 (defalias
   sl (sticky-key 300 lsft)
   sr (sticky-key 300 rsft))
-#+end_src
+#+end_example
 * Tap Macros
 Optional: tap-macros
 
@@ -411,7 +411,7 @@ huge risks:
 
    This concludes this public service announcement.
 ** Examples
-#+begin_src kbd
+#+begin_example kbd
 (defalias
   mc1 #(K M o n a d)
   mc2 #(C-c P50 A-tab P50 C-v) ;; Careful, this might do something
@@ -427,7 +427,7 @@ huge risks:
   _    _    _    _    _    _    _    _    _    _    _    _
   _    _    _              _              _    _    _    _
   )
-#+end_src
+#+end_example
 * Layer Manipulation
 Optional: layer manipulation
 
@@ -504,7 +504,7 @@ them from safest to least safe:
    permanent overlay for a while. This technique is illustrated in the tap-hold
    overlay a bit further down.
 ** Examples
-#+begin_src kbd
+#+begin_example kbd
 (defalias
   yah (layer-toggle asking-for-trouble) ;; Completely safe
   nah (layer-add asking-for-trouble)    ;; Completely unsafe
@@ -555,7 +555,7 @@ them from safest to least safe:
   add (layer-add multi-overlay) ;; multi-overlay is defined in the next
   rem (layer-rem multi-overlay) ;; section below this
   )
-#+end_src
+#+end_example
 * Multi-use Buttons
 Optional: Multi-use buttons
 
@@ -648,7 +648,7 @@ between scenarios.
   complicated, probably is the most comfortable to use. But I've put all of them
   in a testing layer down below, so give them a go and see what is nice.
 ** Examples
-#+begin_src kbd
+#+begin_example kbd
 (defalias
   xtn (tap-next x lsft)         ;; Shift that does 'x' on tap
   xth (tap-hold 400 x lsft)     ;; Long delay for easier testing
@@ -668,7 +668,7 @@ between scenarios.
   @xtn _    _    _    _    _    _    _    _    _    _    @xth
   @tnr _    _              _              _    _    _    @tnh
   )
-#+end_src
+#+end_example
 * Multi-tap
 Optional: Multi-tap
 
@@ -685,10 +685,10 @@ immediately pressed.
 Note that you can actually hold the button, so in the below example, going:
 tap-tap-hold (wait 300ms) will get you a pressed c, until you release again.
 ** Examples
-#+begin_src kbd
+#+begin_example kbd
 (defalias
   mt  (multi-tap 300 a 300 b 300 c 300 d e))
-#+end_src
+#+end_example
 * Around-next
 Optional: Around-next
 
@@ -700,7 +700,7 @@ pressed'. It is a more general and powerful version of `layer-next`.
 I think expansion of this button-style is probably the future of leader-key,
 hydra-style functionality support in KMonad.
 ** Examples
-#+begin_src kbd
+#+begin_example kbd
 (defalias
   ns  (around-next sft)  ;; Shift the next press
   nnm (around-next @num) ;; Perform next press in numbers layer
@@ -715,7 +715,7 @@ hydra-style functionality support in KMonad.
   @nnm _    _    _    _    _    _    _    _    _    _    _
   @ns  _    _              _              _    _    _    _
   )
-#+end_src
+#+end_example
 * Compose Key Sequences
 Optional: Compose-key sequences
 
@@ -754,7 +754,7 @@ shell-command that will:
    press some letter to add this umlaut to. These are created using the `+"`
    syntax.
 **  Examples
-#+begin_src kbd
+#+begin_example kbd
 (defalias
   sym (layer-toggle symbols)
   )
@@ -765,7 +765,7 @@ shell-command that will:
   _    +'   +~   +`   +^   _    _    _    _    _    _    _    _
   _    +"   _    _    _    _    _    _    _    _    _    _
   _    _    _              _              _    _    _    _)
-#+end_src
+#+end_example
 * Command Buttons
 Optional: Command buttons
 
@@ -785,7 +785,7 @@ want to push:
 
 (cmd-button "rm -rf ~/*") ;; Delete all this user's data
 
-#+begin_src kbd
+#+begin_example kbd
 (defalias
   dat (cmd-button "date >> /tmp/kmonad_example.txt")   ;; Append date to tmpfile
   pth (cmd-button "echo $PATH > /tmp/kmonad_path.txt") ;; Write out PATH
@@ -801,4 +801,4 @@ want to push:
   _    _    _    _    _    _    _    _    _    @dat @pth _
   _    _    _              _              _    _    _    _
   )
-#+end_src
+#+end_example
