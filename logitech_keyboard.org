@@ -193,6 +193,11 @@ If we release @ldr /before/ the next key, we treat the keypress as a *tap*, even
 If we release @ldr /after/ the next key, we treat it as holding
 
 Also, if we hold the key for more than 2 seconds, treat it like we are holding the key
+#+begin_src kbd
+(defalias
+  ldr (tap-hold-next-release 2000 (around-next (layer-toggle leader)) lmet)
+  )
+#+end_src
 
 #+begin_src kbd
 (deflayer qwerty
@@ -200,7 +205,33 @@ Also, if we hold the key for more than 2 seconds, treat it like we are holding t
   tab  q    w    e    r    t    y    u    i    o    p    [    ]    \
   caps a    s    d    f    g    h    j    k    l    ;    '    ret
   lsft z    x    c    v    b    n    m    ,    .    /    rsft               up
-  lctl lmet lalt           spc            ralt rctl                     lft rght
+  lctl @ldr lalt           spc            ralt rctl                     lft rght
                                                                           down
+  )
+#+end_src
+* Base Leader Key
+#+begin_src kbd
+(defalias
+  win q ;; TODO window switcher
+  dsc d ;; TODO discord
+  bri b ;; TODO brightness
+  vol v ;; TODO volume layer
+  trm t ;; TODO terminal scratchpads
+  run r ;; TODO run layer
+  pro p ;; TODO prompt
+  age a ;; TODO agenda
+  pre o ;; TODO open preset
+  lld \\ ;; TODO local leader key
+  )
+#+end_src
+
+#+begin_src kbd
+(deflayer leader
+  XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX
+  XX   @win XX   XX   @run XX   XX   XX   XX   XX   @pro XX   XX   XX
+  XX   @age XX   @dsc XX   XX   XX   XX   XX   XX   XX   XX   XX
+  XX   XX   XX   XX   @vol @bri XX   XX   XX   XX   XX   XX                 XX
+  XX   lmet XX             XX             XX   XX                        XX  XX
+                                                                           XX
   )
 #+end_src
