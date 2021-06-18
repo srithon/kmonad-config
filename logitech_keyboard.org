@@ -217,7 +217,7 @@ Also, if we hold the key for more than 2 seconds, treat it like we are holding t
   bri b ;; (ref:brightness)
   vol v ;; (ref:volume)
   trm t ;; (ref:terminal)
-  run r ;; (ref:run)
+  run enter-run ;; (ref:run)
   pro p ;; (ref:prompt)
   age a ;; (ref:agenda)
   pre o ;; (ref:open-preset)
@@ -258,7 +258,41 @@ This command uses ~wmctrl~ to switch to a currently-existing Discord window, and
 ** TODO [[(brightness)][Brightness]]
 ** TODO [[(volume)][Volume]]
 ** TODO [[(terminal)][Terminal]]
-** TODO [[(run)][Run]]
+** [[(run)][Run]]
+We use tap macros to execute the "buttons" in sequence
+To enter the run mode, we execute the ~runner~ script and then enter the ~run~ layer
+We can do this because the leader layer only lasts for one keypress
+When the run layer is added, the layer beneath it is qwerty
+
+To exit the run mode, we remove the ~run~ layer and then kill all instances of ~st~: the terminal we are using for the runner (and nothing else)
+#+begin_src kbd
+(defalias
+  enter-run #((cmd-button "~/.local/bin/runner") (layer-add run))
+  exit-run #((layer-rem run) (cmd-button "killall st"))
+  )
+#+end_src
+
+We named it like this to avoid conflicts with other aliases
+#+begin_src kbd
+(defalias
+  r_e exit-run ;; exit run layer; stands for run_exit
+  )
+#+end_src
+
+#+begin_src kbd
+(deflayer run
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _    _    _    _    _    _    _    _    _    _                  _
+  _    @r_e _              _              _    _                         _   _
+                                                                           _
+  )
+#+end_src
+*** TODO Cleanup exit command
+Right now, we are doing ~killall st~, which only does what we want because we do not use ~st~ for anything else
+We should aim for a more robust solution
+*** TODO Reuse the ~runner~ terminal and shell between invocations
 ** TODO [[(prompt)][Prompt]]
 ** TODO [[(agenda)][Agenda]]
 ** TODO [[(open-preset)][Open Preset]]
