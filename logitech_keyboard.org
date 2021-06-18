@@ -209,7 +209,7 @@ Also, if we hold the key for more than 2 seconds, treat it like we are holding t
                                                                           down
   )
 #+end_src
-* Base Leader Key
+* Base Leader Key Layer
 #+begin_src kbd -r
 (defalias
   win window-switcher ;; (ref:window-switcher)
@@ -235,7 +235,7 @@ Also, if we hold the key for more than 2 seconds, treat it like we are holding t
                                                                            XX
   )
 #+end_src
-** [[(window-switcher)][Window Switcher]]
+* [[(window-switcher)][Window Switcher]]
 Opens the Window Switcher
 
 #+begin_src kbd
@@ -247,7 +247,7 @@ Opens the Window Switcher
 I compiled ~rofi~ from source and put it in ~~/.local/bin~ because the RPM version was too slow for my taste
 Some of the flags are also there for optimization reasons: ~-modi~, ~-noplugins~ and ~--normal-window~
 I noticed that the startup animation was faster with ~--normal-window~, and the other 2 flags stop ~rofi~ from doing unnecessary work
-** [[(discord)][Discord]]
+* [[(discord)][Discord]]
 This command uses ~wmctrl~ to switch to a currently-existing Discord window, and if it fails opens a new instance of Discord
 
 #+begin_src kbd
@@ -255,10 +255,10 @@ This command uses ~wmctrl~ to switch to a currently-existing Discord window, and
   discord (cmd-button "wmctrl -a discord || /usr/bin/Discord")
   )
 #+end_src
-** TODO [[(brightness)][Brightness]]
-** TODO [[(volume)][Volume]]
-** TODO [[(terminal)][Terminal]]
-** [[(run)][Run]]
+* TODO [[(brightness)][Brightness]]
+* TODO [[(volume)][Volume]]
+* TODO [[(terminal)][Terminal]]
+* [[(run)][Run]]
 We use tap macros to execute the "buttons" in sequence
 To enter the run mode, we execute the ~runner~ script and then enter the ~run~ layer
 We can do this because the leader layer only lasts for one keypress
@@ -289,11 +289,11 @@ We named it like this to avoid conflicts with other aliases
                                                                            _
   )
 #+end_src
-*** TODO Cleanup exit command
+** TODO Cleanup exit command
 Right now, we are doing ~killall st~, which only does what we want because we do not use ~st~ for anything else
 We should aim for a more robust solution
-*** TODO Reuse the ~runner~ terminal and shell between invocations
-** TODO [[(prompt)][Prompt]]
-** TODO [[(agenda)][Agenda]]
-** TODO [[(open-preset)][Open Preset]]
-** TODO [[(local-leader)][Local Leader]]
+** TODO Reuse the ~runner~ terminal and shell between invocations
+* TODO [[(prompt)][Prompt]]
+* TODO [[(agenda)][Agenda]]
+* TODO [[(open-preset)][Open Preset]]
+* TODO [[(local-leader)][Local Leader]]
