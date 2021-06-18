@@ -210,24 +210,18 @@ Also, if we hold the key for more than 2 seconds, treat it like we are holding t
   )
 #+end_src
 * Base Leader Key
-- [[(window-switcher)]]
-  I compiled ~rofi~ from source and put it in ~~/.local/bin~ because the RPM version was too slow for my taste
-  Some of the flags are also there for optimization reasons: ~-modi~, ~-noplugins~ and ~--normal-window~
-  I noticed that the startup animation was faster with ~--normal-window~, and the other 2 flags stop ~rofi~ from doing unnecessary work
-- [[(discord)]]
-  This command uses ~wmctrl~ to switch to a currently-existing Discord window, and if it fails opens a new instance of Discord
 #+begin_src kbd -r
 (defalias
-  win (cmd-button "~/.local/bin/rofi -noplugins -modi window -show window -lines 5 --normal-window") ;; window switcher - layer? (ref:window-switcher)
+  win (cmd-button "~/.local/bin/rofi -noplugins -modi window -show window -lines 5 --normal-window") ;; (ref:window-switcher)
   dsc (cmd-button "wmctrl -a discord || /usr/bin/Discord") ;; (ref:discord)
-  bri b ;; TODO brightness
-  vol v ;; TODO volume layer
-  trm t ;; TODO terminal scratchpads
-  run r ;; TODO run layer
-  pro p ;; TODO prompt
-  age a ;; TODO agenda
-  pre o ;; TODO open preset
-  lld \\ ;; TODO local leader key
+  bri b ;; (ref:brightness)
+  vol v ;; (ref:volume)
+  trm t ;; (ref:terminal)
+  run r ;; (ref:run)
+  pro p ;; (ref:prompt)
+  age a ;; (ref:agenda)
+  pre o ;; (ref:open-preset)
+  lld \\ ;; (ref:local-leader)
   )
 #+end_src
 
@@ -241,3 +235,17 @@ Also, if we hold the key for more than 2 seconds, treat it like we are holding t
                                                                            XX
   )
 #+end_src
+** [[(window-switcher)][Window Switcher]]
+  I compiled ~rofi~ from source and put it in ~~/.local/bin~ because the RPM version was too slow for my taste
+  Some of the flags are also there for optimization reasons: ~-modi~, ~-noplugins~ and ~--normal-window~
+  I noticed that the startup animation was faster with ~--normal-window~, and the other 2 flags stop ~rofi~ from doing unnecessary work
+** [[(discord)][Discord]]
+  This command uses ~wmctrl~ to switch to a currently-existing Discord window, and if it fails opens a new instance of Discord
+** TODO [[(brightness)][Brightness]]
+** TODO [[(volume)][Volume]]
+** TODO [[(terminal)][Terminal]]
+** TODO [[(run)][Run]]
+** TODO [[(prompt)][Prompt]]
+** TODO [[(agenda)][Agenda]]
+** TODO [[(open-preset)][Open Preset]]
+** TODO [[(local-leader)][Local Leader]]
