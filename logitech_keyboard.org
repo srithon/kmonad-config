@@ -223,9 +223,7 @@ Also, if we hold the key for more than 2 seconds, treat it like we are holding t
   pre o ;; (ref:open-preset)
   lld \\ ;; (ref:local-leader)
   )
-#+end_src
 
-#+begin_src kbd
 (deflayer leader
   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX
   XX   @win XX   XX   @run XX   XX   XX   XX   XX   @pro XX   XX   XX
@@ -285,9 +283,7 @@ We named it like this to avoid conflicts with other aliases
 (defalias
   r_e exit-run ;; exit run layer; stands for run_exit
   )
-#+end_src
 
-#+begin_src kbd
 (deflayer run
   _    _    _    _    _    _    _    _    _    _    _    _    _    _
   _    _    _    _    _    _    _    _    _    _    _    _    _    _
