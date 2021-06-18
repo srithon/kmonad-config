@@ -215,7 +215,7 @@ Also, if we hold the key for more than 2 seconds, treat it like we are holding t
   win window-switcher ;; (ref:window-switcher)
   dsc discord ;; (ref:discord)
   bri b ;; (ref:brightness)
-  vol v ;; (ref:volume)
+  vol volume ;; (ref:volume)
   trm t ;; (ref:terminal)
   run enter-run ;; (ref:run)
   pro p ;; (ref:prompt)
@@ -256,7 +256,14 @@ This command uses ~wmctrl~ to switch to a currently-existing Discord window, and
   )
 #+end_src
 * TODO [[(brightness)][Brightness]]
-* TODO [[(volume)][Volume]]
+* [[(volume)][Volume]]
+#+begin_src kbd
+(defalias
+  volume (cmd-button "/usr/bin/pavucontrol")
+  )
+#+end_src
+** TODO Volume layer
+The volume layer would remap hjkl to control the volume
 * TODO [[(terminal)][Terminal]]
 * [[(run)][Run]]
 We use tap macros to execute the "buttons" in sequence
