@@ -212,8 +212,8 @@ Also, if we hold the key for more than 2 seconds, treat it like we are holding t
 * Base Leader Key
 #+begin_src kbd -r
 (defalias
-  win (cmd-button "~/.local/bin/rofi -noplugins -modi window -show window -lines 5 --normal-window") ;; (ref:window-switcher)
-  dsc (cmd-button "wmctrl -a discord || /usr/bin/Discord") ;; (ref:discord)
+  win window-switcher ;; (ref:window-switcher)
+  dsc discord ;; (ref:discord)
   bri b ;; (ref:brightness)
   vol v ;; (ref:volume)
   trm t ;; (ref:terminal)
@@ -236,11 +236,25 @@ Also, if we hold the key for more than 2 seconds, treat it like we are holding t
   )
 #+end_src
 ** [[(window-switcher)][Window Switcher]]
-  I compiled ~rofi~ from source and put it in ~~/.local/bin~ because the RPM version was too slow for my taste
-  Some of the flags are also there for optimization reasons: ~-modi~, ~-noplugins~ and ~--normal-window~
-  I noticed that the startup animation was faster with ~--normal-window~, and the other 2 flags stop ~rofi~ from doing unnecessary work
+Opens the Window Switcher
+
+#+begin_src kbd
+(defalias
+  window-switcher (cmd-button "~/.local/bin/rofi -noplugins -modi window -show window -lines 5 --normal-window")
+  )
+#+end_src
+
+I compiled ~rofi~ from source and put it in ~~/.local/bin~ because the RPM version was too slow for my taste
+Some of the flags are also there for optimization reasons: ~-modi~, ~-noplugins~ and ~--normal-window~
+I noticed that the startup animation was faster with ~--normal-window~, and the other 2 flags stop ~rofi~ from doing unnecessary work
 ** [[(discord)][Discord]]
-  This command uses ~wmctrl~ to switch to a currently-existing Discord window, and if it fails opens a new instance of Discord
+This command uses ~wmctrl~ to switch to a currently-existing Discord window, and if it fails opens a new instance of Discord
+
+#+begin_src kbd
+(defalias
+  discord (cmd-button "wmctrl -a discord || /usr/bin/Discord")
+  )
+#+end_src
 ** TODO [[(brightness)][Brightness]]
 ** TODO [[(volume)][Volume]]
 ** TODO [[(terminal)][Terminal]]
