@@ -255,6 +255,7 @@ This command uses ~wmctrl~ to switch to a currently-existing Discord window, and
   discord (cmd-button "wmctrl -a discord || /usr/bin/Discord")
   )
 #+end_src
+** TODO Switch back to the previous window when invoked a second time
 * TODO [[(brightness)][Brightness]]
 * [[(volume)][Volume]]
 #+begin_src kbd
