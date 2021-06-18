@@ -298,6 +298,14 @@ Right now, we are doing ~killall st~, which only does what we want because we do
 We should aim for a more robust solution
 ** TODO Reuse the ~runner~ terminal and shell between invocations
 * TODO [[(prompt)][Prompt]]
-* TODO [[(agenda)][Agenda]]
+* [[(agenda)][Agenda]]
+#+begin_src kbd
+(defalias
+  agenda (cmd-button "kitty ~/.local/bin/taskwarrior-tui")
+  )
+#+end_src
+** TODO Open a floating, semi-transparent window
+Instead of a fullscreen, opaque window
+** TODO Maybe switch to org-agenda
 * TODO [[(open-preset)][Open Preset]]
 * TODO [[(local-leader)][Local Leader]]
