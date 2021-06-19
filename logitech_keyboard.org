@@ -280,7 +280,7 @@ When the run layer is added, the layer beneath it is qwerty.
 To exit the run mode, we remove the ~run~ layer and then kill all instances of ~st~: the terminal we are using for the runner (and nothing else).
 #+begin_src kbd
 (defalias
-  enter-run #((cmd-button "~/.local/bin/runner") (layer-add run))
+  enter-run #((cmd-button "~/.config/kmonad/runner/runner.sh") (layer-add run))
   exit-run #((layer-rem run) (cmd-button "killall st"))
   )
 #+end_src
@@ -299,6 +299,57 @@ We named it like this to avoid conflicts with other aliases.
   _    @r_e _              _              _    _                         _   _
                                                                            _
   )
+#+end_src
+** Runner Script
+:PROPERTIES:
+:header-args:sh: :tangle ~/.config/kmonad/runner/runner.sh :mkdirp yes :tangle-mode (identity #o744)
+:END:
+# :tangle-mode sets the unix file permissions for the tangled file
+# we want the owner to be able to read, write and execute the file
+# we are also giving read access to the group and everyone else
+
+Using the ~dash~ shell for speed
+#+begin_src sh
+#!/bin/dash
+#+end_src
+
+Setting environment variables for the ~fish~ process to inherit.
+
+- ~SKIP_FISH_GREETING~
+  This is a custom variable that determines whether a message should display on startup.
+  I set it to 1 because I do not want it to output for the runner.
+- ~STARSHIP_CONFIG~
+ [[https://github.com/starship/starship/][Starship]] is the shell prompt I am using.
+ I want the runner to have a different configuration than my normal shell, so this points to the other config
+
+#+begin_src sh
+export SKIP_FISH_GREETING=1
+export STARSHIP_CONFIG=~/.config/starship_runner.toml
+#+end_src
+
+Sets the working directory back to home
+#+begin_src sh
+cd
+#+end_src
+
+- ~st~
+  ~st~ is the terminal emulator
+  - ~-c "..."~
+    This sets the X11 classnames for the window.
+    My KDE config contains window rules that rounds the corners of windows with the ~rounded~ class and gives transparency and several other properties to the ~st-runner~ class
+  - ~-g ...~
+    This sets the initial window dimensions for the terminal window.
+
+    The format we are using is ~<width>x<height>+<xoffset>+<yoffset>~.
+    I believe everything is in terms of characters, so the width represents 100 characters, and the height represents 8 lines of space.
+    The offset, however, appears to be in pixels.
+
+    See [[https://manpages.debian.org/testing/libx11-doc/XParseGeometry.3.en.html][this link]] for more details
+  - ~/bin/fish~
+    Tells ~st~ to run the ~fish~ shell
+
+#+begin_src sh
+st -c "rounded st-runner" -g 100x8+225+50 /bin/fish
 #+end_src
 ** TODO Cleanup exit command
 Right now, we are doing ~killall st~, which only does what we want because we do not use ~st~ for anything else.
