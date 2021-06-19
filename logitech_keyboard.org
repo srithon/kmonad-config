@@ -210,14 +210,17 @@ Also, if we hold the key for more than 2 seconds, treat it like we are holding t
   )
 #+end_src
 * Base Leader Key Layer
-#+begin_src kbd -r
+When we define aliases to other aliases, they are eagerly evaluated and will throw an error if they are not defined at that point
+We solve this by plugging this code block into [[Leader Key Definitions]], which gets tangled at the very end
+#+NAME: base_leader_key_layer
+#+begin_src kbd -r :tangle no
 (defalias
-  win window-switcher ;; (ref:window-switcher)
-  dsc discord ;; (ref:discord)
+  win @window-switcher ;; (ref:window-switcher)
+  dsc @discord ;; (ref:discord)
   bri b ;; (ref:brightness)
-  vol volume ;; (ref:volume)
+  vol @volume ;; (ref:volume)
   trm t ;; (ref:terminal)
-  run enter-run ;; (ref:run)
+  run @enter-run ;; (ref:run)
   pro p ;; (ref:prompt)
   age a ;; (ref:agenda)
   pre o ;; (ref:open-preset)
@@ -281,7 +284,7 @@ To exit the run mode, we remove the ~run~ layer and then kill all instances of ~
 We named it like this to avoid conflicts with other aliases
 #+begin_src kbd
 (defalias
-  r_e exit-run ;; exit run layer; stands for run_exit
+  r_e @exit-run ;; exit run layer; stands for run_exit
   )
 
 (deflayer run
@@ -309,3 +312,10 @@ Instead of a fullscreen, opaque window
 ** TODO Maybe switch to org-agenda
 * TODO [[(open-preset)][Open Preset]]
 * TODO [[(local-leader)][Local Leader]]
+
+* Leader Key Definitions
+We need to do this in order to get the layer aliases to evaluate /after/ all of the helper aliases are defined
+Otherwise, we get an error saying that the aliases are non-existent
+#+begin_src kbd :noweb strip-export
+<<base_leader_key_layer>>
+#+end_src
