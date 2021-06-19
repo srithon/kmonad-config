@@ -114,6 +114,9 @@ Add support for virtual-desktop-local presets in the future
 ***** Preset-Local Shortcuts
 ****** O :: Open Problem List
 Opens the ~emacs~ window once again and loops from step #1
+** C :: Org-Capure
+Opens org-capture.
+I already have this bound to ~Super+C~, but having it on ~Super, C~ would make it easier to invoke
 ** \ :: Local Leader Key
 Use this in conjunction with presets to have local preset keybindings
 ** Super :: Super
@@ -224,6 +227,7 @@ We solve this by plugging this code block into [[Leader Key Definitions]], which
   pro p ;; (ref:prompt)
   age a ;; (ref:agenda)
   pre o ;; (ref:open-preset)
+  cap @org-capture ;; (ref:org-capture)
   lld \\ ;; (ref:local-leader)
   )
 
@@ -231,7 +235,7 @@ We solve this by plugging this code block into [[Leader Key Definitions]], which
   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX
   XX   @win XX   XX   @run XX   XX   XX   XX   XX   @pro XX   XX   XX
   XX   @age XX   @dsc XX   XX   XX   XX   XX   XX   XX   XX   XX
-  XX   XX   XX   XX   @vol @bri XX   XX   XX   XX   XX   XX                 XX
+  XX   XX   XX   @cap @vol @bri XX   XX   XX   XX   XX   XX                 XX
   XX   lmet XX             XX             XX   XX                        XX  XX
                                                                            XX
   )
@@ -311,6 +315,11 @@ We should aim for a more robust solution
 Instead of a fullscreen, opaque window
 ** TODO Maybe switch to org-agenda
 * TODO [[(open-preset)][Open Preset]]
+* [[(org-capture)][Org Capture]]
+#+begin_src kbd
+(defalias
+  org-capture (cmd-button "~/.local/bin/org-capture"))
+#+end_src
 * TODO [[(local-leader)][Local Leader]]
 
 * Leader Key Definitions
