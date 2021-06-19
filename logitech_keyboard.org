@@ -130,7 +130,7 @@ Acts as a regular press of Super (hands it to KDE)
   _    _    _              _              _    _    _                    _   _
                                                                            _
   )
-#+end_src
+#+end_example
 ** Inclusive
 #+begin_example kbd
 (deflayer layer-name
@@ -141,7 +141,7 @@ Acts as a regular press of Super (hands it to KDE)
   lctl lmet lalt           spc            ralt rctl                     lft rght
                                                                           down
   )
-#+end_src
+#+end_example
 * Configuration
 #+PROPERTY: header-args :tangle yes
 #+begin_src kbd
