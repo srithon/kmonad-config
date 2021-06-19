@@ -1,5 +1,4 @@
 #+TITLE: Logitech Keyboard Configuration
-#+PROPERTY: header-args :tangle yes
 
 * Super Keybindings
 I want to be able to use Super like a leader key when tapped
@@ -144,6 +143,7 @@ Acts as a regular press of Super (hands it to KDE)
   )
 #+end_src
 * Configuration
+#+PROPERTY: header-args :tangle yes
 #+begin_src kbd
 (defcfg
   ;; For Linux
