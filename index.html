@@ -1,0 +1,2281 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2021-06-19 Sat 00:06 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>KMonad</title>
+<meta name="author" content="Sridaran Thoniyil" />
+<meta name="generator" content="Org Mode" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/bigblow_theme/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/bigblow_theme/css/bigblow.css"/>
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/bigblow_theme/css/hideshow.css"/>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/bigblow_theme/js/jquery-1.11.0.min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/bigblow_theme/js/jquery-ui-1.10.2.min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/bigblow_theme/js/jquery.localscroll-min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/bigblow_theme/js/jquery.scrollTo-1.4.3.1-min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/bigblow_theme/js/jquery.zclip.min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/bigblow_theme/js/bigblow.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/bigblow_theme/js/hideshow.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript">
+// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
+<!--/*--><![CDATA[/*><!--*/
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+    /*]]>*///-->
+// @license-end
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">KMonad</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orgbd491a1">1. KMonad Documentation</a>
+<ul>
+<li><a href="#org4dfc808">1.1. Basic Syntax</a></li>
+<li><a href="#org246d807">1.2. defcfg block</a></li>
+<li><a href="#org1ac2523">1.3. defsrc block</a></li>
+<li><a href="#org33f4b5b">1.4. defalias</a></li>
+<li><a href="#org1a6b1b0">1.5. deflayer</a>
+<ul>
+<li><a href="#orgf532453">1.5.1. Examples</a></li>
+</ul>
+</li>
+<li><a href="#orgd181897">1.6. Buttons with Modifiers</a>
+<ul>
+<li><a href="#org66ffdd8">1.6.1. Examples</a></li>
+</ul>
+</li>
+<li><a href="#org7d87925">1.7. Sticky Keys</a>
+<ul>
+<li><a href="#orga874c49">1.7.1. Examples</a></li>
+</ul>
+</li>
+<li><a href="#orge714e14">1.8. Tap Macros</a>
+<ul>
+<li><a href="#org57aa32d">1.8.1. Examples</a></li>
+</ul>
+</li>
+<li><a href="#org5164b2b">1.9. Layer Manipulation</a>
+<ul>
+<li><a href="#org6aec633">1.9.1. Examples</a></li>
+</ul>
+</li>
+<li><a href="#org38a3bbe">1.10. Multi-use Buttons</a>
+<ul>
+<li><a href="#orgc265b45">1.10.1. Examples</a></li>
+</ul>
+</li>
+<li><a href="#orga8ed91d">1.11. Multi-tap</a>
+<ul>
+<li><a href="#org7e77c23">1.11.1. Examples</a></li>
+</ul>
+</li>
+<li><a href="#org2e4dc10">1.12. Around-next</a>
+<ul>
+<li><a href="#orgcc5e640">1.12.1. Examples</a></li>
+</ul>
+</li>
+<li><a href="#org557fade">1.13. Compose Key Sequences</a>
+<ul>
+<li><a href="#orgb0f013a">1.13.1. Examples</a></li>
+</ul>
+</li>
+<li><a href="#org30ebe6a">1.14. Command Buttons</a></li>
+</ul>
+</li>
+<li><a href="#org550860d">2. Configuration</a>
+<ul>
+<li><a href="#orgc39dae6">2.1. Super Keybindings</a>
+<ul>
+<li><a href="#orgb4a0813">2.1.1. Q :: Window Switcher</a></li>
+<li><a href="#org058dc5a">2.1.2. D :: Discord</a></li>
+<li><a href="#orgfc7008b">2.1.3. B :: Brightness</a></li>
+<li><a href="#org1ed4d02">2.1.4. V :: Volume</a></li>
+<li><a href="#orgb35fbb9">2.1.5. T :: Terminal (Scratchpad)</a></li>
+<li><a href="#org5199d2b">2.1.6. R :: Run</a></li>
+<li><a href="#orgf2bbdb1">2.1.7. P :: Prompt</a></li>
+<li><a href="#org1073479">2.1.8. A :: Agenda</a></li>
+<li><a href="#org34b42f3">2.1.9. O :: Open Preset</a></li>
+<li><a href="#org34875a1">2.1.10. \ :: Local Leader Key</a></li>
+<li><a href="#org0891057">2.1.11. Super :: Super</a></li>
+</ul>
+</li>
+<li><a href="#org689f800">2.2. Layer Templates</a>
+<ul>
+<li><a href="#org8d55704">2.2.1. Passthrough</a></li>
+<li><a href="#org91022a3">2.2.2. Inclusive</a></li>
+</ul>
+</li>
+<li><a href="#org27b7d5c">2.3. Configuration</a></li>
+<li><a href="#orgec6ec09">2.4. Source Layer</a></li>
+<li><a href="#org41eae7b">2.5. Default Layer</a></li>
+<li><a href="#org5f49a2a">2.6. Base Leader Key Layer</a></li>
+<li><a href="#orgef76797">2.7. Window Switcher</a></li>
+<li><a href="#orgbc41d2b">2.8. Discord</a>
+<ul>
+<li><a href="#org613af9c">2.8.1. <span class="todo TODO">TODO</span> Switch back to the previous window when invoked a second time</a></li>
+</ul>
+</li>
+<li><a href="#org2a4529b">2.9. <span class="todo TODO">TODO</span> Brightness</a></li>
+<li><a href="#org9cb401b">2.10. Volume</a>
+<ul>
+<li><a href="#org1abccb2">2.10.1. <span class="todo TODO">TODO</span> Volume layer</a></li>
+</ul>
+</li>
+<li><a href="#orge60bbd8">2.11. <span class="todo TODO">TODO</span> Terminal</a></li>
+<li><a href="#org852fa17">2.12. Run</a>
+<ul>
+<li><a href="#orgaacb4f9">2.12.1. <span class="todo TODO">TODO</span> Cleanup exit command</a></li>
+<li><a href="#org0133408">2.12.2. <span class="todo TODO">TODO</span> Reuse the <code>runner</code> terminal and shell between invocations</a></li>
+</ul>
+</li>
+<li><a href="#org7940c9f">2.13. <span class="todo TODO">TODO</span> Prompt</a></li>
+<li><a href="#org551f7cb">2.14. Agenda</a>
+<ul>
+<li><a href="#org894767b">2.14.1. <span class="todo TODO">TODO</span> Open a floating, semi-transparent window</a></li>
+<li><a href="#orga245699">2.14.2. <span class="todo TODO">TODO</span> Maybe switch to org-agenda</a></li>
+</ul>
+</li>
+<li><a href="#org9fe9589">2.15. <span class="todo TODO">TODO</span> Open Preset</a></li>
+<li><a href="#orgff2c0c4">2.16. <span class="todo TODO">TODO</span> Local Leader</a></li>
+<li><a href="#orgee41b54">2.17. Leader Key Definitions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgbd491a1" class="outline-2">
+<h2 id="orgbd491a1"><span class="section-number-2">1</span> KMonad Documentation</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+Documentation was copied from <a href="https://github.com/kmonad/kmonad/blob/master/keymap/tutorial.kbd">tutorial.kbd</a> and adapted for Org mode
+</p>
+</div>
+
+<div id="outline-container-org4dfc808" class="outline-3">
+<h3 id="org4dfc808"><span class="section-number-3">1.1</span> Basic Syntax</h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+KMonad&rsquo;s configuration language is styled on various lisps, like scheme or
+Common Lisp. In a lisp, every statement is entered between &rsquo;(&rsquo; and &rsquo;)&rsquo;s. If
+you are more used to Fortan style languages (python, ruby, C, Java, etc.), the
+change is quite straightforward: the function name moves into the parentheses,
+and you don&rsquo;t use commas to separate arguments. I.e.
+</p>
+
+<p>
+This:     my_function(a, 3, &ldquo;Alakazam&rdquo;)
+Becomes:  (my_function a 3 &ldquo;Alakazam&rdquo;)
+</p>
+
+<p>
+The reason for this is because Lisp-style languages are very easy to parse and
+write syntax-highlighters for.
+</p>
+
+<p>
+We also provide standard Lisp syntax for comments:
+</p>
+<ul class="org-ul">
+<li>block comments between: #| and its reverse</li>
+<li><p>
+line comments following: ;;
+</p>
+
+<p>
+Unlike standard lisp, a single ; does not denote a command, but instead the
+keycode for semicolon.
+</p>
+
+<p>
+Also, as you might have noticed, whitespace is possible anywhere.
+</p>
+
+<p>
+To check for syntax errors while editing, invoke kmonad with the -d option.
+</p></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org246d807" class="outline-3">
+<h3 id="org246d807"><span class="section-number-3">1.2</span> defcfg block</h3>
+<div class="outline-text-3" id="text-1-2">
+<p>
+Necessary: the `defcfg` block
+</p>
+
+<p>
+There are a few bits of information that are required to be present in a
+KMonad configuration file. One of these is the existence of exactly 1 `defcfg`
+statement. This statement is used to customize various configuration settings.
+Many of these settings have default values, but a minimal definition must
+include at least an &rsquo;input&rsquo; field and an &rsquo;output&rsquo; field. These describe how
+KMonad captures its inputs and how it emits its outputs.
+</p>
+
+<p>
+First, let&rsquo;s go over the optional, non-OS specific settings. Currently there is
+only 2:
+</p>
+
+<ul class="org-ul">
+<li><p>
+fallthrough: `true` or `false`, defaults to `false`
+</p>
+
+<p>
+KMonad catches input events and tries to match them to various handlers. If
+it cannot match an event to any handler (for example, if it isn&rsquo;t included
+in the `defsrc` block, or if it is, but the current keymap does not map any
+buttons to it), then the event gets quietly ignored. If `fallthrough` is set
+to `true`, any unhandled events simply get reemitted.
+</p></li>
+
+<li><p>
+allow-cmd: `true` or `false`, defaults to `false`
+</p>
+
+<p>
+If this is set to `false`, any action that runs a shell-command will simply
+log to `stdout` without ever running (log-level info). Don&rsquo;t ever enable
+this on a configuration that you do not trust, because:
+</p>
+
+<p>
+(cmd-button &ldquo;rm -rf ~/*&rdquo;)
+</p>
+
+<p>
+is a thing. For more information on the `cmd-button&rsquo; function, see the
+section on Command buttons below.
+</p>
+
+<p>
+There are also some optional OS specific settings that we support:
+</p>
+
+<ul class="org-ul">
+<li><p>
+`cmp-seq&rsquo;: KEY, defaults to `RightAlt&rsquo; (Linux X11 specific)
+</p>
+
+<p>
+This sets your compose key for Unicode input. For more information, as well
+as a workaround to also make this work on windows, see the section on
+Compose-key sequences below.
+</p></li>
+
+<li><p>
+`cmp-seq-delay&rsquo;: NUMBER (in milliseconds)
+</p>
+
+<p>
+This sets a delay between each pressed key in a compose-key sequence.  Some
+environments may have troubles recognizing the key sequence if it&rsquo;s pressed
+too rapidly; if you experience any problems in this direction, you can try
+setting this value to `5&rsquo; or `10&rsquo; and see if that helps.
+</p></li>
+</ul>
+
+<p>
+Secondly, let&rsquo;s go over how to specify the `input` and `output` fields of a
+`defcfg` block. This differs between OS&rsquo;es, and so do the capabilities of
+these interfaces.
+</p></li>
+</ul>
+</div>
+<ol class="org-ol">
+<li><a id="org2dd74a3"></a>Linux<br />
+<div class="outline-text-5" id="text-1-2-0-1">
+<p>
+In Linux we deal with input by performing an ioctl-grab on a specific
+device-file. This allows us to hook KMonad on the input of exactly 1 keyboard,
+and allows you to run multiple instances of KMonad for different keyboards. We
+make an input using:
+(device-file &ldquo;/dev/input/by-id/my-keyboard-kbd&rdquo;)
+</p>
+
+<p>
+NOTE: Any valid path to a device-file will work, but it is recommended to use
+the &rsquo;by-id&rsquo; directory, since these names will not change if you replug the
+device.
+</p>
+
+<p>
+We deal with output by creating a &rsquo;uinput&rsquo; device. This requires that the
+&rsquo;uinput&rsquo; kernel module is loaded. The easiest way to ensure this is by calling
+&rsquo;sudo modprobe uinput&rsquo;. We create a uinput device using:
+(uinput-sink &ldquo;name&rdquo; &ldquo;optional post-init command&rdquo;)
+</p>
+</div>
+</li>
+
+<li><a id="orge9950a5"></a>Windows<br />
+<div class="outline-text-5" id="text-1-2-0-2">
+<p>
+In Windows we do not get such fine-grained control. We use a low-level
+keyboard hook to intercept all non-injected keyboard events. There is
+currently an open issue to improve the C-bindings used to capture windows
+keyevents, and if you have a better way to approach this issue, help is deeply
+appreciated. You specify a windows input using:
+(low-level-hook)
+</p>
+
+<p>
+Similarly, the output in Windows lacks the fine-grained control. We use the
+SendEvent API to emit key events directly to Windows. Since these are
+&rsquo;artificial&rsquo; events we won&rsquo;t end up catching them again by the
+`low-level-hook`. It is very likely that KMonad does not play well with other
+programs that capture keyboard input like AHK. You specify windows output using:
+(send-event-sink)
+</p>
+</div>
+</li>
+<li><a id="orgcb19282"></a>MacOS<br />
+<div class="outline-text-5" id="text-1-2-0-3">
+<p>
+For Mac questions I suggest filing an issue and tagging @thoelze1, he wrote
+the MacOS API. However, input using:
+(iokit-name &ldquo;optional product string&rdquo;)
+</p>
+
+<p>
+By default this should grab all keyboards, however if a product string is
+provided, KMonad will only capture those devices that match the provided
+product string. If you would like to provide a product string, you can run
+`make; ./list-keyboards&rsquo; in c_src/mac to list the product strings of all
+connected keyboards.
+</p>
+
+<p>
+You initialize output on MacOS using:
+(kext)
+</p>
+</div>
+</li>
+</ol>
+</div>
+<div id="outline-container-org1ac2523" class="outline-3">
+<h3 id="org1ac2523"><span class="section-number-3">1.3</span> defsrc block</h3>
+<div class="outline-text-3" id="text-1-3">
+<p>
+Necessary: the `defsrc` block
+</p>
+
+<p>
+It is difficult to explain the `defsrc` block without immediately going into
+`deflayer` blocks as well. Essentially, KMonad maps input-events to various
+internal actions, many of which generate output events. The `defsrc` block
+explains the layout on which we specify our `deflayer`s down the line.
+</p>
+
+<p>
+It is important to realize that the `defsrc` block doesn&rsquo;t <b>necessarily</b> have
+to coincide with your actual input keyboard. You can specify a full 100%
+`defsrc` block, but only use a 40% keyboard. This will mean that every
+`deflayer` you specify will also have to match your 100% `defsrc`, and that
+your actual keyboard would be physically unable to trigger about 60% of your
+keymap, but it would be perfectly valid syntax.
+</p>
+
+<p>
+The dual of this (and more useful) is that it is also perfectly valid to only
+specify that part of your keyboard in `defsrc` that you want to remap. If you
+use a 100% keyboard, but don&rsquo;t want to remap the numpad at all you can simply
+leave the numpad out of your `defsrc`, and it should work just fine. In that
+particular case you probably want to set `fallthrough` to `true` in your
+`defcfg` block though.
+</p>
+
+<p>
+In the future we would like to provide support for multiple, named `defsrc`
+blocks, so that it becomes easier to specify various layers for just the
+numpad, for example, but at the moment any more or less than 1 `defsrc` block
+will result in an error.
+</p>
+
+<p>
+The layouting in the `defsrc` block is completely free, whitespace simply gets
+ignored. We strive to provide a name for every keycode that is no longer than
+4 characters, so we find that laying out your keymap in columns of 5 works out
+quite nicely (although wider columns will allow for more informative aliases,
+see below).
+</p>
+
+<p>
+Most keycodes should be obvious. If you are unsure, check
+&rsquo;./src/KMonad/Keyboard/Keycode.hs&rsquo;. Every Keycode has a name corresponding to
+its Keycode name, but all lower-case and with the &rsquo;Key&rsquo; prefix removed. There
+are also various aliases for Keycodes starting around line 350. If you are
+trying to bind a key and there is not a 4-letter alias, please file an issue,
+or better yet, a pull-request, and it will be added promptly.
+</p>
+
+<p>
+Also, you can consult &rsquo;./keymap/template/&rsquo; for various input templates to use
+directly or to look up keycodes by position. Here we use the input-template
+for &rsquo;us_ansi_60.kbd&rsquo;
+</p>
+</div>
+</div>
+<div id="outline-container-org33f4b5b" class="outline-3">
+<h3 id="org33f4b5b"><span class="section-number-3">1.4</span> defalias</h3>
+<div class="outline-text-3" id="text-1-4">
+<p>
+Optional : `defalias` statements
+</p>
+
+<p>
+KMonad will let you specify some very specific, crazy buttons. These
+definitions can get pretty long, though, and would make `deflayer` blocks
+nearly impossible to read. Therefore we provide the ability to alias names to
+these buttons, to keep the actual `deflayer` statements orderly.
+</p>
+
+<p>
+A `defalias` can contain any number of aliases, and it can refer backwards or
+forwards to layers without issue. The only sequencing that needs to be kept in
+mind is that a `defalias` cannot refer forward to another `defalias` that is
+not yet defined.
+</p>
+
+<p>
+Here we define a few aliases, but we will define more later. Notice that we
+try to only use 3 letter names for aliases. If that is not enough to be clear,
+consider widening all columns to 6 or 7 characters (or be content with a messy
+config).
+</p>
+</div>
+</div>
+<div id="outline-container-org1a6b1b0" class="outline-3">
+<h3 id="org1a6b1b0"><span class="section-number-3">1.5</span> deflayer</h3>
+<div class="outline-text-3" id="text-1-5">
+<p>
+Necessary: at least 1 `deflayer` block
+</p>
+
+<p>
+As explained in the `defsrc` section, a `deflayer` will define a button for
+each corresponding entry in the `defsrc` definition. A `deflayer` statement
+consists of the `deflayer` keyword, followed by the name used to identify this
+layer, followed by N &rsquo;statements-that-evaluate-to-a-button&rsquo;, where N is
+exactly how many entries are defined in the `defsrc` statement.
+</p>
+
+<p>
+It is also important to mention that the &rsquo;keymap&rsquo; in KMonad is modelled as a
+stack of layers (just like in QMK). When an event is registered we look in the
+top-most layer for a handler. If we don&rsquo;t find one we try the next layer, and
+then the next.
+</p>
+
+<p>
+Exactly what &rsquo;evaluates-to-a-button&rsquo; will be expanded on in more detail below.
+There are very many different specialist buttons in KMonad that we will touch
+upon. However, for now, these 4 are a good place to begin:
+</p>
+
+<ol class="org-ol">
+<li>Any keycode evaluates to a button that, on press, emits the press of that
+keycode, and on release, emits the release of that keycode. Just a &rsquo;normal&rsquo;
+button. The exception is &rsquo;\&rsquo;, which gets used as an escape character. Use
+&rsquo;\\&rsquo; instead. Other characters that need to be escaped to match the literal
+character are &rsquo;(&rsquo;, &rsquo;)&rsquo;, and &rsquo;_&rsquo;.</li>
+
+<li>An @-prefixed name evaluates to an alias lookup. We named two buttons in
+the `defalias` block above, we could now refer to these buttons using
+`@num` and `@kil`. This is also why we only use alias-names no longer than
+3 characters in this tutorial. Also, note that we are already referencing
+some aliases that have not yet been defined, this is not an issue.</li>
+
+<li>The &rsquo;_&rsquo; character evaluates to transparent. I.e. no handler for that
+key-event in this layer, causing this event to be handed down the layer
+stack to perhaps be handled by the next layer.</li>
+
+<li><p>
+The &rsquo;XX&rsquo; character evaluates to blocked. I.e. no action bound to that
+key-event in this layer, but do actually catch event, preventing any
+underlying layer from handling it.
+</p>
+
+<p>
+Finally, it is important to note that the <b>first</b> `deflayer` statement in a
+KMonad config will be the layer that is active when KMonad starts up.
+</p></li>
+</ol>
+</div>
+<div id="outline-container-orgf532453" class="outline-4">
+<h4 id="orgf532453"><span class="section-number-4">1.5.1</span> Examples</h4>
+<div class="outline-text-4" id="text-1-5-1">
+<pre class="example" id="orgcbdd803">
+(deflayer numbers
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _    _    _    XX   /    7    8    9    -    _    _    _
+  _    _    _    _    _    XX   *    4    5    6    +    _    _
+  _    _    \(   \)   .    XX   0    1    2    3    _    _
+  _    _    _              _              _    _    _    _
+  )
+
+(deflayer my-numbers
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    1    2    3    4    5    6    7    8    9    0    _    _    _
+  _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _    _    _    _    _    _    _    _    _    _                  _
+  _    _    _              _              _    _    _                    _   _
+  _
+  )
+
+(defalias
+  num  (layer-toggle numbers) ;; Bind num to a button that switches to a layer
+  kil  C-A-del                ;; Bind kil to a button that Ctrl-Alt-deletes
+)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgd181897" class="outline-3">
+<h3 id="orgd181897"><span class="section-number-3">1.6</span> Buttons with Modifiers</h3>
+<div class="outline-text-3" id="text-1-6">
+<p>
+Optional: modded buttons
+</p>
+
+<p>
+Let&rsquo;s start by exploring the various special buttons that are supported by
+KMonad by looking at &rsquo;modded&rsquo; buttons, that is to say, buttons that activate
+some kind of &rsquo;mod&rsquo;, then perform some button, and finally release that &rsquo;mod&rsquo;
+again.
+</p>
+
+<p>
+We have already seen an example of this style of button, our `kil` button is
+one such button. Let&rsquo;s look at it in more detail:
+C-A-del
+</p>
+
+<p>
+This looks like a simple declarative statement, but it&rsquo;s helpful to realize
+that is simply syntactic sugar around 2 function calls. This statement is
+equivalent to:
+(around ctl (around alt del))
+</p>
+
+<p>
+This highlights a core design principle in KMonad: we try to provide very
+simple buttons, and then we provide rules and functions for combining them
+into new buttons. Although note: still very much a work in progress.
+</p>
+
+<p>
+So, looking at this statement:
+(around foo bar)
+</p>
+
+<p>
+Here, `around` is a function that takes two buttons and creates a new button.
+This new button will, on a press, first press foo, then press bar, and on a
+release first release bar, and then foo. Once created, this new button can be
+passed to anything in KMonad that expects a button.
+</p>
+
+<p>
+We have already seen other examples of modded buttons, \(, \), *, and +. There
+are no Keycodes for these buttons in KMonad, but they are buttons. They simply
+evaluate to `(around lsft x)`. All shifted numbers have their corresponding
+characters, the same is true for all capitals, and &lt; &gt; : ~ &ldquo; | { } &ensp;+ and ?.
+</p>
+
+<p>
+To wrap up &rsquo;modded-buttons&rsquo;, let&rsquo;s look back at C-A-del. We have 8 variants:
+C- : (around lctl X)
+A- : (around lalt X)
+M- : (around lmet X)
+S- : (around lsft X)
+</p>
+
+<p>
+Then RC-, RA-, RM-, and RS- behave exactly the same, except using the
+right-modifier.
+</p>
+
+<p>
+These can be combined however you please:
+C-A-M-S-x          ;; Perfectly valid
+C-%                ;; Perfectly valid: same as C-S-5
+C-RC-RA-A-M-S-RS-m ;; Sure, but why would you?
+</p>
+
+<p>
+Also, note that although we provide special syntax for certain modifiers,
+these buttons are in no way &rsquo;special&rsquo; in KMonad. There is no concept of &rsquo;modifier&rsquo;.
+(around a (around b c)) ;; Perfectly valid
+</p>
+</div>
+<div id="outline-container-org66ffdd8" class="outline-4">
+<h4 id="org66ffdd8"><span class="section-number-4">1.6.1</span> Examples</h4>
+<div class="outline-text-4" id="text-1-6-1">
+<pre class="example" id="org06ea08c">
+cpy C-c
+pst C-v
+cut C-x
+
+;; Something silly
+md1 (around a (around b c))    ;; abc
+md2 (around a (around lsft b)) ;; aB
+md3 C-A-M-S-l
+md4 (around % b)               ;; BEWARE: %B, not %b, do you see why?
+</pre>
+
+<p>
+Now we define the &rsquo;tst&rsquo; button as opening and closing a bunch of layers at
+the same time. If you understand why this works, you&rsquo;re starting to grok
+KMonad.
+</p>
+
+<p>
+Explanation: we define a bunch of testing-layers with buttons to illustrate
+the various options in KMonad. Each of these layers makes sure to have its
+buttons not overlap with the buttons from the other layers, and specifies all
+its other buttons as transparent. When we use the nested `around` statement,
+whenever we push the button linked to &rsquo;@tst&rsquo; (check `qwerty` layer, we bind
+it to `rctl`), any button we press when holding `rctl` will be pressed in the
+context of those 4 layers overlayed on the stack. When we release `rctl`, all
+these layers will be popped again.
+</p>
+
+<pre class="example" id="orgc00c999">
+(defalias tst (around (layer-toggle macro-test)
+                      (around (layer-toggle layer-test)
+                              (around (layer-toggle around-next-test)
+                                      (around (layer-toggle command-test)
+                                              (layer-toggle modded-test))))))
+
+(deflayer modded-test
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    @md4 _    _    _    _    _    _    _    _    _    _    _
+  _    _    @md1 @md2 @md3 _    _    _    _    _    _    _    _
+  _    _    @cut @cpy @pst _    _    _    _    _    _    _
+  _    _    _              _              _    _    _    _
+  )
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org7d87925" class="outline-3">
+<h3 id="org7d87925"><span class="section-number-3">1.7</span> Sticky Keys</h3>
+<div class="outline-text-3" id="text-1-7">
+<p>
+Optional: sticky keys
+</p>
+
+<p>
+KMonad also support so called &ldquo;sticky keys&rdquo;.  These are keys that will
+behave as if they were pressed after just tapping them.  This behaviour
+wears off after the next button is pressed, which makes them ideal for
+things like a quick control or shift.  For example, tapping a sticky and
+then pressing `abc&rsquo; will result in `Abc&rsquo;.
+</p>
+
+<p>
+You can create these keys with the `sticky-key&rsquo; keyword:
+</p>
+
+<p>
+(defalias
+slc (sticky-key 500 lctl))
+</p>
+
+<p>
+The number after `sticky-key&rsquo; is the timeout you want, in milliseconds.  If
+a key is tapped and that time has passed, it won&rsquo;t act like it&rsquo;s pressed
+down when we receive the next keypress.
+</p>
+
+<p>
+It is also possible to combine sticky keys.  For example, to
+get a sticky shift+control you can do
+</p>
+
+<p>
+(defalias
+ssc (around
+(sticky-key 500 lsft)
+(sticky-key 500 lctl)))
+</p>
+</div>
+<div id="outline-container-orga874c49" class="outline-4">
+<h4 id="orga874c49"><span class="section-number-4">1.7.1</span> Examples</h4>
+<div class="outline-text-4" id="text-1-7-1">
+<p>
+Let&rsquo;s make both shift keys sticky
+</p>
+<pre class="example" id="org60bfab2">
+(defalias
+  sl (sticky-key 300 lsft)
+  sr (sticky-key 300 rsft))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orge714e14" class="outline-3">
+<h3 id="orge714e14"><span class="section-number-3">1.8</span> Tap Macros</h3>
+<div class="outline-text-3" id="text-1-8">
+<p>
+Optional: tap-macros
+</p>
+
+<p>
+Let&rsquo;s look at a button we haven&rsquo;t seen yet, tap-macros.
+</p>
+
+<p>
+`tap-macro` is a function that takes an arbitrary number of buttons and
+returns a new button. When this new button is pressed it rapidly taps all its
+stored buttons in quick succesion except for its last button, which it only
+presses. This last button gets released when the `tap-macro` gets released.
+</p>
+
+<p>
+There are two ways to define a `tap-macro`, using the `tap-macro` function
+directly, or through the #() syntactic sugar. Both evaluate to exactly the
+same button.
+</p>
+
+<p>
+(tap-macro K M o n a d)
+#(K M o n a d)
+</p>
+
+<p>
+If you are going to use a `tap-macro` to perform a sequence of actions inside
+some program you probably want to include short pauses between inputs to give
+the program time to register all the key-presses. Therefore we also provide
+the &rsquo;pause&rsquo; function, which simply pauses processing for a certain amount of
+milliseconds. Pauses can be created like this:
+</p>
+
+<p>
+(pause 20)
+P20
+</p>
+
+<p>
+You an also pause between each key stroke by specifying the `:delay&rsquo; keyword,
+as well as a time in ms, at the end of a `tap-macro&rsquo;:
+</p>
+
+<p>
+(tap-macro K M o n a d :delay 5)
+#(K M o n a d :delay 5)
+</p>
+
+<p>
+The above would be equivalent to e.g.
+</p>
+
+<p>
+(tap-macro K P5 M P5 o P5 n P5 a P5 d)
+</p>
+
+<p>
+WARNING: DO NOT STORE YOUR PASSWORDS IN PLAIN TEXT OR IN YOUR KEYBOARD
+</p>
+
+<p>
+I know it might be tempting to store your password as a macro, but there are 2
+huge risks:
+</p>
+<ol class="org-ol">
+<li>You accidentally leak your config and expose your password</li>
+<li><p>
+Anyone who knows about the button can get clear-text representation of your
+password with any text editor, shell, or text-input field.
+</p>
+
+<p>
+Support for triggering shell commands directly from KMonad is described in the
+command buttons section below.
+</p>
+
+<p>
+This concludes this public service announcement.
+</p></li>
+</ol>
+</div>
+<div id="outline-container-org57aa32d" class="outline-4">
+<h4 id="org57aa32d"><span class="section-number-4">1.8.1</span> Examples</h4>
+<div class="outline-text-4" id="text-1-8-1">
+<pre class="example" id="org58451ea">
+(defalias
+  mc1 #(K M o n a d)
+  mc2 #(C-c P50 A-tab P50 C-v) ;; Careful, this might do something
+  mc3 #(P200 h P150 4 P100 &gt; &lt; P50 &gt; &lt; P20 0 r z 1 ! 1 ! !)
+  mc4 (tap-macro a (pause 50) @md2 (pause 50) c)
+  mc5 #(@mc3 spc @mc3 spc @mc3)
+  )
+
+(deflayer macro-test
+  _    @mc1 @mc2 @mc3 @mc4 @mc5 _    _    _    _    _    _    _    _
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _              _              _    _    _    _
+  )
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org5164b2b" class="outline-3">
+<h3 id="org5164b2b"><span class="section-number-3">1.9</span> Layer Manipulation</h3>
+<div class="outline-text-3" id="text-1-9">
+<p>
+Optional: layer manipulation
+</p>
+
+<p>
+You have already seen the basics of layer-manipulation. The `layer-toggle`
+button. This button adds a layer to the top of KMonad&rsquo;s layer stack when
+pressed, and removes it again when released. There are a number of other ways
+to manipulate the layer stack, some safer than others. Let&rsquo;s go through all of
+them from safest to least safe:
+</p>
+
+<p>
+`layer-toggle` works as described before, 2 things to note:
+</p>
+<ol class="org-ol">
+<li>If you are confused or worried about pressing a key, changing layers, and
+then releasing a key and this causing issues: don&rsquo;t be. KMonad handles
+presses and releases in very different ways. Presses get passed directly to
+the stacked keymap as previously described. When a KMonad button has its
+press-action triggered, it then registers a callback that will catch its
+own release before we ever touch the keymap. This guarantees that the
+button triggered by the press of X <b>will be</b> the button whose release is
+triggered by the release of X (the release of X might trigger other things
+as well, but that is besides the point.)</li>
+<li><p>
+If `layer-toggle` can only ever add and then necessarily remove 1 layer
+from the stack, then it will never cause a permanent change, and is
+perfectly safe.
+</p>
+
+<p>
+`layer-delay`, once pressed, temporarily switches to some layer for some
+milliseconds. Just like `layer-toggle` this will never permanently mess-up the
+layer stack. This button was initially implemented to provide some
+&rsquo;leader-key&rsquo; style behavior. Although I think in the future better solutions
+will be available. For now this will temporarily add a layer to the top of the
+stack:
+(layer-delay 500 my-layer)
+</p>
+
+<p>
+`layer-next`, once pressed, primes KMonad to handle the next press from some
+arbitrary layer. This aims to fill the same usecase as `layer-delay`: the
+beginnings of &rsquo;leader-key&rsquo; style behavior. I think this whole button will get
+deleted soon, because the more general `around-next` now exists (see below)
+and this is nothing more than:
+(around-next (layer-toggle layer-name) some-button)
+Until then though, use `layer-next` like this:
+(layer-next layer-name)
+</p>
+
+<p>
+`layer-switch`: change the base-layer of KMonad. As described at the top of
+this document, the first `deflayer` statement is the layer that is active when
+KMonad starts. Since `layer-toggle` can only ever add on and remove from the
+top of that, it can never change the base-layer. The following button will
+unregister the bottom-most layer of the keymap, and replace it with another
+layer.
+(layer-switch my-layer)
+</p>
+
+<p>
+This is where things start getting potentially dangerous (i.e. get KMonad into
+an unusuable state until a restart has occured). It is perfectly possible to
+switch into a layer that you can never get out of. Or worse, you could
+theoretically have a layer full of only `XX`s and switch into that, rendering
+your keyboard unuseable until you somehow manage to kill KMonad (without using
+your keyboard).
+</p>
+
+<p>
+However, when handled well, `layer-switch` is very useful, letting you switch
+between &rsquo;modes&rsquo; for your keyboard. I have a tiny keyboard with a weird keymap,
+but I switch into a simple &rsquo;qwerty&rsquo; keymap shifted 1 button to the right for
+gaming. Just make sure that any &rsquo;mode&rsquo; you switch into has a button that
+allows you to switch back out of the &rsquo;mode&rsquo; (or content yourself restarting
+KMonad somehow).
+</p>
+
+<p>
+`layer-add` and `layer-rem`. This is where you can very quickly cause yourself
+a big headache. Originally I didn&rsquo;t expose these operations, but someone
+wanted to use them, and I am not one to deny someone else a chainsaw. As the
+names might give away:
+(layer-add name) ;; Add a layer to the top of the stack
+(layer-rem name) ;; Remove a layer by name (noop if no such layer)
+</p>
+
+<p>
+To use `layer-add` and `layer-rem` well, you should take a moment to think
+about how to create a layout that will prevent you from getting into
+situations where you enter a key-configuration you cannot get out of again.
+These two operations together, however, are very useful for activating a
+permanent overlay for a while. This technique is illustrated in the tap-hold
+overlay a bit further down.
+</p></li>
+</ol>
+</div>
+<div id="outline-container-org6aec633" class="outline-4">
+<h4 id="org6aec633"><span class="section-number-4">1.9.1</span> Examples</h4>
+<div class="outline-text-4" id="text-1-9-1">
+<pre class="example" id="orga48c946">
+(defalias
+  yah (layer-toggle asking-for-trouble) ;; Completely safe
+  nah (layer-add asking-for-trouble)    ;; Completely unsafe
+
+  ld1 (layer-delay 500 numbers) ;; One way to get a leader-key
+  ld2 (layer-next numbers)      ;; Another way to get a leader key
+
+  ;; NOTE, this is safe because both `qwerty` and `colemak` contain the `@tst`
+  ;; button which will get us to the `layer-test` layer, which itself contains
+  ;; both `@qwe` and `@col`.
+  qwe (layer-switch qwerty) ;; Set qwerty as the base layer
+  col (layer-switch colemak) ;; Set colemak as the base layer
+  )
+
+(deflayer layer-test
+  @qwe _    _    _    _    _    _    _    _    _    _    @add _    @nah
+  @col _    _    _    _    _    _    _    _    _    _    _    _    @yah
+  _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _    _    _    _    _    _    _    @ld1 @ld2 _
+  _    _    _              _              _    _    _    _
+  )
+
+;; Exactly like qwerty, but with the letters switched around
+(deflayer colemak
+  grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
+  tab  q    w    f    p    g    j    l    u    y    ;    [    ]    \
+  @xcp a    r    s    t    d    h    n    e    i    o    '    ret
+  @sl  z    x    c    v    b    k    m    ,    .    /    @sr
+  lctl @num lalt           spc            ralt rmet @sym @tst
+  )
+
+(defalias lol #(: - D))
+
+;; Contrived example
+(deflayer asking-for-trouble
+  @lol @lol @lol @lol @lol @lol @lol @lol @lol @lol @lol @lol @lol @lol
+  @lol @lol @lol @lol @lol @lol @lol @lol @lol @lol @lol @lol @lol @lol
+  @lol @lol @lol @lol @lol @lol @lol @lol @lol @lol @lol @lol @lol
+  @lol @lol @lol @lol @lol @lol @lol @lol @lol @lol @lol @lol
+  @lol @lol @lol           @lol           @lol @lol @lol @lol
+  )
+
+;; One way to safely use layer-add and layer-rem: the button bound to layer-add
+;; is the same button bound to layer-rem in the layer that `add` adds to the
+;; stack. I.e., it becomes impossible to add or remove multiple copies of a
+;; layer.
+(defalias
+  add (layer-add multi-overlay) ;; multi-overlay is defined in the next
+  rem (layer-rem multi-overlay) ;; section below this
+  )
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org38a3bbe" class="outline-3">
+<h3 id="org38a3bbe"><span class="section-number-3">1.10</span> Multi-use Buttons</h3>
+<div class="outline-text-3" id="text-1-10">
+<p>
+Optional: Multi-use buttons
+</p>
+
+<p>
+Perhaps one of the most useful features of KMonad, where a lot of work has
+gone into, but also an area with many buttons that are ever so slightly
+different. The naming and structuring of these buttons might change sometime
+soon, but for now, this is what there is.
+</p>
+
+<p>
+For the next section being able to talk about examples is going to be handy,
+so consider the following scenario and mini-language that will be the same
+between scenarios.
+</p>
+<ul class="org-ul">
+<li>We have some button `foo` that will be different between scenarios</li>
+<li>`foo` is bound to &rsquo;Esc&rsquo; on the input keyboard</li>
+<li>the letters a s d f are bound to themselves</li>
+<li>Px  signifies the press of button x on the keyboard</li>
+<li>Rx  signifies the release of said button</li>
+<li>Tx  signifies the sequential and near instantaneous press and release of x</li>
+<li><p>
+100 signifies 100ms pass
+</p>
+
+<p>
+So for example:
+Tesc Ta:
+tap of &rsquo;Esc&rsquo; (triggering `foo`), tap of &rsquo;a&rsquo; triggering `a`
+Pesc 100 Ta Tb Resc:
+press of &rsquo;Esc&rsquo;, 100ms pause, tap of &rsquo;a&rsquo;, tap of &rsquo;b&rsquo;, release of &rsquo;Esc&rsquo;
+</p>
+
+<p>
+The `tap-next` button takes 2 buttons, one for tapping, one for holding, and
+combines them into a single button. When pressed, if the next event is its own
+release, we tap the &rsquo;tapping&rsquo; button. In all other cases we first press the
+&rsquo;holding&rsquo; button then we handle the event. Then when the `tap-next` gets
+released, we release the &rsquo;holding&rsquo; button.
+</p>
+
+<p>
+So, using our mini-language, we set foo to:
+(tap-next x lsft)
+Then:
+Tesc            -&gt; x
+Tesc Ta         -&gt; xa
+Pesc Ta Resc    -&gt; A
+Pesc Ta Tr Resc -&gt; AR
+</p>
+
+<p>
+The `tap-hold` button is very similar to `tap-next` (a theme, trust me). The
+difference lies in how the decision is made whether to tap or hold. A
+`tap-hold` waits for a particular timeout, if the `tap-hold` is released
+anywhere before that moment we execute a tap immediately. If the timeout
+occurs and the `tap-hold` is still held, we switch to holding mode.
+</p>
+
+<p>
+The additional feature of a `tap-hold` is that it pauses event-processing
+until it makes its decision and then rolls back processing when the decision
+has been made.
+</p>
+
+<p>
+So, again with the mini-language, we set foo to:
+(tap-hold 200 x lsft) ;; Like tap-next, but with a 200ms timeout
+Then:
+Tesc            -&gt; x
+Tesc Ta         -&gt; xa
+Pesc 300 a      -&gt; A (the moment you press a)
+Pesc a 300      -&gt; A (after 200 ms)
+Pesc a 100 Resc -&gt; xa (both happening immediately on Resc)
+</p>
+
+<p>
+The `tap-hold-next` button is a combination of the previous 2. Essentially,
+think of it as a `tap-next` button, but it also switches to held after a
+period of time. This is useful, because if you have a (tap-next ret ctl) for
+example, and you press it thinking you want to press C-v, but then you change
+your mind, you now cannot release the button without triggering a &rsquo;ret&rsquo;, that
+you then have to backspace. With the `tap-hold-next` button, you simply
+outwait the delay, and you&rsquo;re good. I see no benefit of `tap-next` over
+`tap-hold-next` with a decent timeout value.
+</p>
+
+<p>
+The `tap-next-release` is like `tap-next`, except it decides whether to tap or
+hold based on the next release of a key that was <b>not</b> pressed before us. This
+also performs rollback like `tap-hold`.So, using the minilanguage and foo as:
+(tap-next-release x lsft)
+Then:
+Tesc Ta         -&gt; xa
+Pa Pesc Ra Resc -&gt; ax (because &rsquo;a&rsquo; was already pressed when we started, so
+foo decides it is tapping)
+Pesc Ta Resc    -&gt; A (because a was pressed <b>and</b> released after we started,
+so foo decides it is holding)
+</p>
+
+<p>
+These increasingly stranger buttons are, I think, coming from the stubborn
+drive of some of my more eccentric (and I mean that in the most positive way)
+users to make typing with modifiers on the home-row more comfortable.
+Especially layouts that encourage a lot of rolling motions are nicer to use
+with the `release` style buttons.
+</p>
+
+<p>
+The `tap-hold-next-release` (notice a trend?) is just like `tap-next-release`,
+but it comes with an additional timeout that, just like `tap-hold-next` will
+jump into holding-mode after a timeout.
+</p>
+
+<p>
+I honestly think that `tap-hold-next-release`, although it seems the most
+complicated, probably is the most comfortable to use. But I&rsquo;ve put all of them
+in a testing layer down below, so give them a go and see what is nice.
+</p></li>
+</ul>
+</div>
+<div id="outline-container-orgc265b45" class="outline-4">
+<h4 id="orgc265b45"><span class="section-number-4">1.10.1</span> Examples</h4>
+<div class="outline-text-4" id="text-1-10-1">
+<pre class="example" id="org7ca6974">
+(defalias
+  xtn (tap-next x lsft)         ;; Shift that does 'x' on tap
+  xth (tap-hold 400 x lsft)     ;; Long delay for easier testing
+  thn (tap-hold-next 400 x lsft)
+  tnr (tap-next-release x lsft)
+  tnh (tap-hold-next-release 2000 x lsft)
+
+  ;; Used it the colemak layer
+  xcp (tap-hold-next 400 esc ctl)
+  )
+
+;; Some of the buttons used here are defined in the next section
+(deflayer multi-overlay
+  @mt  _    _    _    _    _    _    _    _    _    _    _    @rem _
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _
+  @thn _    _    _    _    _    _    _    _    _    _    _    _
+  @xtn _    _    _    _    _    _    _    _    _    _    @xth
+  @tnr _    _              _              _    _    _    @tnh
+  )
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orga8ed91d" class="outline-3">
+<h3 id="orga8ed91d"><span class="section-number-3">1.11</span> Multi-tap</h3>
+<div class="outline-text-3" id="text-1-11">
+<p>
+Optional: Multi-tap
+</p>
+
+<p>
+Besides the tap-hold style buttons there is another multi-use button (with.
+only 1 variant, at the moment). The `multi-tap`.
+</p>
+
+<p>
+A `multi-tap` codes for different buttons depending on how often it is tapped.
+It is defined by a series of delays and buttons, followed by a last button
+without delay. As long as you tap the `multi-tap` within the delay specified,
+it will jump to the next button. Once the delay is exceeded the selected
+button is pressed. If the last button in the list is reached, it is
+immediately pressed.
+</p>
+
+<p>
+Note that you can actually hold the button, so in the below example, going:
+tap-tap-hold (wait 300ms) will get you a pressed c, until you release again.
+</p>
+</div>
+<div id="outline-container-org7e77c23" class="outline-4">
+<h4 id="org7e77c23"><span class="section-number-4">1.11.1</span> Examples</h4>
+<div class="outline-text-4" id="text-1-11-1">
+<pre class="example" id="orgddea0a0">
+(defalias
+  mt  (multi-tap 300 a 300 b 300 c 300 d e))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org2e4dc10" class="outline-3">
+<h3 id="org2e4dc10"><span class="section-number-3">1.12</span> Around-next</h3>
+<div class="outline-text-3" id="text-1-12">
+<p>
+Optional: Around-next
+</p>
+
+<p>
+The `around-next` function creates a button that primes KMonad to perform the
+next button-press inside some context. This could be the context of &rsquo;having
+Shift pressed&rsquo; or &rsquo;being inside some layer&rsquo; or, less usefully, &rsquo;having d
+pressed&rsquo;. It is a more general and powerful version of `layer-next`.
+</p>
+
+<p>
+I think expansion of this button-style is probably the future of leader-key,
+hydra-style functionality support in KMonad.
+</p>
+</div>
+<div id="outline-container-orgcc5e640" class="outline-4">
+<h4 id="orgcc5e640"><span class="section-number-4">1.12.1</span> Examples</h4>
+<div class="outline-text-4" id="text-1-12-1">
+<pre class="example" id="org6ae8adb">
+(defalias
+  ns  (around-next sft)  ;; Shift the next press
+  nnm (around-next @num) ;; Perform next press in numbers layer
+  nd  (around-next d)    ;; Silly, but possible
+
+  )
+
+(deflayer around-next-test
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _
+  @nd  _    _    _    _    _    _    _    _    _    _    _    _
+  @nnm _    _    _    _    _    _    _    _    _    _    _
+  @ns  _    _              _              _    _    _    _
+  )
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org557fade" class="outline-3">
+<h3 id="org557fade"><span class="section-number-3">1.13</span> Compose Key Sequences</h3>
+<div class="outline-text-3" id="text-1-13">
+<p>
+Optional: Compose-key sequences
+</p>
+
+<p>
+Compose-key sequences are series of button-presses that your operating system
+will interpret as the insertion of a special character, like accented
+characters, or various special-languages. In that sense, they are just
+syntactic sugar for keyboard macros.
+</p>
+
+<p>
+To get this to work on Linux you will need to set your compose-key with a tool
+like `setxkbmap&rsquo;, as well as tell kmonad that information. See the `defcfg&rsquo;
+block at the top of this file for a working example. Note that you need to
+wait ever so slightly for the keyboard to register with linux before the
+command gets executed, that&rsquo;s why the `sleep 1`. Also, note that all the
+`/run/current-system&rsquo; stuff is because the author uses NixOS. Just find a
+shell-command that will:
+</p>
+
+<ol class="org-ol">
+<li>Sleep a moment</li>
+<li><p>
+Set the compose-key to your desired key
+</p>
+
+<p>
+Please be aware that what `setxkbmap&rsquo; calls the `menu&rsquo; key is not actually the
+`menu&rsquo; key! If you want to use the often suggested
+</p>
+
+<p>
+setxkbmap -option compose:menu
+</p>
+
+<p>
+you will have to set your compose key within kmonad to `compose&rsquo; and not
+`menu&rsquo;.
+</p>
+
+<p>
+After this, this should work out of the box under Linux. Windows does not
+recognize the same compose-key sequences, but WinCompose will make most of the
+sequences line up with KMonad: <a href="http://wincompose.info/">http://wincompose.info/</a>
+This has not in any way been tested on Mac.
+</p>
+
+<p>
+In addition to hard-coded symbols, we also provide &rsquo;uncompleted&rsquo; macros. Since
+a compose-key sequence is literally just a series of keystrokes, we can omit
+the last one, and enter the sequence for &rsquo;add an umlaut&rsquo; and let the user then
+press some letter to add this umlaut to. These are created using the `+&ldquo;`
+syntax.
+</p></li>
+</ol>
+</div>
+<div id="outline-container-orgb0f013a" class="outline-4">
+<h4 id="orgb0f013a"><span class="section-number-4">1.13.1</span> Examples</h4>
+<div class="outline-text-4" id="text-1-13-1">
+<pre class="example" id="org210b644">
+(defalias
+  sym (layer-toggle symbols)
+  )
+
+(deflayer symbols
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    ä    é    ©    _    _    _    _    _    _    _    _    _    _
+  _    +'   +~   +`   +^   _    _    _    _    _    _    _    _
+  _    +"   _    _    _    _    _    _    _    _    _    _
+  _    _    _              _              _    _    _    _)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org30ebe6a" class="outline-3">
+<h3 id="org30ebe6a"><span class="section-number-3">1.14</span> Command Buttons</h3>
+<div class="outline-text-3" id="text-1-14">
+<p>
+Optional: Command buttons
+</p>
+
+<p>
+Currently we also provide the ability to launch arbitrary shell-commands from
+inside kmonad. These commands are simply handed off to the command-shell
+without any further checking or waiting.
+</p>
+
+<p>
+NOTE: currently only tested on Linux, but should work on any platform, as long
+as the command is valid for that platform.
+</p>
+
+<p>
+The `cmd-button&rsquo; function takes two arguments, the second one of which is
+optional. These represent the commands to be executed on pressing and
+releasing the button respectively.
+</p>
+
+<p>
+BEWARE: never run anyone&rsquo;s configuration without looking at it. You wouldn&rsquo;t
+want to push:
+</p>
+
+<p>
+(cmd-button &ldquo;rm -rf ~/*&rdquo;) ;; Delete all this user&rsquo;s data
+</p>
+
+<pre class="example" id="orgaa63c1f">
+(defalias
+  dat (cmd-button "date &gt;&gt; /tmp/kmonad_example.txt")   ;; Append date to tmpfile
+  pth (cmd-button "echo $PATH &gt; /tmp/kmonad_path.txt") ;; Write out PATH
+  ;; `dat' on press and `pth' on release
+  bth (cmd-button "date &gt;&gt; /tmp/kmonad_example.txt"
+                   "echo $PATH &gt; /tmp/kmonad_path.txt")
+  )
+
+(deflayer command-test
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _    _    _    _    _    _    _    @dat @pth _
+  _    _    _              _              _    _    _    _
+  )
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org550860d" class="outline-2">
+<h2 id="org550860d"><span class="section-number-2">2</span> Configuration</h2>
+<div class="outline-text-2" id="text-2">
+</div>
+<div id="outline-container-orgc39dae6" class="outline-3">
+<h3 id="orgc39dae6"><span class="section-number-3">2.1</span> Super Keybindings</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+I want to be able to use Super like a leader key when tapped
+Each headline represents a key to be pressed after tapping Super
+</p>
+</div>
+<div id="outline-container-orgb4a0813" class="outline-4">
+<h4 id="orgb4a0813"><span class="section-number-4">2.1.1</span> Q :: Window Switcher</h4>
+<div class="outline-text-4" id="text-2-1-1">
+<p>
+Launches the window switcher
+</p>
+</div>
+</div>
+<div id="outline-container-org058dc5a" class="outline-4">
+<h4 id="org058dc5a"><span class="section-number-4">2.1.2</span> D :: Discord</h4>
+<div class="outline-text-4" id="text-2-1-2">
+<p>
+Opens Discord
+</p>
+</div>
+</div>
+<div id="outline-container-orgfc7008b" class="outline-4">
+<h4 id="orgfc7008b"><span class="section-number-4">2.1.3</span> B :: Brightness</h4>
+<div class="outline-text-4" id="text-2-1-3">
+<p>
+Opens <code>BrightnessControl</code> GUI <b>OR</b> initiates <code>BrightnessControl</code> layer, where we can manipulate brightness with <code>hjkl</code>
+Also look into <a href="https://github.com/maoserr/redshiftgui">redshiftgui</a> to see if we can use this instead. I left it alone because building it requires a library that isn&rsquo;t in the Fedora repos called &ldquo;<a href="https://sourceforge.net/projects/iup/files/3.30/Linux%20Libraries/">IUP</a>&rdquo;
+</p>
+</div>
+<ol class="org-ol">
+<li><a id="orgfd65204"></a>BrightnessControl Layer<br />
+<ol class="org-ol">
+<li><a id="org06a9ee8"></a>H<br />
+<div class="outline-text-6" id="text-2-1-3-1-1">
+<p>
+Rotate active monitor to the left
+</p>
+</div>
+</li>
+<li><a id="org3580320"></a>L<br />
+<div class="outline-text-6" id="text-2-1-3-1-2">
+<p>
+Rotate active monitor to the right
+</p>
+</div>
+</li>
+<li><a id="org1fc1af6"></a>K<br />
+<div class="outline-text-6" id="text-2-1-3-1-3">
+<p>
+Brightness Up
+</p>
+</div>
+</li>
+<li><a id="org2bd5bf6"></a>J<br />
+<div class="outline-text-6" id="text-2-1-3-1-4">
+<p>
+Brightness Down
+</p>
+</div>
+</li>
+<li><a id="org9a5957a"></a>Esc | Super<br />
+<div class="outline-text-6" id="text-2-1-3-1-5">
+<p>
+Exit layer
+</p>
+</div>
+</li>
+</ol>
+</li>
+</ol>
+</div>
+<div id="outline-container-org1ed4d02" class="outline-4">
+<h4 id="org1ed4d02"><span class="section-number-4">2.1.4</span> V :: Volume</h4>
+<div class="outline-text-4" id="text-2-1-4">
+<p>
+Opens volume manager
+</p>
+</div>
+<ol class="org-ol">
+<li><a id="orgfb4c0cd"></a>Volume Layer<br />
+<ol class="org-ol">
+<li><a id="org7950bd2"></a>H<br />
+<div class="outline-text-6" id="text-2-1-4-1-1">
+<p>
+Rotate current output left
+</p>
+</div>
+</li>
+<li><a id="orgf8fbb9a"></a>J<br />
+<div class="outline-text-6" id="text-2-1-4-1-2">
+<p>
+Rotate current output right
+</p>
+</div>
+</li>
+<li><a id="org9e6cd77"></a>K<br />
+<div class="outline-text-6" id="text-2-1-4-1-3">
+<p>
+Volume up by 5
+</p>
+</div>
+</li>
+<li><a id="orgee9c8b1"></a>L<br />
+<div class="outline-text-6" id="text-2-1-4-1-4">
+<p>
+Volume down by 5
+</p>
+</div>
+</li>
+</ol>
+</li>
+</ol>
+</div>
+<div id="outline-container-orgb35fbb9" class="outline-4">
+<h4 id="orgb35fbb9"><span class="section-number-4">2.1.5</span> T :: Terminal (Scratchpad)</h4>
+<div class="outline-text-4" id="text-2-1-5">
+<p>
+Opens terminal scratchpad
+</p>
+</div>
+<ol class="org-ol">
+<li><a id="org52e3f1a"></a>Hold<br />
+<div class="outline-text-5" id="text-2-1-5-1">
+<p>
+Opens menu with all of the available scratchpads
+</p>
+</div>
+</li>
+<li><a id="orgfe88426"></a>Tap<br />
+<div class="outline-text-5" id="text-2-1-5-2">
+<p>
+<del>Opens most recently opened scratchpad</del>
+We can use <code>yakuake</code> for this basic functionality
+Instead, dedicate this to the <b>Terminal Layer</b>?
+</p>
+</div>
+</li>
+<li><a id="org4b42514"></a>Terminal Layer<br />
+<ol class="org-ol">
+<li><a id="orge46806f"></a><del>Super,</del>​] :: Next<br />
+<div class="outline-text-6" id="text-2-1-5-3-1">
+<p>
+Next terminal scratchpad (cycle)
+</p>
+</div>
+</li>
+<li><a id="org1cab9e4"></a><del>Super,</del>​[ :: Previous<br />
+<div class="outline-text-6" id="text-2-1-5-3-2">
+<p>
+Last terminal scratchpad (cycle)
+</p>
+</div>
+</li>
+<li><a id="org8c9c135"></a>L :: List<br />
+<div class="outline-text-6" id="text-2-1-5-3-3">
+<p>
+Show all open scratchpads and prompt for which one to open
+</p>
+</div>
+</li>
+<li><a id="orgeef5e46"></a>V :: Vim<br />
+<div class="outline-text-6" id="text-2-1-5-3-4">
+<p>
+Create a Vim scratchpad that will be deleted immediately after Vim closes
+</p>
+</div>
+</li>
+</ol>
+</li>
+</ol>
+</div>
+<div id="outline-container-org5199d2b" class="outline-4">
+<h4 id="org5199d2b"><span class="section-number-4">2.1.6</span> R :: Run</h4>
+<div class="outline-text-4" id="text-2-1-6">
+<p>
+Run a single command in a small popup window
+</p>
+
+<p>
+Have it appear at the top of the screen, and have the window expand down as the output fills
+</p>
+
+<p>
+This could be super useful for things like <code>remind-in 10m Do something</code>
+</p>
+</div>
+<ol class="org-ol">
+<li><a id="org9ab6342"></a>Layer<br />
+<ol class="org-ol">
+<li><a id="org839c2f3"></a>Super, Esc (in sequence)<br />
+<div class="outline-text-6" id="text-2-1-6-1-1">
+<p>
+Exit layer and close <code>run</code> window
+</p>
+</div>
+</li>
+<li><a id="orga6c0d04"></a>E<br />
+<div class="outline-text-6" id="text-2-1-6-1-2">
+<p>
+Make window taller
+</p>
+</div>
+</li>
+</ol>
+</li>
+<li><a id="org2cff56e"></a>Notes<br />
+<ol class="org-ol">
+<li><a id="orgc47709b"></a>Keybindings<br />
+<div class="outline-text-6" id="text-2-1-6-2-1">
+<p>
+In the spawned window, bind Ctrl+R to resize the window to the necessary length, Esc/Enter to revert the size
+</p>
+
+<p>
+After you press enter &ldquo;for real&rdquo;, hand the scrollback buffer to <code>pee resizing_program.sh less</code>
+Might have to use kitty for this
+</p>
+</div>
+</li>
+<li><a id="orgff4b030"></a>Window Properties<br />
+<div class="outline-text-6" id="text-2-1-6-2-2">
+<p>
+Source: <a href="https://www.reddit.com/r/kde/comments/d5ne9s/can_you_have_no_titlebar_and_frame_but_keep_the/">https://www.reddit.com/r/kde/comments/d5ne9s/can_you_have_no_titlebar_and_frame_but_keep_the/</a>
+Made a window-specific override for the window class &ldquo;st-runner&rdquo; that disabled the title bar
+This lets us havae the nice shadow but without the title bar
+</p>
+</div>
+</li>
+</ol>
+</li>
+</ol>
+</div>
+<div id="outline-container-orgf2bbdb1" class="outline-4">
+<h4 id="orgf2bbdb1"><span class="section-number-4">2.1.7</span> P :: Prompt</h4>
+<div class="outline-text-4" id="text-2-1-7">
+<p>
+Opens prompt to open <code>rofi</code> and launch custom actions by typing
+</p>
+</div>
+<ol class="org-ol">
+<li><a id="orgbb9a7ea"></a>thyme<br />
+<div class="outline-text-5" id="text-2-1-7-1">
+<p>
+Opens <code>rofi</code> with list of <code>thyme</code> files
+Choose a date and then view the breakdown for that date
+</p>
+</div>
+</li>
+<li><a id="orgbcae6e0"></a>incognito<br />
+<div class="outline-text-5" id="text-2-1-7-2">
+<p>
+Turns on VPN
+Disables <code>thyme</code>
+</p>
+
+<p>
+If called a second time, disables both of these
+</p>
+</div>
+</li>
+</ol>
+</div>
+<div id="outline-container-org1073479" class="outline-4">
+<h4 id="org1073479"><span class="section-number-4">2.1.8</span> A :: Agenda</h4>
+<div class="outline-text-4" id="text-2-1-8">
+<p>
+Opens agenda
+</p>
+</div>
+</div>
+<div id="outline-container-org34b42f3" class="outline-4">
+<h4 id="org34b42f3"><span class="section-number-4">2.1.9</span> O :: Open Preset</h4>
+<div class="outline-text-4" id="text-2-1-9">
+</div>
+<ol class="org-ol">
+<li><a id="org7ef26ca"></a>Tap<br />
+<div class="outline-text-5" id="text-2-1-9-1">
+<p>
+Gives you preset-local shortcuts
+</p>
+
+<p>
+Automatically show help for it (this is hard to memorize)
+Emacs <code>which-key</code> style help
+</p>
+</div>
+</li>
+<li><a id="org8bf90c6"></a>Hold<br />
+<div class="outline-text-5" id="text-2-1-9-2">
+<p>
+Opens <code>rofi</code> with list of available &ldquo;presets&rdquo;
+</p>
+
+<p>
+If currently in a preset, exit the preset
+Currently loaded presets should be at the top!
+If you select a preset while another is currently active, disable the old preset
+</p>
+
+<p>
+Add support for virtual-desktop-local presets in the future
+</p>
+</div>
+</li>
+<li><a id="orge041031"></a>Presets<br />
+<ol class="org-ol">
+<li><a id="orgca55f8b"></a>leetcode<br />
+<ol class="org-ol">
+<li><a id="org1072d1f"></a>Left Monitor<br />
+<div class="outline-text-7" id="text-2-1-9-3-1-1">
+<ol class="org-ol">
+<li>Open fullscreen terminal</li>
+<li><code>cd ~/Development/leetcode/problems</code></li>
+</ol>
+</div>
+</li>
+<li><a id="org389cdff"></a>Right Monitor<br />
+<div class="outline-text-7" id="text-2-1-9-3-1-2">
+<p>
+<del>1. Open firefox</del>
+<del>2. Navigate to <a href="https://www.teamblind.com/post/New-Year-Gift---Curated-List-of-Top-75-LeetCode-Questions-to-Save-Your-Time-OaM1orEU">New Year Gift - Curated List of Top 75 LeetCode Questions to Save Your Time</a></del>
+<del>3.</del>
+</p>
+<ol class="org-ol">
+<li>Open firefox?
+This would be so that when you press enter in emacs, it would open the link in the right firefox window</li>
+<li>Open <code>emacs</code></li>
+<li>Navigate to &ldquo;problems.org&rdquo;</li>
+<li>Select a problem</li>
+<li>When you press enter, open the link in our firefox window and then close emacs</li>
+</ol>
+</div>
+</li>
+<li><a id="org922d0e7"></a>Preset-Local Shortcuts<br />
+<ol class="org-ol">
+<li><a id="org75584a7"></a>O :: Open Problem List<br />
+<div class="outline-text-8" id="text-2-1-9-3-1-3-1">
+<p>
+Opens the <code>emacs</code> window once again and loops from step #1
+</p>
+</div>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+</div>
+<div id="outline-container-org34875a1" class="outline-4">
+<h4 id="org34875a1"><span class="section-number-4">2.1.10</span> \ :: Local Leader Key</h4>
+<div class="outline-text-4" id="text-2-1-10">
+<p>
+Use this in conjunction with presets to have local preset keybindings
+</p>
+</div>
+</div>
+<div id="outline-container-org0891057" class="outline-4">
+<h4 id="org0891057"><span class="section-number-4">2.1.11</span> Super :: Super</h4>
+<div class="outline-text-4" id="text-2-1-11">
+<p>
+Acts as a regular press of Super (hands it to KDE)
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-org689f800" class="outline-3">
+<h3 id="org689f800"><span class="section-number-3">2.2</span> Layer Templates</h3>
+<div class="outline-text-3" id="text-2-2">
+</div>
+<div id="outline-container-org8d55704" class="outline-4">
+<h4 id="org8d55704"><span class="section-number-4">2.2.1</span> Passthrough</h4>
+<div class="outline-text-4" id="text-2-2-1">
+<pre class="example" id="orga8cf0e8">
+(deflayer layer-name
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _    _    _    _    _    _    _    _    _    _                  _
+  _    _    _              _              _    _    _                    _   _
+                                                                           _
+  )
+</pre>
+</div>
+</div>
+<div id="outline-container-org91022a3" class="outline-4">
+<h4 id="org91022a3"><span class="section-number-4">2.2.2</span> Inclusive</h4>
+<div class="outline-text-4" id="text-2-2-2">
+<pre class="example" id="org38a9489">
+(deflayer layer-name
+  grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
+  tab  q    w    e    r    t    y    u    i    o    p    [    ]    \
+  caps a    s    d    f    g    h    j    k    l    ;    '    ret
+  lsft z    x    c    v    b    n    m    ,    .    /    rsft               up
+  lctl lmet lalt           spc            ralt rctl                     lft rght
+                                                                          down
+  )
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org27b7d5c" class="outline-3">
+<h3 id="org27b7d5c"><span class="section-number-3">2.3</span> Configuration</h3>
+<div class="outline-text-3" id="text-2-3">
+<div class="org-src-container">
+<pre class="src src-kbd"><span style="color: #51afef;">(</span><span style="color: #51afef; font-style: italic;">defcfg</span>
+  <span style="color: #5B6268; font-style: italic;">;; </span><span style="color: #5B6268; font-style: italic;">For Linux</span>
+  <span style="color: #c678dd;">input</span>  <span style="color: #c678dd;">(</span><span style="color: #c678dd;">device-file</span> <span style="color: #98be65;">"/dev/input/by-id/usb-Logitech_USB_Receiver-if02-event-kbd"</span><span style="color: #c678dd;">)</span>
+  <span style="color: #c678dd;">output</span> <span style="color: #c678dd;">(</span><span style="color: #c678dd;">uinput-sink</span> <span style="color: #98be65;">"Logitech KMonad Output"</span>
+                       <span style="color: #5B6268; font-style: italic;">;; </span><span style="color: #5B6268; font-style: italic;">To understand the importance of the following line, see the section on</span>
+                       <span style="color: #5B6268; font-style: italic;">;; </span><span style="color: #5B6268; font-style: italic;">Compose-key sequences at the near-bottom of this file.</span>
+                       <span style="color: #98be65;">"/run/current-system/sw/bin/sleep 1 &amp;&amp; /run/current-system/sw/bin/setxkbmap -option compose:ralt"</span><span style="color: #c678dd;">)</span>
+  <span style="color: #c678dd;">cmp-seq</span> rctrl    <span style="color: #5B6268; font-style: italic;">;; </span><span style="color: #5B6268; font-style: italic;">Set the compose key to `</span><span style="color: #a9a1e1; font-style: italic;">RightAlt</span><span style="color: #5B6268; font-style: italic;">'</span>
+  <span style="color: #c678dd;">cmp-seq-delay</span> <span style="color: #da8548; font-weight: bold;">5</span> <span style="color: #5B6268; font-style: italic;">;; </span><span style="color: #5B6268; font-style: italic;">5ms delay between each compose-key sequence press</span>
+
+  <span style="color: #5B6268; font-style: italic;">;; </span><span style="color: #5B6268; font-style: italic;">Comment this is you want unhandled events not to be emitted</span>
+  <span style="color: #c678dd;">fallthrough</span> true
+
+  <span style="color: #5B6268; font-style: italic;">;; </span><span style="color: #5B6268; font-style: italic;">Set this to false to disable any command-execution in KMonad</span>
+  <span style="color: #c678dd;">allow-cmd</span> true
+  <span style="color: #51afef;">)</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgec6ec09" class="outline-3">
+<h3 id="orgec6ec09"><span class="section-number-3">2.4</span> Source Layer</h3>
+<div class="outline-text-3" id="text-2-4">
+<div class="org-src-container">
+<pre class="src src-kbd"><span style="color: #51afef;">(</span><span style="color: #51afef; font-style: italic;">defsrc</span>
+  grv  <span style="color: #da8548; font-weight: bold;">1</span>    <span style="color: #da8548; font-weight: bold;">2</span>    <span style="color: #da8548; font-weight: bold;">3</span>    <span style="color: #da8548; font-weight: bold;">4</span>    <span style="color: #da8548; font-weight: bold;">5</span>    <span style="color: #da8548; font-weight: bold;">6</span>    <span style="color: #da8548; font-weight: bold;">7</span>    <span style="color: #da8548; font-weight: bold;">8</span>    <span style="color: #da8548; font-weight: bold;">9</span>    <span style="color: #da8548; font-weight: bold;">0</span>    -    =    bspc
+  tab  q    w    e    r    t    y    u    i    o    p    [    ]    \
+  caps a    s    d    f    g    h    j    k    l    ;    <span style="color: #51afef;">'</span>    <span style="color: #ECBE7B;">ret</span>
+  lsft z    x    c    v    b    n    m    ,    .    /    rsft               up
+  lctl lmet lalt           spc            ralt rctl                     lft rght
+                                                                          down
+  <span style="color: #51afef;">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org41eae7b" class="outline-3">
+<h3 id="org41eae7b"><span class="section-number-3">2.5</span> Default Layer</h3>
+<div class="outline-text-3" id="text-2-5">
+<blockquote>
+<p>
+Optional: as many layers as you please
+</p>
+
+<p>
+We had already defined `num` as referring to a `(layer-toggle numbers)`. We
+will get into layer-manipulation soon, but first, let&rsquo;s just create a second
+layer that overlays a numpad under our right-hand.
+</p>
+
+<p>
+To easily specify layers it is highly recommended to create an empty
+`deflayer` statement as a comment at the top of your config, so you can simply
+copy-paste this template. There are also various empty layer templates
+available in the &rsquo;./keymap/template&rsquo; directory.
+</p>
+</blockquote>
+
+<p>
+Enable the &ldquo;leader&rdquo; layer for the next keypress
+If we release @ldr <i>before</i> the next key, we treat the keypress as a <b>tap</b>, even if for a short period of time both keys were down.
+If we release @ldr <i>after</i> the next key, we treat it as holding
+</p>
+
+<p>
+Also, if we hold the key for more than 2 seconds, treat it like we are holding the key
+</p>
+<div class="org-src-container">
+<pre class="src src-kbd"><span style="color: #51afef;">(</span><span style="color: #51afef; font-style: italic;">defalias</span>
+  ldr <span style="color: #c678dd;">(</span><span style="color: #c678dd;">tap-hold-next-release</span> <span style="color: #da8548; font-weight: bold;">2000</span> <span style="color: #98be65;">(</span><span style="color: #c678dd;">around-next</span> <span style="color: #a9a1e1;">(</span><span style="color: #c678dd;">layer-toggle</span> leader<span style="color: #a9a1e1;">)</span><span style="color: #98be65;">)</span> lmet<span style="color: #c678dd;">)</span>
+  <span style="color: #51afef;">)</span>
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-kbd"><span style="color: #51afef;">(</span><span style="color: #51afef; font-style: italic;">deflayer</span><span style="color: #dcaeea;"> qwerty</span>
+  grv  <span style="color: #da8548; font-weight: bold;">1</span>    <span style="color: #da8548; font-weight: bold;">2</span>    <span style="color: #da8548; font-weight: bold;">3</span>    <span style="color: #da8548; font-weight: bold;">4</span>    <span style="color: #da8548; font-weight: bold;">5</span>    <span style="color: #da8548; font-weight: bold;">6</span>    <span style="color: #da8548; font-weight: bold;">7</span>    <span style="color: #da8548; font-weight: bold;">8</span>    <span style="color: #da8548; font-weight: bold;">9</span>    <span style="color: #da8548; font-weight: bold;">0</span>    -    =    bspc
+  tab  q    w    e    r    t    y    u    i    o    p    [    ]    \
+  caps a    s    d    f    g    h    j    k    l    ;    <span style="color: #51afef;">'</span>    <span style="color: #ECBE7B;">ret</span>
+  lsft z    x    c    v    b    n    m    ,    .    /    rsft               up
+  lctl <span style="color: #dcaeea;">@ldr</span> lalt           spc            ralt rctl                     lft rght
+                                                                          down
+  <span style="color: #51afef;">)</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org5f49a2a" class="outline-3">
+<h3 id="org5f49a2a"><span class="section-number-3">2.6</span> Base Leader Key Layer</h3>
+<div class="outline-text-3" id="text-2-6">
+<p>
+When we define aliases to other aliases, they are eagerly evaluated and will throw an error if they are not defined at that point
+We solve this by plugging this code block into <a href="#orgee41b54">2.17</a>, which gets tangled at the very end
+</p>
+<div class="org-src-container">
+<pre class="src src-kbd" id="org2bc5239"><span style="color: #51afef;">(</span><span style="color: #51afef; font-style: italic;">defalias</span>
+<span id="coderef-window-switcher" class="coderef-off">  win <span style="color: #dcaeea;">@window-switcher</span> <span style="color: #5B6268; font-style: italic;">;;</span></span>
+<span id="coderef-discord" class="coderef-off">  dsc <span style="color: #dcaeea;">@discord</span> <span style="color: #5B6268; font-style: italic;">;;</span></span>
+<span id="coderef-brightness" class="coderef-off">  bri b <span style="color: #5B6268; font-style: italic;">;;</span></span>
+<span id="coderef-volume" class="coderef-off">  vol <span style="color: #dcaeea;">@volume</span> <span style="color: #5B6268; font-style: italic;">;;</span></span>
+<span id="coderef-terminal" class="coderef-off">  trm t <span style="color: #5B6268; font-style: italic;">;;</span></span>
+<span id="coderef-run" class="coderef-off">  run <span style="color: #dcaeea;">@enter-run</span> <span style="color: #5B6268; font-style: italic;">;;</span></span>
+<span id="coderef-prompt" class="coderef-off">  pro p <span style="color: #5B6268; font-style: italic;">;;</span></span>
+<span id="coderef-agenda" class="coderef-off">  age a <span style="color: #5B6268; font-style: italic;">;;</span></span>
+<span id="coderef-open-preset" class="coderef-off">  pre o <span style="color: #5B6268; font-style: italic;">;;</span></span>
+<span id="coderef-local-leader" class="coderef-off">  lld \\ <span style="color: #5B6268; font-style: italic;">;;</span></span>
+  <span style="color: #51afef;">)</span>
+
+<span style="color: #51afef;">(</span><span style="color: #51afef; font-style: italic;">deflayer</span><span style="color: #dcaeea;"> leader</span>
+  XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX
+  XX   <span style="color: #dcaeea;">@win</span> XX   XX   <span style="color: #dcaeea;">@run</span> XX   XX   XX   XX   XX   <span style="color: #dcaeea;">@pro</span> XX   XX   XX
+  XX   <span style="color: #dcaeea;">@age</span> XX   <span style="color: #dcaeea;">@dsc</span> XX   XX   XX   XX   XX   XX   XX   XX   XX
+  XX   XX   XX   XX   <span style="color: #dcaeea;">@vol</span> <span style="color: #dcaeea;">@bri</span> XX   XX   XX   XX   XX   XX                 XX
+  XX   lmet XX             XX             XX   XX                        XX  XX
+                                                                           XX
+  <span style="color: #51afef;">)</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgef76797" class="outline-3">
+<h3 id="orgef76797"><span class="section-number-3">2.7</span> <a href="#coderef-window-switcher" class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-window-switcher');" onmouseout="CodeHighlightOff(this, 'coderef-window-switcher');">Window Switcher</a></h3>
+<div class="outline-text-3" id="text-2-7">
+<p>
+Opens the Window Switcher
+</p>
+
+<div class="org-src-container">
+<pre class="src src-kbd"><span style="color: #51afef;">(</span><span style="color: #51afef; font-style: italic;">defalias</span>
+  window-switcher <span style="color: #c678dd;">(</span><span style="color: #c678dd;">cmd-button</span> <span style="color: #98be65;">"~/.local/bin/rofi -noplugins -modi window -show window -lines 5 --normal-window"</span><span style="color: #c678dd;">)</span>
+  <span style="color: #51afef;">)</span>
+</pre>
+</div>
+
+<p>
+I compiled <code>rofi</code> from source and put it in <code>~/.local/bin</code> because the RPM version was too slow for my taste
+Some of the flags are also there for optimization reasons: <code>-modi</code>, <code>-noplugins</code> and <code>--normal-window</code>
+I noticed that the startup animation was faster with <code>--normal-window</code>, and the other 2 flags stop <code>rofi</code> from doing unnecessary work
+</p>
+</div>
+</div>
+<div id="outline-container-orgbc41d2b" class="outline-3">
+<h3 id="orgbc41d2b"><span class="section-number-3">2.8</span> <a href="#coderef-discord" class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-discord');" onmouseout="CodeHighlightOff(this, 'coderef-discord');">Discord</a></h3>
+<div class="outline-text-3" id="text-2-8">
+<p>
+This command uses <code>wmctrl</code> to switch to a currently-existing Discord window, and if it fails opens a new instance of Discord
+</p>
+
+<div class="org-src-container">
+<pre class="src src-kbd"><span style="color: #51afef;">(</span><span style="color: #51afef; font-style: italic;">defalias</span>
+  discord <span style="color: #c678dd;">(</span><span style="color: #c678dd;">cmd-button</span> <span style="color: #98be65;">"wmctrl -a discord || /usr/bin/Discord"</span><span style="color: #c678dd;">)</span>
+  <span style="color: #51afef;">)</span>
+</pre>
+</div>
+</div>
+<div id="outline-container-org613af9c" class="outline-4">
+<h4 id="org613af9c"><span class="section-number-4">2.8.1</span> <span class="todo TODO">TODO</span> Switch back to the previous window when invoked a second time</h4>
+</div>
+</div>
+<div id="outline-container-org2a4529b" class="outline-3">
+<h3 id="org2a4529b"><span class="section-number-3">2.9</span> <span class="todo TODO">TODO</span> <a href="#coderef-brightness" class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-brightness');" onmouseout="CodeHighlightOff(this, 'coderef-brightness');">Brightness</a></h3>
+</div>
+<div id="outline-container-org9cb401b" class="outline-3">
+<h3 id="org9cb401b"><span class="section-number-3">2.10</span> <a href="#coderef-volume" class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-volume');" onmouseout="CodeHighlightOff(this, 'coderef-volume');">Volume</a></h3>
+<div class="outline-text-3" id="text-2-10">
+<div class="org-src-container">
+<pre class="src src-kbd"><span style="color: #51afef;">(</span><span style="color: #51afef; font-style: italic;">defalias</span>
+  volume <span style="color: #c678dd;">(</span><span style="color: #c678dd;">cmd-button</span> <span style="color: #98be65;">"/usr/bin/pavucontrol"</span><span style="color: #c678dd;">)</span>
+  <span style="color: #51afef;">)</span>
+</pre>
+</div>
+</div>
+<div id="outline-container-org1abccb2" class="outline-4">
+<h4 id="org1abccb2"><span class="section-number-4">2.10.1</span> <span class="todo TODO">TODO</span> Volume layer</h4>
+<div class="outline-text-4" id="text-2-10-1">
+<p>
+The volume layer would remap hjkl to control the volume
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-orge60bbd8" class="outline-3">
+<h3 id="orge60bbd8"><span class="section-number-3">2.11</span> <span class="todo TODO">TODO</span> <a href="#coderef-terminal" class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-terminal');" onmouseout="CodeHighlightOff(this, 'coderef-terminal');">Terminal</a></h3>
+</div>
+<div id="outline-container-org852fa17" class="outline-3">
+<h3 id="org852fa17"><span class="section-number-3">2.12</span> <a href="#coderef-run" class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-run');" onmouseout="CodeHighlightOff(this, 'coderef-run');">Run</a></h3>
+<div class="outline-text-3" id="text-2-12">
+<p>
+We use tap macros to execute the &ldquo;buttons&rdquo; in sequence
+To enter the run mode, we execute the <code>runner</code> script and then enter the <code>run</code> layer
+We can do this because the leader layer only lasts for one keypress
+When the run layer is added, the layer beneath it is qwerty
+</p>
+
+<p>
+To exit the run mode, we remove the <code>run</code> layer and then kill all instances of <code>st</code>: the terminal we are using for the runner (and nothing else)
+</p>
+<div class="org-src-container">
+<pre class="src src-kbd"><span style="color: #51afef;">(</span><span style="color: #51afef; font-style: italic;">defalias</span>
+  enter-run #<span style="color: #c678dd;">(</span><span style="color: #98be65;">(</span><span style="color: #c678dd;">cmd-button</span> <span style="color: #98be65;">"~/.local/bin/runner"</span><span style="color: #98be65;">)</span> <span style="color: #98be65;">(</span><span style="color: #c678dd;">layer-add</span> run<span style="color: #98be65;">)</span><span style="color: #c678dd;">)</span>
+  exit-run #<span style="color: #c678dd;">(</span><span style="color: #98be65;">(</span><span style="color: #c678dd;">layer-rem</span> run<span style="color: #98be65;">)</span> <span style="color: #98be65;">(</span><span style="color: #c678dd;">cmd-button</span> <span style="color: #98be65;">"killall st"</span><span style="color: #98be65;">)</span><span style="color: #c678dd;">)</span>
+  <span style="color: #51afef;">)</span>
+</pre>
+</div>
+
+<p>
+We named it like this to avoid conflicts with other aliases
+</p>
+<div class="org-src-container">
+<pre class="src src-kbd"><span style="color: #51afef;">(</span><span style="color: #51afef; font-style: italic;">defalias</span>
+  r_e <span style="color: #dcaeea;">@exit-run</span> <span style="color: #5B6268; font-style: italic;">;; </span><span style="color: #5B6268; font-style: italic;">exit run layer; stands for run_exit</span>
+  <span style="color: #51afef;">)</span>
+
+<span style="color: #51afef;">(</span><span style="color: #51afef; font-style: italic;">deflayer</span><span style="color: #dcaeea;"> run</span>
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _    _    _    _    _    _    _    _    _    _                  _
+  _    <span style="color: #dcaeea;">@r_e</span> _              _              _    _                         _   _
+                                                                           _
+  <span style="color: #51afef;">)</span>
+</pre>
+</div>
+</div>
+<div id="outline-container-orgaacb4f9" class="outline-4">
+<h4 id="orgaacb4f9"><span class="section-number-4">2.12.1</span> <span class="todo TODO">TODO</span> Cleanup exit command</h4>
+<div class="outline-text-4" id="text-2-12-1">
+<p>
+Right now, we are doing <code>killall st</code>, which only does what we want because we do not use <code>st</code> for anything else
+We should aim for a more robust solution
+</p>
+</div>
+</div>
+<div id="outline-container-org0133408" class="outline-4">
+<h4 id="org0133408"><span class="section-number-4">2.12.2</span> <span class="todo TODO">TODO</span> Reuse the <code>runner</code> terminal and shell between invocations</h4>
+</div>
+</div>
+<div id="outline-container-org7940c9f" class="outline-3">
+<h3 id="org7940c9f"><span class="section-number-3">2.13</span> <span class="todo TODO">TODO</span> <a href="#coderef-prompt" class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-prompt');" onmouseout="CodeHighlightOff(this, 'coderef-prompt');">Prompt</a></h3>
+</div>
+<div id="outline-container-org551f7cb" class="outline-3">
+<h3 id="org551f7cb"><span class="section-number-3">2.14</span> <a href="#coderef-agenda" class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-agenda');" onmouseout="CodeHighlightOff(this, 'coderef-agenda');">Agenda</a></h3>
+<div class="outline-text-3" id="text-2-14">
+<div class="org-src-container">
+<pre class="src src-kbd"><span style="color: #51afef;">(</span><span style="color: #51afef; font-style: italic;">defalias</span>
+  agenda <span style="color: #c678dd;">(</span><span style="color: #c678dd;">cmd-button</span> <span style="color: #98be65;">"kitty ~/.local/bin/taskwarrior-tui"</span><span style="color: #c678dd;">)</span>
+  <span style="color: #51afef;">)</span>
+</pre>
+</div>
+</div>
+<div id="outline-container-org894767b" class="outline-4">
+<h4 id="org894767b"><span class="section-number-4">2.14.1</span> <span class="todo TODO">TODO</span> Open a floating, semi-transparent window</h4>
+<div class="outline-text-4" id="text-2-14-1">
+<p>
+Instead of a fullscreen, opaque window
+</p>
+</div>
+</div>
+<div id="outline-container-orga245699" class="outline-4">
+<h4 id="orga245699"><span class="section-number-4">2.14.2</span> <span class="todo TODO">TODO</span> Maybe switch to org-agenda</h4>
+</div>
+</div>
+<div id="outline-container-org9fe9589" class="outline-3">
+<h3 id="org9fe9589"><span class="section-number-3">2.15</span> <span class="todo TODO">TODO</span> <a href="#coderef-open-preset" class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-open-preset');" onmouseout="CodeHighlightOff(this, 'coderef-open-preset');">Open Preset</a></h3>
+</div>
+<div id="outline-container-orgff2c0c4" class="outline-3">
+<h3 id="orgff2c0c4"><span class="section-number-3">2.16</span> <span class="todo TODO">TODO</span> <a href="#coderef-local-leader" class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-local-leader');" onmouseout="CodeHighlightOff(this, 'coderef-local-leader');">Local Leader</a></h3>
+</div>
+
+<div id="outline-container-orgee41b54" class="outline-3">
+<h3 id="orgee41b54"><span class="section-number-3">2.17</span> Leader Key Definitions</h3>
+<div class="outline-text-3" id="text-2-17">
+<p>
+We need to do this in order to get the layer aliases to evaluate <i>after</i> all of the helper aliases are defined
+Otherwise, we get an error saying that the aliases are non-existent
+</p>
+<div class="org-src-container">
+<pre class="src src-kbd">&lt;&lt;base_leader_key_layer&gt;&gt;
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Sridaran Thoniyil</p>
+<p class="date">Created: 2021-06-19 Sat 00:06</p>
+</div>
+</body>
+</html>
