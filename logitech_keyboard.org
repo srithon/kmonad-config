@@ -345,16 +345,21 @@ cd
     The offset, however, appears to be in pixels.
 
     See [[https://manpages.debian.org/testing/libx11-doc/XParseGeometry.3.en.html][this link]] for more details
-  - ~/bin/fish~
-    Tells ~st~ to run the ~fish~ shell
+  - ~screen~
+    Using ~screen~ to maintain a single shell session through each ~runner~ invocation.
+    - ~-DR runner~
+      Attaches to a session called ~runner~, creating it if necessary.
+      Some of ~screen~'s flag combinations seem a little arbitrary.
+    - ~-s /bin/fish~
+      Tells ~screen~ to start new sessions with the ~fish~ shell.
 
 #+begin_src sh
-st -c "rounded st-runner" -g 100x8+225+50 /bin/fish
+st -c "rounded st-runner" -g 100x8+225+50 screen -DR runner -s /bin/fish
 #+end_src
 ** TODO Cleanup exit command
 Right now, we are doing ~killall st~, which only does what we want because we do not use ~st~ for anything else.
 We should aim for a more robust solution.
-** TODO Reuse the ~runner~ terminal and shell between invocations
+** DONE Reuse the ~runner~ terminal and shell between invocations
 * TODO [[(prompt)][Prompt]]
 * [[(agenda)][Agenda]]
 #+begin_src kbd
