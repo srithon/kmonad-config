@@ -225,7 +225,7 @@ We solve this by plugging this code block into [[Leader Key Definitions]], which
   trm t ;; (ref:terminal)
   run @enter-run ;; (ref:run)
   pro p ;; (ref:prompt)
-  age a ;; (ref:agenda)
+  age @agenda ;; (ref:agenda)
   pre o ;; (ref:open-preset)
   cap @org-capture ;; (ref:org-capture)
   lld \\ ;; (ref:local-leader)
