@@ -319,8 +319,8 @@ Setting environment variables for the ~fish~ process to inherit.
   This is a custom variable that determines whether a message should display on startup.
   I set it to 1 because I do not want it to output for the runner.
 - ~STARSHIP_CONFIG~
- [[https://github.com/starship/starship/][Starship]] is the shell prompt I am using.
- I want the runner to have a different configuration than my normal shell, so this points to the other config
+  [[https://github.com/starship/starship/][Starship]] is the shell prompt I am using.
+  I want the runner to have a different configuration than my normal shell, so this points to the other config
 
 #+begin_src sh
 export SKIP_FISH_GREETING=1
