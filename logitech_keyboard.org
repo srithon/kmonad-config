@@ -354,7 +354,16 @@ cd
       Tells ~screen~ to start new sessions with the ~fish~ shell.
 
 #+begin_src sh
-st -c "rounded st-runner" -g 100x8+225+50 screen -DR runner -s /bin/fish
+st -c "rounded st-runner" -g 100x8+225+50 screen -c ~/.config/kmonad/runner/screenrc -DR runner -s /bin/fish
+#+end_src
+
+The configuration we are using for ~screen~.
+
+- ~term screen-256color~
+  This line fixes the colors in the ~screen~ window.
+  Before, I was getting a lot of text that wasn't being highlighted.
+#+begin_src text :tangle ~/.config/kmonad/runner/screenrc
+term screen-256color
 #+end_src
 ** TODO Cleanup exit command
 Right now, we are doing ~killall st~, which only does what we want because we do not use ~st~ for anything else.
