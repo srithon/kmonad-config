@@ -357,6 +357,13 @@ cd
 st -c "rounded st-runner" -g 100x8+225+50 screen -c ~/.config/kmonad/runner/screenrc -DR runner -s /bin/fish
 #+end_src
 
+After ~st~ closes, we scroll down our runner so we no longer see the commands/output from earlier.
+We do this by telling screen to send ~Control+L~ keystrokes to the ~runner~ session.
+Since it's the same shell, we /will/ still be in the same working directory and have the same history as before
+#+begin_src sh
+screen -r runner -X stuff ""
+#+end_src
+
 The configuration we are using for ~screen~.
 
 - ~term screen-256color~
