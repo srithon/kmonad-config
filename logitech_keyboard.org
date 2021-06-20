@@ -332,7 +332,7 @@ Sets the working directory back to home
 cd
 #+end_src
 
-- ~st~
+- ~~/.local/bin/st~
   ~st~ is the terminal emulator
   - ~-c "..."~
     This sets the X11 classnames for the window.
@@ -354,7 +354,7 @@ cd
       Tells ~screen~ to start new sessions with the ~fish~ shell.
 
 #+begin_src sh
-st -c "rounded st-runner" -g 100x8+225+50 screen -c ~/.config/kmonad/runner/screenrc -DR runner -s /bin/fish
+~/.local/bin/st -c "rounded st-runner" -g 100x8+225+50 screen -c ~/.config/kmonad/runner/screenrc -DR runner -s /bin/fish
 #+end_src
 
 After ~st~ closes, we scroll down our runner so we no longer see the commands/output from earlier.
