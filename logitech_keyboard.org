@@ -315,10 +315,10 @@ Using the ~dash~ shell for speed
 
 Setting environment variables for the ~fish~ process to inherit.
 
-- ~SKIP_FISH_GREETING~
+- ~SKIP_FISH_GREETING~ ::
   This is a custom variable that determines whether a message should display on startup.
   I set it to 1 because I do not want it to output for the runner.
-- ~STARSHIP_CONFIG~
+- ~STARSHIP_CONFIG~ ::
   [[https://github.com/starship/starship/][Starship]] is the shell prompt I am using.
   I want the runner to have a different configuration than my normal shell, so this points to the other config
 
@@ -332,12 +332,12 @@ Sets the working directory back to home
 cd
 #+end_src
 
-- ~~/.local/bin/st~
+- ~~/.local/bin/st~ ::
   ~st~ is the terminal emulator
-  - ~-c "..."~
+  - ~-c "..."~ ::
     This sets the X11 classnames for the window.
     My KDE config contains window rules that rounds the corners of windows with the ~rounded~ class and gives transparency and several other properties to the ~st-runner~ class
-  - ~-g ...~
+  - ~-g ...~ ::
     This sets the initial window dimensions for the terminal window.
 
     The format we are using is ~<width>x<height>+<xoffset>+<yoffset>~.
@@ -345,12 +345,12 @@ cd
     The offset, however, appears to be in pixels.
 
     See [[https://manpages.debian.org/testing/libx11-doc/XParseGeometry.3.en.html][this link]] for more details
-  - ~screen~
+  - ~screen~ ::
     Using ~screen~ to maintain a single shell session through each ~runner~ invocation.
-    - ~-DR runner~
+    - ~-DR runner~ ::
       Attaches to a session called ~runner~, creating it if necessary.
       Some of ~screen~'s flag combinations seem a little arbitrary.
-    - ~-s /bin/fish~
+    - ~-s /bin/fish~ ::
       Tells ~screen~ to start new sessions with the ~fish~ shell.
 
 #+begin_src sh
@@ -366,7 +366,7 @@ screen -r runner -X stuff ""
 
 The configuration we are using for ~screen~.
 
-- ~term screen-256color~
+- ~term screen-256color~ ::
   This line fixes the colors in the ~screen~ window.
   Before, I was getting a lot of text that wasn't being highlighted.
 #+begin_src text :tangle ~/.config/kmonad/runner/screenrc
