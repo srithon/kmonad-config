@@ -206,10 +206,11 @@ Enable the "leader" layer for the next keypress.
 If we release @ldr /before/ the next key, we treat the keypress as a *tap*, even if for a short period of time both keys were down.
 If we release @ldr /after/ the next key, we treat it as holding.
 
-Also, if we hold the key for more than 2 seconds, treat it like we are holding the key.
+Also, if we hold the key for more than 250 milliseconds, treat it like we are holding the key.
+When we are trying to use the super key in a tap melody, we have the key down for a very short time, so having the hold timeout on 250ms lets us use it for chords more conveniently
 #+begin_src kbd
 (defalias
-  ldr (tap-hold-next-release 2000 (around-next (layer-toggle leader)) lmet)
+  ldr (tap-hold-next-release 250 (around-next (layer-toggle leader)) lmet)
   )
 #+end_src
 
