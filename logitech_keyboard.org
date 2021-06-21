@@ -222,7 +222,7 @@ When we are trying to use the super key in a tap melody, we have the key down fo
 (deflayer qwerty
   grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
   tab  q    w    e    r    t    y    u    i    o    p    [    ]    \
-  caps a    s    d    f    g    h    j    k    l    ;    '    ret
+  lctl a    s    d    f    g    h    j    k    l    ;    '    ret
   lsft z    x    c    v    b    n    m    ,    .    /    rsft               up
   lctl @ldr lalt           spc            ralt rctl                     lft rght
                                                                           down
