@@ -479,8 +479,6 @@ SCROLL_SPEED_FILE=/tmp/kmonad_scroll_script_speed
 SCROLL_SPEED_FILE_OLD=/tmp/kmonad_scroll_script_speed_old
 #+end_src
 
-#+end_src
-
 Check if a process is already running for the current direction, and kill it if necessary.
 We have separate PID files for horizontal and vertical scrolling because we want to be able to scroll in both directions simultaneously.
 #+begin_src sh
@@ -540,7 +538,7 @@ Get the current delay from ~$SCROLL_SPEED_FILE~, creating it if necessary
 #+end_src
 
 To emulate scrolling, we use ~xdotool~ to repeatedly send scroll button presses at a fixed interval: ~$DELAY~ milliseconds.
-The ~10000~ number effectively represents "infinity", as it means that the process will only exit after ~10000 * ~$DELAY~ milliseconds
+The ~10000~ number effectively represents "infinity", as it means that the process will only exit after ~10000 * $DELAY~ milliseconds
 #+begin_src sh
         xdotool click --repeat 10000 --delay $DELAY $TARGET_BUTTON &
 #+end_src
