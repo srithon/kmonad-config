@@ -128,6 +128,10 @@ Scroll down
 Scroll up
 **** L
 Scroll to the right
+**** Shift
+Increase scroll speed while held
+**** Ctrl
+Decrease scroll speed while held
 ** \ :: Local Leader Key
 Use this in conjunction with presets to have local preset keybindings.
 ** Super :: Super
@@ -421,6 +425,11 @@ On release, the script will kill the instance created on press
                            "~/.config/kmonad/scroll/scroll.sh v 0")
   scroll-right (cmd-button "~/.config/kmonad/scroll/scroll.sh h 1"
                            "~/.config/kmonad/scroll/scroll.sh h 0")
+
+  scroll-speed-up   (cmd-button "~/.config/kmonad/scroll/scroll_speed.sh 50"
+                              "~/.config/kmonad/scroll/scroll_speed.sh 0")
+  scroll-speed-down (cmd-button "~/.config/kmonad/scroll/scroll_speed.sh 200"
+                                "~/.config/kmonad/scroll/scroll_speed.sh 0")
   )
 #+end_src
 
@@ -430,14 +439,18 @@ On release, the script will kill the instance created on press
   s_l @scroll-right
   s_k @scroll-up
   s_j @scroll-down
+
+  s_u @scroll-speed-up
+  s_d @scroll-speed-down
+
   s_e @exit-scroll)
 
 (deflayer scroll
   _    _    _    _    _    _    _    _    _    _    _    _    _    _
   _    _    _    _    _    _    _    _    _    _    _    _    _    _
   _    _    _    _    _    _    @s_h @s_k @s_j @s_l _    _    _
-  _    _    _    _    _    _    _    _    _    _    _    _                  _
-  _    @s_e _              _              _    _                         _   _
+  @s_u _    _    _    _    _    _    _    _    _    _    _                  _
+  @s_d @s_e _              _              _    _                         _   _
                                                                            _
   )
 #+end_src
@@ -454,10 +467,18 @@ Again using dash for speed
 - ~DIRECTION~ ::
   Either ~h~ for "horizontal" or ~v~ for "vertical".
 - ~MAGNITUDE~ ::
-  A positive or negative *integer* indicating the scroll speed.
+  A positive or negative *integer* indicating the inverse scroll speed.
 #+begin_src sh
 DIRECTION="$1"
 MAGNITUDE="$2"
+#+end_src
+
+Files storing the scroll speeds
+#+begin_src sh
+SCROLL_SPEED_FILE=/tmp/kmonad_scroll_script_speed
+SCROLL_SPEED_FILE_OLD=/tmp/kmonad_scroll_script_speed_old
+#+end_src
+
 #+end_src
 
 Check if a process is already running for the current direction, and kill it if necessary.
@@ -490,33 +511,104 @@ fi
 
 if [ -e $DIRECTION_PID_FILE ]
 then
-    kill $(cat $DIRECTION_PID_FILE)
+    kill $(head -n1 $DIRECTION_PID_FILE)
     rm $DIRECTION_PID_FILE
 #+end_src
-
-To emulate scrolling, we use ~xdotool~ to repeatedly send scroll button presses at a fixed interval: ~100~ milliseconds.
-The ~10000~ number effectively represents "infinity", as it means that the process will only exit after ~10000 * 100~ milliseconds, or ~1000~ seconds.
 
 This condition is an ~else if~ because if we are holding ~h~ and then press ~l~, we want the two to /cancel out/ rather than having the ~l~ override the ~h~.
 In this code, if the direction pid file exists, we kill the process, creating a new one /only/ if we did not kill an existing one.
 #+begin_src sh
 elif [ $MAGNITUDE -ne 0 ]
 then
-    xdotool click --repeat 10000 --delay 100 $TARGET_BUTTON &
-    # $! is the pid of the last spawned background process
-    echo "$!" > "$DIRECTION_PID_FILE"
+#+end_src
+
+We want this section of code in a loop, so that if the speed changes we can react to it and restart ~xdotool~ with the new speed.
+#+begin_src sh
+    while true
+    do
+#+end_src
+
+Get the current delay from ~$SCROLL_SPEED_FILE~, creating it if necessary
+#+begin_src sh
+        if ! [ -e $SCROLL_SPEED_FILE ]
+        then
+            DELAY=150
+            echo $DELAY > $SCROLL_SPEED_FILE
+        else
+            DELAY=$(cat $SCROLL_SPEED_FILE)
+        fi
+#+end_src
+
+To emulate scrolling, we use ~xdotool~ to repeatedly send scroll button presses at a fixed interval: ~$DELAY~ milliseconds.
+The ~10000~ number effectively represents "infinity", as it means that the process will only exit after ~10000 * ~$DELAY~ milliseconds
+#+begin_src sh
+        xdotool click --repeat 10000 --delay $DELAY $TARGET_BUTTON &
+#+end_src
+
+~$$~ is the PID of the shell process
+#+begin_src sh
+        echo "$$" > "$DIRECTION_PID_FILE"
+#+end_src
+
+Send incoming ~SIGTERM~'s to the ~xdotool~ process so that it can be killed ([[https://linuxconfig.org/how-to-propagate-a-signal-to-child-processes-from-a-bash-script][source]])
+#+begin_src sh
+        trap "kill $!" TERM
+#+end_src
+
+If we receive a ~USR1~ signal, restart the loop so the speed can be updated
+#+begin_src sh
+        trap "kill $!; wait $!; continue" USR1
+#+end_src
+
+Wait for the ~xdotool~ process to complete
+#+begin_src sh
+        wait $!
+#+end_src
+
+If we get to the end of the "loop" without ~USR1~ signal firing, we can safely exit
+#+begin_src sh
+        break
+    done
+fi
+#+end_src
+** Scroll Speed Script
+:PROPERTIES:
+:header-args:sh: :tangle ~/.config/kmonad/scroll/scroll_speed.sh :mkdirp yes :tangle-mode (identity #o744) :padline no
+:END:
+- ~NEW_DELAY~ ::
+  The new delay in milliseconds that we need ~xdotool~ to use.
+  If it is equal to ~0~, then reset the delay to the old delay
+#+begin_src sh
+#!/bin/dash
+
+NEW_DELAY=$1
+#+end_src
+
+Files storing the scroll speeds
+#+begin_src sh
+SCROLL_SPEED_FILE=/tmp/kmonad_scroll_script_speed
+SCROLL_SPEED_FILE_OLD=/tmp/kmonad_scroll_script_speed_old
+#+end_src
+
+Save the current speed to another file
+#+begin_src sh
+if [ $NEW_DELAY -ne 0 ]
+then
+    cat /tmp/kmonad_scroll_script_speed > /tmp/kmonad_scroll_script_speed_old
+
+    # write new speed to the file
+    echo $NEW_DELAY > /tmp/kmonad_scroll_script_speed
+else
+    cat /tmp/kmonad_scroll_script_speed_old > /tmp/kmonad_scroll_script_speed
 fi
 #+end_src
 
-I used to have this code inside of the ~elif~:
-#+begin_src sh :tangle no
-# https://stackoverflow.com/questions/2493642/how-does-a-linux-unix-bash-script-know-its-own-pid
-echo $$ > $DIRECTION_PID_FILE
+Send ~USR1~ signals to both the vertical and horizontal processes, so that they will refresh their speed
+#+begin_src sh
+kill -s USR1 $(cat /tmp/kmonad_scroll_script_vertical)
+kill -s USR1 $(cat /tmp/kmonad_scroll_script_horizontal)
 #+end_src
-
-I believe the reason it wasn't working was because the ~kill~ would never terminate the ~xdotool~ process, since ~dash~ would wait for ~xdotool~ to terminate on its own before exitting.
-Now, the code has ~kill~ interact directly with the ~xdotool~ process rather than the shell running it.
-** TODO Use ~shift~ to control scroll speed
+** DONE Use ~shift~ to control scroll speed
 ** Original Approach
 This was my original idea, but I am now implementing scrolling through a shell script
 #+begin_quote
