@@ -417,13 +417,13 @@ On release, the script will kill the instance created on press
   enter-scroll (layer-add scroll)
   exit-scroll (layer-rem scroll)
 
-  scroll-left  (cmd-button "~/.config/kmonad/scroll/scroll.sh h -1"
+  scroll-left  (cmd-button "~/.config/kmonad/scroll/scroll.sh h -"
                            "~/.config/kmonad/scroll/scroll.sh h 0")
-  scroll-up    (cmd-button "~/.config/kmonad/scroll/scroll.sh v -1"
+  scroll-up    (cmd-button "~/.config/kmonad/scroll/scroll.sh v -"
                            "~/.config/kmonad/scroll/scroll.sh v 0")
-  scroll-down  (cmd-button "~/.config/kmonad/scroll/scroll.sh v 1"
+  scroll-down  (cmd-button "~/.config/kmonad/scroll/scroll.sh v +"
                            "~/.config/kmonad/scroll/scroll.sh v 0")
-  scroll-right (cmd-button "~/.config/kmonad/scroll/scroll.sh h 1"
+  scroll-right (cmd-button "~/.config/kmonad/scroll/scroll.sh h +"
                            "~/.config/kmonad/scroll/scroll.sh h 0")
 
   scroll-speed-up   (cmd-button "~/.config/kmonad/scroll/scroll_speed.sh 50"
@@ -467,7 +467,7 @@ Again using dash for speed
 - ~DIRECTION~ ::
   Either ~h~ for "horizontal" or ~v~ for "vertical".
 - ~MAGNITUDE~ ::
-  A positive or negative *integer* indicating the inverse scroll speed.
+  Either ~+~ for the positive direction, ~-~ for the negative direction or ~0~ to stop
 #+begin_src sh
 DIRECTION="$1"
 MAGNITUDE="$2"
@@ -488,7 +488,7 @@ if [ $DIRECTION = "h" ]
 then
     DIRECTION_PID_FILE=/tmp/kmonad_scroll_script_horizontal
 
-    if [ $MAGNITUDE -lt 0 ]
+    if [ $MAGNITUDE = "-" ]
     then
         # if negative, then use scroll left button
         TARGET_BUTTON=6
@@ -499,7 +499,7 @@ then
 else
     DIRECTION_PID_FILE=/tmp/kmonad_scroll_script_vertical
 
-    if [ $MAGNITUDE -lt 0 ]
+    if [ $MAGNITUDE = "-" ]
     then
         # if negative, then use scroll up button
         TARGET_BUTTON=5
@@ -518,7 +518,7 @@ then
 This condition is an ~else if~ because if we are holding ~h~ and then press ~l~, we want the two to /cancel out/ rather than having the ~l~ override the ~h~.
 In this code, if the direction pid file exists, we kill the process, creating a new one /only/ if we did not kill an existing one.
 #+begin_src sh
-elif [ $MAGNITUDE -ne 0 ]
+elif ! [ $MAGNITUDE = "0" ]
 then
 #+end_src
 
