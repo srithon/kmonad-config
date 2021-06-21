@@ -117,6 +117,17 @@ Opens the ~emacs~ window once again and loops from step #1.
 ** C :: Org-Capure
 Opens org-capture.
 I already have this bound to ~Super+C~, but having it on ~Super, C~ would make it easier to invoke.
+** S :: Scroll
+Layer that lets you emulate mouse wheel scrolling using vim keys
+*** Scroll Layer
+**** H
+Scroll to the left
+**** J
+Scroll down
+**** K
+Scroll up
+**** L
+Scroll to the right
 ** \ :: Local Leader Key
 Use this in conjunction with presets to have local preset keybindings.
 ** Super :: Super
@@ -228,13 +239,14 @@ We solve this by plugging this code block into [[Leader Key Definitions]], which
   age @agenda ;; (ref:agenda)
   pre o ;; (ref:open-preset)
   cap @org-capture ;; (ref:org-capture)
+  scr @enter-scroll ;; (ref:scroll)
   lld \\ ;; (ref:local-leader)
   )
 
 (deflayer leader
   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX
   XX   @win XX   XX   @run XX   XX   XX   XX   XX   @pro XX   XX   XX
-  XX   @age XX   @dsc XX   XX   XX   XX   XX   XX   XX   XX   XX
+  XX   @age @scr @dsc XX   XX   XX   XX   XX   XX   XX   XX   XX
   XX   XX   XX   @cap @vol @bri XX   XX   XX   XX   XX   XX                 XX
   XX   lmet XX             XX             XX   XX                        XX  XX
                                                                            XX
@@ -392,6 +404,145 @@ Instead of a fullscreen, opaque window.
 (defalias
   org-capture (cmd-button "~/.local/bin/org-capture"))
 #+end_src
+* [[(scroll)][Scroll]]
+We set the scroll buttons to invoke the ~scroll.sh~ script once on press and once on release.
+On release, the script will kill the instance created on press
+#+begin_src kbd
+(defalias
+  enter-scroll (layer-add scroll)
+  exit-scroll (layer-rem scroll)
+
+  scroll-left  (cmd-button "~/.config/kmonad/scroll/scroll.sh h -1"
+                           "~/.config/kmonad/scroll/scroll.sh h 0")
+  scroll-up    (cmd-button "~/.config/kmonad/scroll/scroll.sh v -1"
+                           "~/.config/kmonad/scroll/scroll.sh v 0")
+  scroll-down  (cmd-button "~/.config/kmonad/scroll/scroll.sh v 1"
+                           "~/.config/kmonad/scroll/scroll.sh v 0")
+  scroll-right (cmd-button "~/.config/kmonad/scroll/scroll.sh h 1"
+                           "~/.config/kmonad/scroll/scroll.sh h 0")
+  )
+#+end_src
+
+#+begin_src kbd
+(defalias
+  s_h @scroll-left
+  s_l @scroll-right
+  s_k @scroll-up
+  s_j @scroll-down
+  s_e @exit-scroll)
+
+(deflayer scroll
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _    _    _    _    @s_h @s_k @s_j @s_l _    _    _
+  _    _    _    _    _    _    _    _    _    _    _    _                  _
+  _    @s_e _              _              _    _                         _   _
+                                                                           _
+  )
+#+end_src
+** Scroll Script
+:PROPERTIES:
+:header-args:sh:  :tangle ~/.config/kmonad/scroll/scroll.sh :mkdirp yes :tangle-mode (identity #o744) :padline no
+:END:
+
+Again using dash for speed
+#+begin_src sh
+#!/bin/dash
+#+end_src
+
+- ~DIRECTION~ ::
+  Either ~h~ for "horizontal" or ~v~ for "vertical".
+- ~MAGNITUDE~ ::
+  A positive or negative *integer* indicating the scroll speed.
+#+begin_src sh
+DIRECTION="$1"
+MAGNITUDE="$2"
+#+end_src
+
+Check if a process is already running for the current direction, and kill it if necessary.
+We have separate PID files for horizontal and vertical scrolling because we want to be able to scroll in both directions simultaneously.
+#+begin_src sh
+if [ $DIRECTION = "h" ]
+then
+    DIRECTION_PID_FILE=/tmp/kmonad_scroll_script_horizontal
+
+    if [ $MAGNITUDE -lt 0 ]
+    then
+        # if negative, then use scroll left button
+        TARGET_BUTTON=6
+    else
+        # if positive, then use scroll right button
+        TARGET_BUTTON=7
+    fi
+else
+    DIRECTION_PID_FILE=/tmp/kmonad_scroll_script_vertical
+
+    if [ $MAGNITUDE -lt 0 ]
+    then
+        # if negative, then use scroll up button
+        TARGET_BUTTON=5
+    else
+        # if positive, then use scroll down button
+        TARGET_BUTTON=4
+    fi
+fi
+
+if [ -e $DIRECTION_PID_FILE ]
+then
+    kill $(cat $DIRECTION_PID_FILE)
+    rm $DIRECTION_PID_FILE
+#+end_src
+
+To emulate scrolling, we use ~xdotool~ to repeatedly send scroll button presses at a fixed interval: ~100~ milliseconds.
+The ~10000~ number effectively represents "infinity", as it means that the process will only exit after ~10000 * 100~ milliseconds, or ~1000~ seconds.
+
+This condition is an ~else if~ because if we are holding ~h~ and then press ~l~, we want the two to /cancel out/ rather than having the ~l~ override the ~h~.
+In this code, if the direction pid file exists, we kill the process, creating a new one /only/ if we did not kill an existing one.
+#+begin_src sh
+elif [ $MAGNITUDE -ne 0 ]
+then
+    xdotool click --repeat 10000 --delay 100 $TARGET_BUTTON &
+    # $! is the pid of the last spawned background process
+    echo "$!" > "$DIRECTION_PID_FILE"
+fi
+#+end_src
+
+I used to have this code inside of the ~elif~:
+#+begin_src sh :tangle no
+# https://stackoverflow.com/questions/2493642/how-does-a-linux-unix-bash-script-know-its-own-pid
+echo $$ > $DIRECTION_PID_FILE
+#+end_src
+
+I believe the reason it wasn't working was because the ~kill~ would never terminate the ~xdotool~ process, since ~dash~ would wait for ~xdotool~ to terminate on its own before exitting.
+Now, the code has ~kill~ interact directly with the ~xdotool~ process rather than the shell running it.
+** TODO Use ~shift~ to control scroll speed
+** Original Approach
+This was my original idea, but I am now implementing scrolling through a shell script
+#+begin_quote
+We are using keys F13-F16 to represent scrolling.
+We need to do this because KMonad does not support sending mouse events.
+Because these keys are not used for anything else (they aren't actually on the keyboard), we can safely remap them to buttons using ~xmodmap~, which /does/ support mouse buttons.
+#+end_quote
+
+This was in my ~~/.Xmodmap~
+#+begin_src text :tangle no
+keycode 191 = Left
+keycode 192 = Pointer_Button5
+keycode 193 = Pointer_Button4
+keycode 194 = Right
+#+end_src
+
+First of all, ~xmodmap~ did not let me bind ~191~ and ~194~ to ~Pointer_Button6~ and ~Pointer_Button7~ (pushing the scroll wheel left/right), saying that it did not recognize either keysym.
+As a workaround, I tried setting these to the arrow keys.
+
+The horizontal arrow keys worked, but the up/down scrolling did not.
+In most applications, the up/down arrow keys do selection in addition to scrolling, so binding ~j~ and ~k~ to arrow keys was not an acceptable solution
+
+Scrolling works by repeatedly "clicking" the scroll buttons.
+Whenever you scroll a scrollbar on your mouse, the speed at which you scroll determines how fast the scrolling occurs on your screen.
+
+I believe the reason the vertical scrolling was not working is because KMonad was repeating the keypresses too quickly.
+Because of this, it probably did not register as scrolling and was simply ignored.
 * TODO [[(local-leader)][Local Leader]]
 
 * Leader Key Definitions
