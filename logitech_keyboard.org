@@ -448,7 +448,7 @@ On release, the script will kill the instance created on press
 (deflayer scroll
   _    _    _    _    _    _    _    _    _    _    _    _    _    _
   _    _    _    _    _    _    _    _    _    _    _    _    _    _
-  @s_d _    _    _    _    _    @s_h @s_k @s_j @s_l _    _    _
+  @s_d _    _    _    _    _    @s_h @s_j @s_k @s_l _    _    _
   @s_u _    _    _    _    _    _    _    _    _    _    _                  _
   @s_d @s_e _              _              _    _                         _   _
                                                                            _
@@ -500,10 +500,10 @@ else
     if [ $MAGNITUDE = "-" ]
     then
         # if negative, then use scroll up button
-        TARGET_BUTTON=5
+        TARGET_BUTTON=4
     else
         # if positive, then use scroll down button
-        TARGET_BUTTON=4
+        TARGET_BUTTON=5
     fi
 fi
 
