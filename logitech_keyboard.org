@@ -22,7 +22,7 @@ Brightness Down.
 **** Esc | Super
 Exit layer.
 ** V :: Volume
-Layer that allows you to easily change the volume.
+Layer that allows you to easily change the volume using the keyboard
 *** Volume Layer
 **** H
 Rotate current output left.
