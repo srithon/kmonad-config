@@ -444,6 +444,8 @@ while True:
     # 30 ms delay
     sleep(0.030)
 #+end_src
+This code could be further optimized by spawning the system commands with ~subprocess.Popen~, saving the handles to a list and polling/filtering them on each iteration of the loop.
+The [[https://pypi.org/project/subprocess32/][subprocess32]] package is recommended when using ~subprocess~ in ~python2~, since the stock version of ~subprocess~ that ships with it has several issues.
 **** Lua Implementation
 I originally wrote the helper script in Lua because I thought that Python would be too slow.
 However, upon further inspection of the startup time link, python2's startup time is under 3 milliseconds, which is certainly acceptable for this usecase.
