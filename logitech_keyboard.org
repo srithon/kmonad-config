@@ -371,9 +371,25 @@ Unfortunately, these programs do not allow you to /get/ values cleanly, only set
 To me, although this ~qdbus~ solution is verbose, it beats having to parse text output, which the ~pa*~ solutions all had in common.
 
 All of the following ~qdbus~ commands are listed in this [[https://gist.github.com/srithon/3cd297bdfdd157c0a7e00ff1aeb2690c][gist]].
+
+*NOTE*: This code caches the value of ~ACTIVE_CONTROL~ to reduce delay before the volume modulation can begin.
+I found that the delay was just long enough to bother me, and a benchmark showed that everything before the ~python2~ invocation took around 60 milliseconds to run before caching.
+/With/ caching, this became around 25 milliseconds
+I /believe/ that this cached value will be valid so long as you do not change sound cards.
 #+begin_src sh
+    ACTIVE_CONTROL_CACHE_FILE=/tmp/kmonad_volume_script_active_control
+
     # I'm not exactly sure what a control is
-    ACTIVE_CONTROL=$(qdbus org.kde.kded5 /Mixers/PulseAudio__Playback_Devices_1 org.kde.KMix.Mixer.controls)
+    if [ -e $ACTIVE_CONTROL_CACHE_FILE ]; then
+        ACTIVE_CONTROL=$(cat $ACTIVE_CONTROL_CACHE_FILE)
+    else
+        ACTIVE_CONTROL=$(qdbus org.kde.kded5 /Mixers/PulseAudio__Playback_Devices_1 org.kde.KMix.Mixer.controls)
+        # OPTIMIZATION: spawn in the background
+        echo $ACTIVE_CONTROL > $ACTIVE_CONTROL_CACHE_FILE &
+    fi
+#+end_src
+
+#+begin_src sh
     # Use the active control path and read the volume property from it
     CURRENT_VOLUME=$(qdbus org.kde.kded5 "$ACTIVE_CONTROL" org.kde.KMix.Control.volume)
 #+end_src
