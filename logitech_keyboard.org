@@ -21,33 +21,6 @@ Brightness Up.
 Brightness Down.
 **** Esc | Super
 Exit layer.
-** V :: Volume
-Layer that allows you to easily change the volume using the keyboard
-*** Volume Layer
-**** H
-Rotate current output left.
-**** J
-Rotate current output right.
-**** K
-Volume up by 5.
-**** L
-Volume down by 5.
-**** M
-Toggles the muteness (?) of the current output and exits the Volume Layer
-**** Q
-Toggles volume ~osd~ visibility.
-*** DONE Figure out which library to use to create the volume applet
-#+begin_quote
-I did a bunch of research into GUI overlays on Linux that can render over fullscreen applications.
-There is a significant lack of resources on the topic, but one thing I did get working was a demo using the [[https://github.com/davidmaamoaix/overlay][overlay]] Python library, which is built on ~tkinter~.
-The downside is that ~overlay~ is unmaintained and doesn't work on Linux without [[https://github.com/davidmaamoaix/overlay/issues/2#issuecomment-650091963][changing the source]].
-I have yet to see if what I am trying to accomplish is possible with this library, but it /can/ render over fullscreen, which is a good start.
-
-I also looked into [[https://github.com/brndnmtthws/conky][conky]], assuming that it would be able to render over fullscreen applications, but it turns out it cannot.
-#+end_quote
-
-I ended up using KDE's ~osd~ with its DBus interface, emulating the normal volume popups that you get with the stock volume keys.
-This has the benefit of fitting in with the system theme, and only took a single line to implement
 ** T :: Terminal (Scratchpad)
 Opens terminal scratchpad.
 *** Hold
@@ -148,6 +121,33 @@ Scroll to the right
 Increase scroll speed while held
 **** Ctrl
 Decrease scroll speed while held
+** V :: Volume
+Layer that allows you to easily change the volume using the keyboard
+*** Volume Layer
+**** H
+Rotate current output left.
+**** J
+Rotate current output right.
+**** K
+Volume up by 5.
+**** L
+Volume down by 5.
+**** M
+Toggles the muteness (?) of the current output and exits the Volume Layer
+**** Q
+Toggles volume ~osd~ visibility.
+*** DONE Figure out which library to use to create the volume applet
+#+begin_quote
+I did a bunch of research into GUI overlays on Linux that can render over fullscreen applications.
+There is a significant lack of resources on the topic, but one thing I did get working was a demo using the [[https://github.com/davidmaamoaix/overlay][overlay]] Python library, which is built on ~tkinter~.
+The downside is that ~overlay~ is unmaintained and doesn't work on Linux without [[https://github.com/davidmaamoaix/overlay/issues/2#issuecomment-650091963][changing the source]].
+I have yet to see if what I am trying to accomplish is possible with this library, but it /can/ render over fullscreen, which is a good start.
+
+I also looked into [[https://github.com/brndnmtthws/conky][conky]], assuming that it would be able to render over fullscreen applications, but it turns out it cannot.
+#+end_quote
+
+I ended up using KDE's ~osd~ with its DBus interface, emulating the normal volume popups that you get with the stock volume keys.
+This has the benefit of fitting in with the system theme, and only took a single line to implement
 ** \ :: Local Leader Key
 Use this in conjunction with presets to have local preset keybindings.
 ** Super :: Super
@@ -295,324 +295,6 @@ This command uses ~wmctrl~ to switch to a currently-existing Discord window, and
 #+end_src
 ** TODO Switch back to the previous window when invoked a second time
 * TODO [[(brightness)][Brightness]]
-* [[(volume)][Volume]]
-#+begin_src kbd
-(defalias
-  ;; Enable (overwrite) osd visibility when entering volume layer
-  enter-volume #((cmd-button "echo 1 > /tmp/kmonad_volume_script_display_osd") (layer-add volume))
-  exit-volume (layer-rem volume)
-
-  volume-up   (cmd-button "~/.config/kmonad/volume/volume.sh +"
-                          "~/.config/kmonad/volume/volume.sh 0")
-  volume-down (cmd-button "~/.config/kmonad/volume/volume.sh -"
-                          "~/.config/kmonad/volume/volume.sh 0")
-
-  volume-osd-toggle (cmd-button "~/.config/kmonad/volume/volume_popup_toggle.sh")
-
-  ;; uses KDE​'s DBus interface to call the KMix volume mute shortcut, and also exits the layer
-  ;; we can do this because we do not need the muting behavior to be different from pressing the mute button normally
-  volume-mute (cmd-button "qdbus org.kde.kglobalaccel /component/kmix invokeShortcut mute")
-  )
-#+end_src
-
-#+begin_src kbd
-(defalias
-  v_k @volume-up
-  v_j @volume-down
-
-  v_m @volume-mute
-
-  v_q @volume-osd-toggle ;; pneumonic is "quiet"
-
-  v_e @exit-volume
-  )
-
-(deflayer volume
-  _    _    _    _    _    _    _    _    _    _    _    _    _    _
-  _    @v_q _    _    _    _    _    _    _    _    _    _    _    _
-  _    _    _    _    _    _    _    @v_j @v_k _    _    _    _
-  _    _    _    _    _    _    _    @v_m _    _    _    _                  _
-  _    @v_e _              _              _    _                         _   _
-                                                                           _
-  )
-#+end_src
-** Volume Script
-:PROPERTIES:
-:header-args:sh:  :tangle ~/.config/kmonad/volume/volume.sh :mkdirp yes :tangle-mode (identity #o744) :padline no
-:END:
-
-Similar to the [[Scroll Script]], this script will modulate a parameter at a given rate, writing its own PID into a file so that it can be killed when a key is released
-
-- ~VOLUME_CHANGE_DIRECTION~ ::
-  Either ~+~ to increase volume, ~-~  to decrease it or ~0~ to stop.
-
-Like all of the other scripts, this one is POSIX-compliant
-#+begin_src sh
-#!/bin/dash
-
-VOLUME_CHANGE_DIRECTION="$1"
-#+end_src
-
-Kill the instance that is currently modifying the volume (if it exists).
-~kill~ will throw an error if the process is no longer alive, but that will not crash the script
-#+begin_src sh
-DIRECTION_PID_FILE=/tmp/kmonad_volume_script
-
-# Kill existing process if necessary
-if [ -e $DIRECTION_PID_FILE ]; then
-    kill "$(cat $DIRECTION_PID_FILE)"
-    rm $DIRECTION_PID_FILE
-fi
-#+end_src
-
-Only run the code if the direction is non-zero
-#+begin_src sh
-if ! [ "$VOLUME_CHANGE_DIRECTION" = "0" ]; then
-#+end_src
-
-Get the current volume using KMix's DBus interface.
-
-I'm doing it this way because [[https://unix.stackexchange.com/questions/132230/read-out-pulseaudio-volume-from-commandline-i-want-pactl-get-sink-volume][this]] StackOverflow post about getting the current volume from ~pactl/pacmd~ did not yield a clean enough solution.
-[[https://unix.stackexchange.com/questions/132230/read-out-pulseaudio-volume-from-commandline-i-want-pactl-get-sink-volume][This]] StackOverflow post details several solutions to get the volume from ~pacmd~, but none of them are pretty.
-Unfortunately, these programs do not allow you to /get/ values cleanly, only set them.
-To me, although this ~qdbus~ solution is verbose, it beats having to parse text output, which the ~pa*~ solutions all had in common.
-
-All of the following ~qdbus~ commands are listed in this [[https://gist.github.com/srithon/3cd297bdfdd157c0a7e00ff1aeb2690c][gist]].
-
-*NOTE*: This code caches the value of ~ACTIVE_CONTROL~ to reduce delay before the volume modulation can begin.
-I found that the delay was just long enough to bother me, and a benchmark showed that everything before the ~python2~ invocation took around 60 milliseconds to run before caching.
-/With/ caching, this became around 25 milliseconds
-I /believe/ that this cached value will be valid so long as you do not change sound cards.
-#+begin_src sh
-    ACTIVE_CONTROL_CACHE_FILE=/tmp/kmonad_volume_script_active_control
-
-    # I'm not exactly sure what a control is
-    if [ -e $ACTIVE_CONTROL_CACHE_FILE ]; then
-        ACTIVE_CONTROL=$(cat $ACTIVE_CONTROL_CACHE_FILE)
-    else
-        ACTIVE_CONTROL=$(qdbus org.kde.kded5 /Mixers/PulseAudio__Playback_Devices_1 org.kde.KMix.Mixer.controls)
-        # OPTIMIZATION: spawn in the background
-        echo $ACTIVE_CONTROL > $ACTIVE_CONTROL_CACHE_FILE &
-    fi
-#+end_src
-
-Reads whether or not to display ~osd~ popups from the disk
-#+begin_src sh
-    DISPLAY_OSD_FILE=/tmp/kmonad_volume_script_display_osd
-
-    # I'm not exactly sure what a control is
-    if [ -e $DISPLAY_OSD_FILE ]; then
-        DISPLAY_OSD=$(cat $DISPLAY_OSD_FILE)
-    else
-        DISPLAY_OSD=1
-        echo $DISPLAY_OSD > $DISPLAY_OSD_FILE &
-    fi
-#+end_src
-
-#+begin_src sh
-    # Use the active control path and read the volume property from it
-    CURRENT_VOLUME=$(qdbus org.kde.kded5 "$ACTIVE_CONTROL" org.kde.KMix.Control.volume)
-#+end_src
-
-Explicitly unmute the output.
-The ~&~ spawns it in the background so that we don't add extra delay before the actual volume modulation
-#+begin_src sh
-    pactl set-sink-mute @DEFAULT_SINK@ false &
-#+end_src
-
-Write the shell's pid to disk so the next invocation can kill it
-#+begin_src sh
-    echo "$$" > "$DIRECTION_PID_FILE"
-#+end_src
-
-- ~-E~​ ::
-  Prevents unnecessary environment variables from being loaded (optimization).
-- ~-S~ ::
-  Prevents unnecessary modules from being loaded (optimization)
-
-The reasoning behind this section being written in Python can be found under [[Volume Helper Script]]​.
-In this code, the ~python2~ process inherits the PID of the shell since we are using ~exec~
-#+begin_src sh
-    exec python2 -ES ~/.config/kmonad/volume/change_volume.py $CURRENT_VOLUME $VOLUME_CHANGE_DIRECTION $DISPLAY_OSD
-fi
-#+end_src
-*** Volume Helper Script
-:PROPERTIES:
-:header-args:python: :tangle ~/.config/kmonad/volume/change_volume.py
-:END:
-The reason I wrote this section in +Lua+​~python2~ is because it requires a loop to run with a subsecond delay.
-If this were written as part of the shell script, we would be calling out to ~/bin/sleep~ tens of times per second, and the interval could become visibly inconsistent.
-
-- ~volume~ ::
-  An integer representing the starting volume percentage
-- ~increment~ ::
-  ~+~ to increase volume, ~-~  to decrease it or ~0~ to toggle mute.
-- ~display_osd~ ::
-  ~1~ to display the ~osd~ popups when the volume changes, ~0~ to suppress them
-
-#+begin_src python
-from time import sleep
-from os import system
-from sys import argv
-
-volume = int(argv[1])
-increment = 1 if argv[2] == '+' else -1
-display_osd = True if argv[3] == '1' else False
-#+end_src
-
-When we receive a ~USR1~ signal from the [[Volume OSD Toggle Script]], invert the value of ~display_osd~.
-This is equivalent to reading the new value of the file; we know that the script would have inverted the value from what it was originally, so we can simply invert our variable to mirror it.
-#+begin_src python
-import signal
-
-def usr1_handler(signum, frame):
-    global display_osd
-    display_osd = not display_osd
-
-signal.signal(signal.SIGUSR1, usr1_handler)
-#+end_src
-
-f-strings were only introduced in python3.6, so this code uses ~string.format~.
-I was originally confused by ~string.format~, thinking ~string~ was a module, but in reality ~format~ is a method defined on the ~string~ class.
-#+begin_src python
-while True:
-    # Clamp the range of the loop between 0 and 100
-    # Without these checks, there would be nothing stopping it from going out of bounds
-    if volume > 100 and increment > 0 or volume < 0 and increment < 0:
-        break
-
-    volume += increment
-
-    system('pactl set-sink-volume @DEFAULT_SINK@ {}%'.format(volume))
-
-    if display_osd:
-        system('qdbus org.kde.plasmashell /org/kde/osdService org.kde.osdService.volumeChanged {}'.format(volume))
-
-    # 30 ms delay
-    sleep(0.030)
-#+end_src
-This code could be further optimized by spawning the system commands with ~subprocess.Popen~, saving the handles to a list and polling/filtering them on each iteration of the loop.
-The [[https://pypi.org/project/subprocess32/][subprocess32]] package is recommended when using ~subprocess~ in ~python2~, since the stock version of ~subprocess~ that ships with it has several issues.
-**** Lua Implementation
-I originally wrote the helper script in Lua because I thought that Python would be too slow.
-However, upon further inspection of the startup time link, python2's startup time is under 3 milliseconds, which is certainly acceptable for this usecase.
-
-I ran my own benchmarks to compare Lua's startup time without python2's and these were the results
-#+begin_example
-$ hyperfine 'lua -E -e ""' 'python2 -S -c ""'
-Benchmark #1: lua -E -e ""
-  Time (mean ± σ):       0.4 ms ±   0.2 ms    [User: 0.4 ms, System: 0.4 ms]
-  Range (min … max):     0.1 ms …   2.2 ms    1214 runs
-
-  Warning: Command took less than 5 ms to complete. Results might be inaccurate.
-
-Benchmark #2: python2 -S -c ""
-  Time (mean ± σ):       2.9 ms ±   0.5 ms    [User: 2.1 ms, System: 0.9 ms]
-  Range (min … max):     2.3 ms …   5.3 ms    649 runs
-
-  Warning: Command took less than 5 ms to complete. Results might be inaccurate.
-
-Summary
-  'lua -E -e ""' ran
-    7.45 ± 4.81 times faster than 'python2 -S -c ""'
-#+end_example
-
-As mentioned earlier, Lua's startup time is many times faster,  but python2's 3 milliseconds is still an acceptable speed.
-I ran my own benchmarks to compare my Lua implementation and my Python implementation (for 100 iterations of the loop) and these were the results.
-#+begin_example
-$ hyperfine 'lua -E change_volume.lua 0 1' 'python2 -S change_volume.py 0 1'
-Benchmark #1: lua -E change_volume.lua 0 1
-  Time (mean ± σ):      6.747 s ±  0.066 s    [User: 1.056 s, System: 0.913 s]
-  Range (min … max):    6.685 s …  6.899 s    10 runs
-
-Benchmark #2: python2 -S change_volume.py 0 1
-  Time (mean ± σ):      6.664 s ±  0.038 s    [User: 1.060 s, System: 0.887 s]
-  Range (min … max):    6.613 s …  6.730 s    10 runs
-
-Summary
-  'python2 -S change_volume.py 0 1' ran
-    1.01 ± 0.01 times faster than 'lua -E change_volume.lua 0 1'
-#+end_example
-
-When taking everything into account, python2 was actually a tiny bit faster than Lua.
-This difference may have just been chance, but it shows that in the grand scheme of things, Lua's superior startup time does not make a super big impact on the overall runtime.
-
-The python2 implementation also has the advantage of not requiring any external dependencies, so it was the clear winner. Many distributions actually require python2 for their own internal packages, so it's much more likely to not have to install anything new
-
-#+begin_quote
-Replaces the running shell process with a Lua script that modulates the volume in a loop.
-The reason I wrote this section in Lua is because it requires a loop to run with a subsecond delay.
-If this were written as part of the shell script, we would be calling out to ~/bin/sleep~ tens of times per second, and the interval could be visibly erratic and inconsistent.
-With the ~socket~ module, Lua lets you sleep without calling out to an external process.
-
-I chose Lua over Python because Python's startup time is significantly higher (see [[https://github.com/bdrung/startup-time][this]]).
-I chose it over C and other compiled languages because I didn't want to have to compile and store an executable.
-
-*Note* that ~socket~ may not be shipped with your distribution by default.
-For Fedora, I had to install the ~lua-socket~ and ~lua-socket-devel~ packages to get it working. Installing both /may/ not be necessary.
-
-In this code, the ~lua~ process inherits the PID of the shell since we are using ~exec~
-#+end_quote
-
-#+begin_src lua :tangle no
-local socket = require('socket')
-local os = require('os')
-
-local volume = tonumber(arg[1])
-local increment = tonumber(arg[2])
-
-while true do
-  volume = volume + increment
-
-  os.execute('pactl set-sink-volume @DEFAULT_SINK@ ' .. volume .. '%')
-  os.execute('qdbus org.kde.plasmashell /org/kde/osdService org.kde.osdService.volumeChanged ' .. volume)
-
-  socket.select(nil, nil, 0.04)
-end
-#+end_src
-** Volume OSD Toggle Script
-:PROPERTIES:
-:header-args:sh:  :tangle ~/.config/kmonad/volume/volume_popup_toggle.sh :tangle-mode (identity #o744) :padline no
-:END:
-
-This script switches the contents of ~$DISPLAY_OSD_FILE~ between 0 and 1, setting the value to 0 if the file does not exist.
-
-- ~sed~ ::
-  Stream editor
-  - ~-i "$DISPLAY_OSD_FILE"~ ::
-    Modifies the file in-place, so we don't need to open the file once for reading and again for writing.
-  - ~'y/01/10'~ ::
-    From the ~sed~ man page for the ~y~ command:
-    #+begin_quote
-    Transliterate the characters in the pattern space which appear in source to the corresponding character in dest.
-    #+end_quote
-    This effectively maps ~0~ to ~1~ and ~1~ to ~0~.
-
-#+begin_src sh
-#!/bin/dash
-
-DISPLAY_OSD_FILE=/tmp/kmonad_volume_script_display_osd
-
-if ! [ -e $DISPLAY_OSD_FILE ]; then
-    echo "0" > "$DISPLAY_OSD_FILE"
-else
-    sed -i 'y/01/10/' "$DISPLAY_OSD_FILE"
-fi
-
-if [ -e /tmp/kmonad_volume_script ]; then
-    kill -s USR1 $(cat /tmp/kmonad_volume_script)
-fi
-#+end_src
-
-This is an alternate implementation of the swap using ~tr~.
-See [[https://stackoverflow.com/questions/6696842/how-can-i-use-a-file-in-a-command-and-redirect-output-to-the-same-file-without-t][this]] StackOverflow post on why we can't redirect the output of ~tr~ back into the file using ~>~.
-#+begin_example sh :tangle no
-tr '01' '10' < $DISPLAY_OSD_FILE | sponge $DISPLAY_OSD_FILE
-#+end_example
-** DONE Volume layer
-The volume layer would remap hjkl to control the volume.
-** TODO Volume Next/Prev
-Rotate to next/previous output with h/l
 * TODO [[(terminal)][Terminal]]
 * [[(run)][Run]]
 We use tap macros to execute the "buttons" in sequence.
@@ -960,6 +642,324 @@ Whenever you scroll a scrollbar on your mouse, the speed at which you scroll det
 
 I believe the reason the vertical scrolling was not working is because KMonad was repeating the keypresses too quickly.
 Because of this, it probably did not register as scrolling and was simply ignored.
+* [[(volume)][Volume]]
+#+begin_src kbd
+(defalias
+  ;; Enable (overwrite) osd visibility when entering volume layer
+  enter-volume #((cmd-button "echo 1 > /tmp/kmonad_volume_script_display_osd") (layer-add volume))
+  exit-volume (layer-rem volume)
+
+  volume-up   (cmd-button "~/.config/kmonad/volume/volume.sh +"
+                          "~/.config/kmonad/volume/volume.sh 0")
+  volume-down (cmd-button "~/.config/kmonad/volume/volume.sh -"
+                          "~/.config/kmonad/volume/volume.sh 0")
+
+  volume-osd-toggle (cmd-button "~/.config/kmonad/volume/volume_popup_toggle.sh")
+
+  ;; uses KDE​'s DBus interface to call the KMix volume mute shortcut, and also exits the layer
+  ;; we can do this because we do not need the muting behavior to be different from pressing the mute button normally
+  volume-mute (cmd-button "qdbus org.kde.kglobalaccel /component/kmix invokeShortcut mute")
+  )
+#+end_src
+
+#+begin_src kbd
+(defalias
+  v_k @volume-up
+  v_j @volume-down
+
+  v_m @volume-mute
+
+  v_q @volume-osd-toggle ;; pneumonic is "quiet"
+
+  v_e @exit-volume
+  )
+
+(deflayer volume
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    @v_q _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _    _    _    _    _    @v_j @v_k _    _    _    _
+  _    _    _    _    _    _    _    @v_m _    _    _    _                  _
+  _    @v_e _              _              _    _                         _   _
+                                                                           _
+  )
+#+end_src
+** Volume Script
+:PROPERTIES:
+:header-args:sh:  :tangle ~/.config/kmonad/volume/volume.sh :mkdirp yes :tangle-mode (identity #o744) :padline no
+:END:
+
+Similar to the [[Scroll Script]], this script will modulate a parameter at a given rate, writing its own PID into a file so that it can be killed when a key is released
+
+- ~VOLUME_CHANGE_DIRECTION~ ::
+  Either ~+~ to increase volume, ~-~  to decrease it or ~0~ to stop.
+
+Like all of the other scripts, this one is POSIX-compliant
+#+begin_src sh
+#!/bin/dash
+
+VOLUME_CHANGE_DIRECTION="$1"
+#+end_src
+
+Kill the instance that is currently modifying the volume (if it exists).
+~kill~ will throw an error if the process is no longer alive, but that will not crash the script
+#+begin_src sh
+DIRECTION_PID_FILE=/tmp/kmonad_volume_script
+
+# Kill existing process if necessary
+if [ -e $DIRECTION_PID_FILE ]; then
+    kill "$(cat $DIRECTION_PID_FILE)"
+    rm $DIRECTION_PID_FILE
+fi
+#+end_src
+
+Only run the code if the direction is non-zero
+#+begin_src sh
+if ! [ "$VOLUME_CHANGE_DIRECTION" = "0" ]; then
+#+end_src
+
+Get the current volume using KMix's DBus interface.
+
+I'm doing it this way because [[https://unix.stackexchange.com/questions/132230/read-out-pulseaudio-volume-from-commandline-i-want-pactl-get-sink-volume][this]] StackOverflow post about getting the current volume from ~pactl/pacmd~ did not yield a clean enough solution.
+[[https://unix.stackexchange.com/questions/132230/read-out-pulseaudio-volume-from-commandline-i-want-pactl-get-sink-volume][This]] StackOverflow post details several solutions to get the volume from ~pacmd~, but none of them are pretty.
+Unfortunately, these programs do not allow you to /get/ values cleanly, only set them.
+To me, although this ~qdbus~ solution is verbose, it beats having to parse text output, which the ~pa*~ solutions all had in common.
+
+All of the following ~qdbus~ commands are listed in this [[https://gist.github.com/srithon/3cd297bdfdd157c0a7e00ff1aeb2690c][gist]].
+
+*NOTE*: This code caches the value of ~ACTIVE_CONTROL~ to reduce delay before the volume modulation can begin.
+I found that the delay was just long enough to bother me, and a benchmark showed that everything before the ~python2~ invocation took around 60 milliseconds to run before caching.
+/With/ caching, this became around 25 milliseconds
+I /believe/ that this cached value will be valid so long as you do not change sound cards.
+#+begin_src sh
+    ACTIVE_CONTROL_CACHE_FILE=/tmp/kmonad_volume_script_active_control
+
+    # I'm not exactly sure what a control is
+    if [ -e $ACTIVE_CONTROL_CACHE_FILE ]; then
+        ACTIVE_CONTROL=$(cat $ACTIVE_CONTROL_CACHE_FILE)
+    else
+        ACTIVE_CONTROL=$(qdbus org.kde.kded5 /Mixers/PulseAudio__Playback_Devices_1 org.kde.KMix.Mixer.controls)
+        # OPTIMIZATION: spawn in the background
+        echo $ACTIVE_CONTROL > $ACTIVE_CONTROL_CACHE_FILE &
+    fi
+#+end_src
+
+Reads whether or not to display ~osd~ popups from the disk
+#+begin_src sh
+    DISPLAY_OSD_FILE=/tmp/kmonad_volume_script_display_osd
+
+    # I'm not exactly sure what a control is
+    if [ -e $DISPLAY_OSD_FILE ]; then
+        DISPLAY_OSD=$(cat $DISPLAY_OSD_FILE)
+    else
+        DISPLAY_OSD=1
+        echo $DISPLAY_OSD > $DISPLAY_OSD_FILE &
+    fi
+#+end_src
+
+#+begin_src sh
+    # Use the active control path and read the volume property from it
+    CURRENT_VOLUME=$(qdbus org.kde.kded5 "$ACTIVE_CONTROL" org.kde.KMix.Control.volume)
+#+end_src
+
+Explicitly unmute the output.
+The ~&~ spawns it in the background so that we don't add extra delay before the actual volume modulation
+#+begin_src sh
+    pactl set-sink-mute @DEFAULT_SINK@ false &
+#+end_src
+
+Write the shell's pid to disk so the next invocation can kill it
+#+begin_src sh
+    echo "$$" > "$DIRECTION_PID_FILE"
+#+end_src
+
+- ~-E~​ ::
+  Prevents unnecessary environment variables from being loaded (optimization).
+- ~-S~ ::
+  Prevents unnecessary modules from being loaded (optimization)
+
+The reasoning behind this section being written in Python can be found under [[Volume Helper Script]]​.
+In this code, the ~python2~ process inherits the PID of the shell since we are using ~exec~
+#+begin_src sh
+    exec python2 -ES ~/.config/kmonad/volume/change_volume.py $CURRENT_VOLUME $VOLUME_CHANGE_DIRECTION $DISPLAY_OSD
+fi
+#+end_src
+*** Volume Helper Script
+:PROPERTIES:
+:header-args:python: :tangle ~/.config/kmonad/volume/change_volume.py
+:END:
+The reason I wrote this section in +Lua+​~python2~ is because it requires a loop to run with a subsecond delay.
+If this were written as part of the shell script, we would be calling out to ~/bin/sleep~ tens of times per second, and the interval could become visibly inconsistent.
+
+- ~volume~ ::
+  An integer representing the starting volume percentage
+- ~increment~ ::
+  ~+~ to increase volume, ~-~  to decrease it or ~0~ to toggle mute.
+- ~display_osd~ ::
+  ~1~ to display the ~osd~ popups when the volume changes, ~0~ to suppress them
+
+#+begin_src python
+from time import sleep
+from os import system
+from sys import argv
+
+volume = int(argv[1])
+increment = 1 if argv[2] == '+' else -1
+display_osd = True if argv[3] == '1' else False
+#+end_src
+
+When we receive a ~USR1~ signal from the [[Volume OSD Toggle Script]], invert the value of ~display_osd~.
+This is equivalent to reading the new value of the file; we know that the script would have inverted the value from what it was originally, so we can simply invert our variable to mirror it.
+#+begin_src python
+import signal
+
+def usr1_handler(signum, frame):
+    global display_osd
+    display_osd = not display_osd
+
+signal.signal(signal.SIGUSR1, usr1_handler)
+#+end_src
+
+f-strings were only introduced in python3.6, so this code uses ~string.format~.
+I was originally confused by ~string.format~, thinking ~string~ was a module, but in reality ~format~ is a method defined on the ~string~ class.
+#+begin_src python
+while True:
+    # Clamp the range of the loop between 0 and 100
+    # Without these checks, there would be nothing stopping it from going out of bounds
+    if volume > 100 and increment > 0 or volume < 0 and increment < 0:
+        break
+
+    volume += increment
+
+    system('pactl set-sink-volume @DEFAULT_SINK@ {}%'.format(volume))
+
+    if display_osd:
+        system('qdbus org.kde.plasmashell /org/kde/osdService org.kde.osdService.volumeChanged {}'.format(volume))
+
+    # 30 ms delay
+    sleep(0.030)
+#+end_src
+This code could be further optimized by spawning the system commands with ~subprocess.Popen~, saving the handles to a list and polling/filtering them on each iteration of the loop.
+The [[https://pypi.org/project/subprocess32/][subprocess32]] package is recommended when using ~subprocess~ in ~python2~, since the stock version of ~subprocess~ that ships with it has several issues.
+**** Lua Implementation
+I originally wrote the helper script in Lua because I thought that Python would be too slow.
+However, upon further inspection of the startup time link, python2's startup time is under 3 milliseconds, which is certainly acceptable for this usecase.
+
+I ran my own benchmarks to compare Lua's startup time without python2's and these were the results
+#+begin_example
+$ hyperfine 'lua -E -e ""' 'python2 -S -c ""'
+Benchmark #1: lua -E -e ""
+  Time (mean ± σ):       0.4 ms ±   0.2 ms    [User: 0.4 ms, System: 0.4 ms]
+  Range (min … max):     0.1 ms …   2.2 ms    1214 runs
+
+  Warning: Command took less than 5 ms to complete. Results might be inaccurate.
+
+Benchmark #2: python2 -S -c ""
+  Time (mean ± σ):       2.9 ms ±   0.5 ms    [User: 2.1 ms, System: 0.9 ms]
+  Range (min … max):     2.3 ms …   5.3 ms    649 runs
+
+  Warning: Command took less than 5 ms to complete. Results might be inaccurate.
+
+Summary
+  'lua -E -e ""' ran
+    7.45 ± 4.81 times faster than 'python2 -S -c ""'
+#+end_example
+
+As mentioned earlier, Lua's startup time is many times faster,  but python2's 3 milliseconds is still an acceptable speed.
+I ran my own benchmarks to compare my Lua implementation and my Python implementation (for 100 iterations of the loop) and these were the results.
+#+begin_example
+$ hyperfine 'lua -E change_volume.lua 0 1' 'python2 -S change_volume.py 0 1'
+Benchmark #1: lua -E change_volume.lua 0 1
+  Time (mean ± σ):      6.747 s ±  0.066 s    [User: 1.056 s, System: 0.913 s]
+  Range (min … max):    6.685 s …  6.899 s    10 runs
+
+Benchmark #2: python2 -S change_volume.py 0 1
+  Time (mean ± σ):      6.664 s ±  0.038 s    [User: 1.060 s, System: 0.887 s]
+  Range (min … max):    6.613 s …  6.730 s    10 runs
+
+Summary
+  'python2 -S change_volume.py 0 1' ran
+    1.01 ± 0.01 times faster than 'lua -E change_volume.lua 0 1'
+#+end_example
+
+When taking everything into account, python2 was actually a tiny bit faster than Lua.
+This difference may have just been chance, but it shows that in the grand scheme of things, Lua's superior startup time does not make a super big impact on the overall runtime.
+
+The python2 implementation also has the advantage of not requiring any external dependencies, so it was the clear winner. Many distributions actually require python2 for their own internal packages, so it's much more likely to not have to install anything new
+
+#+begin_quote
+Replaces the running shell process with a Lua script that modulates the volume in a loop.
+The reason I wrote this section in Lua is because it requires a loop to run with a subsecond delay.
+If this were written as part of the shell script, we would be calling out to ~/bin/sleep~ tens of times per second, and the interval could be visibly erratic and inconsistent.
+With the ~socket~ module, Lua lets you sleep without calling out to an external process.
+
+I chose Lua over Python because Python's startup time is significantly higher (see [[https://github.com/bdrung/startup-time][this]]).
+I chose it over C and other compiled languages because I didn't want to have to compile and store an executable.
+
+*Note* that ~socket~ may not be shipped with your distribution by default.
+For Fedora, I had to install the ~lua-socket~ and ~lua-socket-devel~ packages to get it working. Installing both /may/ not be necessary.
+
+In this code, the ~lua~ process inherits the PID of the shell since we are using ~exec~
+#+end_quote
+
+#+begin_src lua :tangle no
+local socket = require('socket')
+local os = require('os')
+
+local volume = tonumber(arg[1])
+local increment = tonumber(arg[2])
+
+while true do
+  volume = volume + increment
+
+  os.execute('pactl set-sink-volume @DEFAULT_SINK@ ' .. volume .. '%')
+  os.execute('qdbus org.kde.plasmashell /org/kde/osdService org.kde.osdService.volumeChanged ' .. volume)
+
+  socket.select(nil, nil, 0.04)
+end
+#+end_src
+** Volume OSD Toggle Script
+:PROPERTIES:
+:header-args:sh:  :tangle ~/.config/kmonad/volume/volume_popup_toggle.sh :tangle-mode (identity #o744) :padline no
+:END:
+
+This script switches the contents of ~$DISPLAY_OSD_FILE~ between 0 and 1, setting the value to 0 if the file does not exist.
+
+- ~sed~ ::
+  Stream editor
+  - ~-i "$DISPLAY_OSD_FILE"~ ::
+    Modifies the file in-place, so we don't need to open the file once for reading and again for writing.
+  - ~'y/01/10'~ ::
+    From the ~sed~ man page for the ~y~ command:
+    #+begin_quote
+    Transliterate the characters in the pattern space which appear in source to the corresponding character in dest.
+    #+end_quote
+    This effectively maps ~0~ to ~1~ and ~1~ to ~0~.
+
+#+begin_src sh
+#!/bin/dash
+
+DISPLAY_OSD_FILE=/tmp/kmonad_volume_script_display_osd
+
+if ! [ -e $DISPLAY_OSD_FILE ]; then
+    echo "0" > "$DISPLAY_OSD_FILE"
+else
+    sed -i 'y/01/10/' "$DISPLAY_OSD_FILE"
+fi
+
+if [ -e /tmp/kmonad_volume_script ]; then
+    kill -s USR1 $(cat /tmp/kmonad_volume_script)
+fi
+#+end_src
+
+This is an alternate implementation of the swap using ~tr~.
+See [[https://stackoverflow.com/questions/6696842/how-can-i-use-a-file-in-a-command-and-redirect-output-to-the-same-file-without-t][this]] StackOverflow post on why we can't redirect the output of ~tr~ back into the file using ~>~.
+#+begin_example sh :tangle no
+tr '01' '10' < $DISPLAY_OSD_FILE | sponge $DISPLAY_OSD_FILE
+#+end_example
+** DONE Volume layer
+The volume layer would remap hjkl to control the volume.
+** TODO Volume Next/Prev
+Rotate to next/previous output with h/l
 * TODO [[(local-leader)][Local Leader]]
 
 * Leader Key Definitions
