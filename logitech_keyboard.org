@@ -34,6 +34,8 @@ Volume up by 5.
 Volume down by 5.
 **** M
 Toggles the muteness (?) of the current output and exits the Volume Layer
+**** Q
+Toggles volume ~osd~ visibility.
 *** DONE Figure out which library to use to create the volume applet
 #+begin_quote
 I did a bunch of research into GUI overlays on Linux that can render over fullscreen applications.
@@ -304,6 +306,8 @@ This command uses ~wmctrl~ to switch to a currently-existing Discord window, and
   volume-down (cmd-button "~/.config/kmonad/volume/volume.sh -"
                           "~/.config/kmonad/volume/volume.sh 0")
 
+  volume-osd-toggle (cmd-button "~/.config/kmonad/volume/volume_popup_toggle.sh")
+
   ;; uses KDE​'s DBus interface to call the KMix volume mute shortcut, and also exits the layer
   ;; we can do this because we do not need the muting behavior to be different from pressing the mute button normally
   volume-mute (cmd-button "qdbus org.kde.kglobalaccel /component/kmix invokeShortcut mute")
@@ -317,12 +321,14 @@ This command uses ~wmctrl~ to switch to a currently-existing Discord window, and
 
   v_m @volume-mute
 
+  v_q @volume-osd-toggle ;; pneumonic is "quiet"
+
   v_e @exit-volume
   )
 
 (deflayer volume
   _    _    _    _    _    _    _    _    _    _    _    _    _    _
-  _    _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    @v_q _    _    _    _    _    _    _    _    _    _    _    _
   _    _    _    _    _    _    _    @v_j @v_k _    _    _    _
   _    _    _    _    _    _    _    @v_m _    _    _    _                  _
   _    @v_e _              _              _    _                         _   _
@@ -389,6 +395,19 @@ I /believe/ that this cached value will be valid so long as you do not change so
     fi
 #+end_src
 
+Reads whether or not to display ~osd~ popups from the disk
+#+begin_src sh
+    DISPLAY_OSD_FILE=/tmp/kmonad_volume_script_display_osd
+
+    # I'm not exactly sure what a control is
+    if [ -e $DISPLAY_OSD_FILE ]; then
+        DISPLAY_OSD=$(cat $DISPLAY_OSD_FILE)
+    else
+        DISPLAY_OSD=1
+        echo $DISPLAY_OSD > $DISPLAY_OSD_FILE &
+    fi
+#+end_src
+
 #+begin_src sh
     # Use the active control path and read the volume property from it
     CURRENT_VOLUME=$(qdbus org.kde.kded5 "$ACTIVE_CONTROL" org.kde.KMix.Control.volume)
@@ -413,10 +432,13 @@ Write the shell's pid to disk so the next invocation can kill it
 The reasoning behind this section being written in Python can be found under [[Volume Helper Script]]​.
 In this code, the ~python2~ process inherits the PID of the shell since we are using ~exec~
 #+begin_src sh
-    exec python2 -ES ~/.config/kmonad/volume/change_volume.py $CURRENT_VOLUME $VOLUME_CHANGE_DIRECTION
+    exec python2 -ES ~/.config/kmonad/volume/change_volume.py $CURRENT_VOLUME $VOLUME_CHANGE_DIRECTION $DISPLAY_OSD
 fi
 #+end_src
 *** Volume Helper Script
+:PROPERTIES:
+:header-args:python: :tangle ~/.config/kmonad/volume/change_volume.py
+:END:
 The reason I wrote this section in +Lua+​~python2~ is because it requires a loop to run with a subsecond delay.
 If this were written as part of the shell script, we would be calling out to ~/bin/sleep~ tens of times per second, and the interval could become visibly inconsistent.
 
@@ -424,22 +446,46 @@ If this were written as part of the shell script, we would be calling out to ~/b
   An integer representing the starting volume percentage
 - ~increment~ ::
   ~+~ to increase volume, ~-~  to decrease it or ~0~ to toggle mute.
+- ~display_osd~ ::
+  ~1~ to display the ~osd~ popups when the volume changes, ~0~ to suppress them
 
-f-strings were only introduced in python3.6, so this code uses ~string.format~.
-I was originally confused by ~string.format~, thinking ~string~ was a module, but in reality ~format~ is a method defined on the ~string~ class.
-#+begin_src python :tangle ~/.config/kmonad/volume/change_volume.py
+#+begin_src python
 from time import sleep
 from os import system
 from sys import argv
 
 volume = int(argv[1])
 increment = 1 if argv[2] == '+' else -1
+display_osd = True if argv[3] == '1' else False
+#+end_src
 
+When we receive a ~USR1~ signal from the [[Volume OSD Toggle Script]], invert the value of ~display_osd~.
+This is equivalent to reading the new value of the file; we know that the script would have inverted the value from what it was originally, so we can simply invert our variable to mirror it.
+#+begin_src python
+import signal
+
+def usr1_handler(signum, frame):
+    global display_osd
+    display_osd = not display_osd
+
+signal.signal(signal.SIGUSR1, usr1_handler)
+#+end_src
+
+f-strings were only introduced in python3.6, so this code uses ~string.format~.
+I was originally confused by ~string.format~, thinking ~string~ was a module, but in reality ~format~ is a method defined on the ~string~ class.
+#+begin_src python
 while True:
+    # Clamp the range of the loop between 0 and 100
+    # Without these checks, there would be nothing stopping it from going out of bounds
+    if volume > 100 and increment > 0 or volume < 0 and increment < 0:
+        break
+
     volume += increment
 
     system('pactl set-sink-volume @DEFAULT_SINK@ {}%'.format(volume))
-    system('qdbus org.kde.plasmashell /org/kde/osdService org.kde.osdService.volumeChanged {}'.format(volume))
+
+    if display_osd:
+        system('qdbus org.kde.plasmashell /org/kde/osdService org.kde.osdService.volumeChanged {}'.format(volume))
 
     # 30 ms delay
     sleep(0.030)
@@ -523,6 +569,45 @@ while true do
   socket.select(nil, nil, 0.04)
 end
 #+end_src
+** Volume OSD Toggle Script
+:PROPERTIES:
+:header-args:sh:  :tangle ~/.config/kmonad/volume/volume_popup_toggle.sh :tangle-mode (identity #o744) :padline no
+:END:
+
+This script switches the contents of ~$DISPLAY_OSD_FILE~ between 0 and 1, setting the value to 0 if the file does not exist.
+
+- ~sed~ ::
+  Stream editor
+  - ~-i "$DISPLAY_OSD_FILE"~ ::
+    Modifies the file in-place, so we don't need to open the file once for reading and again for writing.
+  - ~'y/01/10'~ ::
+    From the ~sed~ man page for the ~y~ command:
+    #+begin_quote
+    Transliterate the characters in the pattern space which appear in source to the corresponding character in dest.
+    #+end_quote
+    This effectively maps ~0~ to ~1~ and ~1~ to ~0~.
+
+#+begin_src sh
+#!/bin/dash
+
+DISPLAY_OSD_FILE=/tmp/kmonad_volume_script_display_osd
+
+if ! [ -e $DISPLAY_OSD_FILE ]; then
+    echo "0" > "$DISPLAY_OSD_FILE"
+else
+    sed -i 'y/01/10/' "$DISPLAY_OSD_FILE"
+fi
+
+if [ -e /tmp/kmonad_volume_script ]; then
+    kill -s USR1 $(cat /tmp/kmonad_volume_script)
+fi
+#+end_src
+
+This is an alternate implementation of the swap using ~tr~.
+See [[https://stackoverflow.com/questions/6696842/how-can-i-use-a-file-in-a-command-and-redirect-output-to-the-same-file-without-t][this]] StackOverflow post on why we can't redirect the output of ~tr~ back into the file using ~>~.
+#+begin_example sh :tangle no
+tr '01' '10' < $DISPLAY_OSD_FILE | sponge $DISPLAY_OSD_FILE
+#+end_example
 ** DONE Volume layer
 The volume layer would remap hjkl to control the volume.
 ** TODO Volume Next/Prev
