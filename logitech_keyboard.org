@@ -1,6 +1,7 @@
 #+TITLE: Logitech Keyboard Configuration
 #+PROPERTY: header-args:kbd :noweb yes
 #+PROPERTY: header-args:python :noweb yes
+#+HTML_HEAD: <style>pre.src{font-family: Fira Code, JetBrains Mono, Hack, monospace;}</style>
 
 To allow for easier configuration, I am using "variables" for parts of the config that are subject to change between different setups.
 These "variables" are implemented using Org mode's [[https://orgmode.org/manual/Noweb-Reference-Syntax.html][noweb]] syntax, which allows for code blocks to insert the contents of other code blocks.
