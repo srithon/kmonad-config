@@ -1,6 +1,4 @@
 #+TITLE: Logitech Keyboard Configuration
-#+PROPERTY: header-args:kbd :noweb yes
-#+PROPERTY: header-args:python :noweb yes
 #+HTML_HEAD: <style>pre.src{font-family: Fira Code, JetBrains Mono, Hack, monospace;}</style>
 
 To allow for easier configuration, I am using "variables" for parts of the config that are subject to change between different setups.
@@ -20,13 +18,13 @@ Variable names are all uppercase, and their definitions will mirror the structur
   I want the runner to have a different configuration than my normal shell, so this points to the other config
   #+NAME: STARSHIP_RUNNER_CONFIG
   #+begin_src text
-~/.config/starship_runner/toml
+~/.config/starship_runner.toml
   #+end_src
 ** Program Paths
 - ~ST~ ::
  #+NAME: ST
  #+begin_src text
- ~/.local/bin/st
+~/.local/bin/st
  #+end_src
 - ~ROFI~ ::
  #+NAME: ROFI
@@ -220,7 +218,7 @@ Acts as a regular press of Super (hands it to KDE).
   )
 #+end_example
 * Configuration
-#+PROPERTY: header-args :tangle yes
+#+PROPERTY: header-args :tangle yes :noweb tangle
 #+begin_src kbd
 (defcfg
   ;; For Linux
@@ -612,12 +610,12 @@ We want this section of code in a loop, so that if the speed changes we can reac
 
 Get the current delay from ~$SCROLL_SPEED_FILE~, creating it if necessary
 #+begin_src sh
-        if ! [ -e $SCROLL_SPEED_FILE ]
+        if ! [ -e |>SCROLL_SPEED_FILE<| ]
         then
             DELAY=150
-            echo $DELAY > $SCROLL_SPEED_FILE
+            echo $DELAY > |>SCROLL_SPEED_FILE<|
         else
-            DELAY=$(cat $SCROLL_SPEED_FILE)
+            DELAY=$(cat |>SCROLL_SPEED_FILE<|)
         fi
 #+end_src
 
@@ -719,7 +717,7 @@ Because of this, it probably did not register as scrolling and was simply ignore
 ~/.config/kmonad/volume/volume.sh
   #+end_src
 - ~VOLUME_TOGGLE_OSD_SCRIPT~ ::
-  #+NAME: VOLUME_SCRIPT
+  #+NAME: VOLUME_TOGGLE_OSD_SCRIPT
   #+begin_src text
 ~/.config/kmonad/volume/volume_popup_toggle.sh
   #+end_src
@@ -741,7 +739,7 @@ Because of this, it probably did not register as scrolling and was simply ignore
   volume-down (cmd-button "|>VOLUME_SCRIPT<| -"
                           "|>VOLUME_SCRIPT<| 0")
 
-  volume-osd-toggle (cmd-button "|>VOLUME_SCRIPT_OSD_FILE<|")
+  volume-osd-toggle (cmd-button "|>VOLUME_TOGGLE_OSD_SCRIPT<|")
 
   ;; uses KDE​'s DBus interface to call the KMix volume mute shortcut, and also exits the layer
   ;; we can do this because we do not need the muting behavior to be different from pressing the mute button normally
@@ -1064,7 +1062,7 @@ Rotate to next/previous output with h/l
 We need to do this in order to get the layer aliases to evaluate /after/ all of the helper aliases are defined.
 Otherwise, we get an error saying that the aliases are non-existent.
 #+begin_src kbd :noweb strip-export
-<<base_leader_key_layer>>
+|>base_leader_key_layer<|
 #+end_src
 
 # Local Variables:
