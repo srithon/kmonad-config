@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-06-26 Sat 01:30 -->
+<!-- 2021-06-26 Sat 13:21 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>KMonad</title>
@@ -204,6 +204,7 @@
 <script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/bigblow_theme/js/bigblow.js"></script>
 <script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/bigblow_theme/js/hideshow.js"></script>
 <script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/lib/js/jquery.stickytableheaders.min.js"></script>
+<style>pre.src{font-family: Fira Code, JetBrains Mono, Hack, monospace;}</style>
 <script type="text/javascript">
 // @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
 <!--/*--><![CDATA[/*><!--*/
@@ -256,207 +257,263 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org44b1982">1. Configuration</a>
+<li><a href="#org432a2e8">1. Configuration</a>
 <ul>
-<li><a href="#orgedd50f7">1.1. Super Keybindings</a>
+<li><a href="#org4bc9261">1.1. Global Variables</a>
 <ul>
-<li><a href="#orgc4561f7">1.1.1. Q :: Window Switcher</a></li>
-<li><a href="#orga0c93c9">1.1.2. D :: Discord</a></li>
-<li><a href="#org8a9fe2f">1.1.3. B :: Brightness</a></li>
-<li><a href="#orgeb28a90">1.1.4. T :: Terminal (Scratchpad)</a></li>
-<li><a href="#org357ef60">1.1.5. R :: Run</a></li>
-<li><a href="#org1cd66c2">1.1.6. P :: Prompt</a></li>
-<li><a href="#org14571d4">1.1.7. A :: Agenda</a></li>
-<li><a href="#org2d94756">1.1.8. O :: Open Preset</a></li>
-<li><a href="#org01fb44e">1.1.9. C :: Org-Capure</a></li>
-<li><a href="#org390fb71">1.1.10. S :: Scroll</a></li>
-<li><a href="#org65b5721">1.1.11. V :: Volume</a></li>
-<li><a href="#org5f06303">1.1.12. \ :: Local Leader Key</a></li>
-<li><a href="#orgfb99d60">1.1.13. Super :: Super</a></li>
+<li><a href="#orgafdb2fa">1.1.1. Program Paths</a></li>
 </ul>
 </li>
-<li><a href="#org80fdf1c">1.2. Layer Templates</a>
+<li><a href="#orgd99fe20">1.2. Super Keybindings</a>
 <ul>
-<li><a href="#orgb65d890">1.2.1. Passthrough</a></li>
-<li><a href="#orgc802651">1.2.2. Inclusive</a></li>
+<li><a href="#org19e2a2a">1.2.1. Q :: Window Switcher</a></li>
+<li><a href="#org0bff82e">1.2.2. D :: Discord</a></li>
+<li><a href="#orgd2b0906">1.2.3. B :: Brightness</a></li>
+<li><a href="#org9f78aad">1.2.4. T :: Terminal (Scratchpad)</a></li>
+<li><a href="#orge507bb2">1.2.5. R :: Run</a></li>
+<li><a href="#orgaafdc43">1.2.6. P :: Prompt</a></li>
+<li><a href="#org762faf9">1.2.7. A :: Agenda</a></li>
+<li><a href="#org4e1369e">1.2.8. O :: Open Preset</a></li>
+<li><a href="#orga53e631">1.2.9. C :: Org-Capure</a></li>
+<li><a href="#orged5a932">1.2.10. S :: Scroll</a></li>
+<li><a href="#org2e75162">1.2.11. V :: Volume</a></li>
+<li><a href="#org1b2e54e">1.2.12. \ :: Local Leader Key</a></li>
+<li><a href="#org2b1f6a2">1.2.13. Super :: Super</a></li>
 </ul>
 </li>
-<li><a href="#orgd2c6a43">1.3. Configuration</a></li>
-<li><a href="#org79693e7">1.4. Source Layer</a></li>
-<li><a href="#org2804902">1.5. Default Layer</a></li>
-<li><a href="#org41bd1f6">1.6. Base Leader Key Layer</a></li>
-<li><a href="#org9d34cd5">1.7. Window Switcher</a></li>
-<li><a href="#org9fac1da">1.8. Discord</a>
+<li><a href="#orgbf9af2c">1.3. Layer Templates</a>
 <ul>
-<li><a href="#org33dd135">1.8.1. <span class="todo TODO">TODO</span> Switch back to the previous window when invoked a second time</a></li>
-<li><a href="#orgfb539f4">1.8.2. Discord Script</a></li>
+<li><a href="#org28cc9b1">1.3.1. Passthrough</a></li>
+<li><a href="#orgcab6177">1.3.2. Inclusive</a></li>
 </ul>
 </li>
-<li><a href="#orgdc3b53e">1.9. <span class="todo TODO">TODO</span> Brightness</a></li>
-<li><a href="#org007af98">1.10. <span class="todo TODO">TODO</span> Terminal</a></li>
-<li><a href="#orgb52077d">1.11. Run</a>
+<li><a href="#orga7901ee">1.4. Configuration</a></li>
+<li><a href="#orgcde62e9">1.5. Source Layer</a></li>
+<li><a href="#org03fdccf">1.6. Default Layer</a></li>
+<li><a href="#org487d109">1.7. Base Leader Key Layer</a></li>
+<li><a href="#org3f09964">1.8. Window Switcher</a></li>
+<li><a href="#orga50c45d">1.9. Discord</a>
 <ul>
-<li><a href="#org72b5466">1.11.1. Runner Script</a></li>
-<li><a href="#org4598741">1.11.2. <span class="todo TODO">TODO</span> Cleanup exit command</a></li>
-<li><a href="#org696ac39">1.11.3. <span class="done DONE">DONE</span> Reuse the <code>runner</code> terminal and shell between invocations</a></li>
+<li><a href="#orgac3b0b0">1.9.1. <span class="todo TODO">TODO</span> Switch back to the previous window when invoked a second time</a></li>
 </ul>
 </li>
-<li><a href="#org2cebf0b">1.12. <span class="todo TODO">TODO</span> Prompt</a></li>
-<li><a href="#orgb7a95a2">1.13. Agenda</a>
+<li><a href="#org5c28202">1.10. <span class="todo TODO">TODO</span> Brightness</a></li>
+<li><a href="#orgd235bd2">1.11. <span class="todo TODO">TODO</span> Terminal</a></li>
+<li><a href="#orgabfe756">1.12. Run</a>
 <ul>
-<li><a href="#org197998e">1.13.1. <span class="todo TODO">TODO</span> Open a floating, semi-transparent window</a></li>
-<li><a href="#orgb2aec3b">1.13.2. <span class="todo TODO">TODO</span> Maybe switch to org-agenda</a></li>
+<li><a href="#org37e9fa7">1.12.1. Runner Script</a></li>
+<li><a href="#org854d25d">1.12.2. <span class="todo TODO">TODO</span> Cleanup exit command</a></li>
+<li><a href="#orga5cbaae">1.12.3. <span class="done DONE">DONE</span> Reuse the <code>runner</code> terminal and shell between invocations</a></li>
 </ul>
 </li>
-<li><a href="#org0856432">1.14. <span class="todo TODO">TODO</span> Open Preset</a></li>
-<li><a href="#org467a96c">1.15. Org Capture</a></li>
-<li><a href="#orgc66687a">1.16. Scroll</a>
+<li><a href="#orge72fe8a">1.13. <span class="todo TODO">TODO</span> Prompt</a></li>
+<li><a href="#org84ee6a1">1.14. Agenda</a>
 <ul>
-<li><a href="#orgad2ad67">1.16.1. Scroll Script</a></li>
-<li><a href="#org0c4a819">1.16.2. Scroll Speed Script</a></li>
-<li><a href="#orgda3589c">1.16.3. <span class="done DONE">DONE</span> Use <code>shift</code> to control scroll speed</a></li>
-<li><a href="#orgd874d97">1.16.4. Original Approach</a></li>
+<li><a href="#orge86181a">1.14.1. <span class="todo TODO">TODO</span> Open a floating, semi-transparent window</a></li>
+<li><a href="#orgdd23267">1.14.2. <span class="todo TODO">TODO</span> Maybe switch to org-agenda</a></li>
 </ul>
 </li>
-<li><a href="#org91963e4">1.17. Volume</a>
+<li><a href="#orga3035b6">1.15. <span class="todo TODO">TODO</span> Open Preset</a></li>
+<li><a href="#org9a71f8a">1.16. Org Capture</a></li>
+<li><a href="#org99882f8">1.17. Scroll</a>
 <ul>
-<li><a href="#org54d1a5d">1.17.1. Volume Script</a></li>
-<li><a href="#org6846e79">1.17.2. Volume OSD Toggle Script</a></li>
-<li><a href="#org5a3ea66">1.17.3. <span class="done DONE">DONE</span> Volume layer</a></li>
-<li><a href="#org432a996">1.17.4. <span class="todo TODO">TODO</span> Volume Next/Prev</a></li>
+<li><a href="#org2793f9c">1.17.1. Scroll Script</a></li>
+<li><a href="#org4553a10">1.17.2. Scroll Speed Script</a></li>
+<li><a href="#orgdbff692">1.17.3. <span class="done DONE">DONE</span> Use <code>shift</code> to control scroll speed</a></li>
+<li><a href="#org5c6a0de">1.17.4. Original Approach</a></li>
 </ul>
 </li>
-<li><a href="#org47fca1a">1.18. <span class="todo TODO">TODO</span> Local Leader</a></li>
-<li><a href="#org66fa0e4">1.19. Leader Key Definitions</a></li>
+<li><a href="#org94a2c24">1.18. Volume</a>
+<ul>
+<li><a href="#orgd8842c0">1.18.1. Volume Script</a></li>
+<li><a href="#orgf53275f">1.18.2. Volume OSD Toggle Script</a></li>
+<li><a href="#orgd573ead">1.18.3. <span class="done DONE">DONE</span> Volume layer</a></li>
+<li><a href="#org993a903">1.18.4. <span class="todo TODO">TODO</span> Volume Next/Prev</a></li>
 </ul>
 </li>
-<li><a href="#org0263051">2. KMonad Documentation</a>
-<ul>
-<li><a href="#orgd3f1502">2.1. Basic Syntax</a></li>
-<li><a href="#orgd4d96f7">2.2. defcfg block</a></li>
-<li><a href="#orgc368b26">2.3. defsrc block</a></li>
-<li><a href="#org5c76d32">2.4. defalias</a></li>
-<li><a href="#org3612eaa">2.5. deflayer</a>
-<ul>
-<li><a href="#org2cca666">2.5.1. Examples</a></li>
+<li><a href="#org8325467">1.19. <span class="todo TODO">TODO</span> Local Leader</a></li>
+<li><a href="#orge5b852d">1.20. Leader Key Definitions</a></li>
 </ul>
 </li>
-<li><a href="#org298c314">2.6. Buttons with Modifiers</a>
+<li><a href="#org49e1a24">2. KMonad Documentation</a>
 <ul>
-<li><a href="#orgfc139de">2.6.1. Examples</a></li>
+<li><a href="#org25b5caf">2.1. Basic Syntax</a></li>
+<li><a href="#org115e09f">2.2. defcfg block</a></li>
+<li><a href="#orgbaa7d70">2.3. defsrc block</a></li>
+<li><a href="#org1dcc96f">2.4. defalias</a></li>
+<li><a href="#org06ac40e">2.5. deflayer</a>
+<ul>
+<li><a href="#org7b80834">2.5.1. Examples</a></li>
 </ul>
 </li>
-<li><a href="#orgc6e37e6">2.7. Sticky Keys</a>
+<li><a href="#orgbc4d0e5">2.6. Buttons with Modifiers</a>
 <ul>
-<li><a href="#org6c44bed">2.7.1. Examples</a></li>
+<li><a href="#orgb0aacfd">2.6.1. Examples</a></li>
 </ul>
 </li>
-<li><a href="#org3267811">2.8. Tap Macros</a>
+<li><a href="#org928f4ec">2.7. Sticky Keys</a>
 <ul>
-<li><a href="#org32a44d9">2.8.1. Examples</a></li>
+<li><a href="#orga6ed934">2.7.1. Examples</a></li>
 </ul>
 </li>
-<li><a href="#orga86ca26">2.9. Layer Manipulation</a>
+<li><a href="#org4c28774">2.8. Tap Macros</a>
 <ul>
-<li><a href="#orgf7e81bd">2.9.1. Examples</a></li>
+<li><a href="#orgb9a4569">2.8.1. Examples</a></li>
 </ul>
 </li>
-<li><a href="#org1414397">2.10. Multi-use Buttons</a>
+<li><a href="#orgb8385d2">2.9. Layer Manipulation</a>
 <ul>
-<li><a href="#org7ba4973">2.10.1. Examples</a></li>
+<li><a href="#org6765afe">2.9.1. Examples</a></li>
 </ul>
 </li>
-<li><a href="#org9047bb7">2.11. Multi-tap</a>
+<li><a href="#orgb3c03ea">2.10. Multi-use Buttons</a>
 <ul>
-<li><a href="#org18f96f8">2.11.1. Examples</a></li>
+<li><a href="#org62a550c">2.10.1. Examples</a></li>
 </ul>
 </li>
-<li><a href="#orgac04ebc">2.12. Around-next</a>
+<li><a href="#org6d65a6a">2.11. Multi-tap</a>
 <ul>
-<li><a href="#org3103650">2.12.1. Examples</a></li>
+<li><a href="#org92d5eac">2.11.1. Examples</a></li>
 </ul>
 </li>
-<li><a href="#orga668a24">2.13. Compose Key Sequences</a>
+<li><a href="#orgcb1d43e">2.12. Around-next</a>
 <ul>
-<li><a href="#orgc1c8af2">2.13.1. Examples</a></li>
+<li><a href="#org2a053fe">2.12.1. Examples</a></li>
 </ul>
 </li>
-<li><a href="#orge8652d3">2.14. Command Buttons</a></li>
+<li><a href="#org72250ff">2.13. Compose Key Sequences</a>
+<ul>
+<li><a href="#orgf1835bd">2.13.1. Examples</a></li>
+</ul>
+</li>
+<li><a href="#org5f7860f">2.14. Command Buttons</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org44b1982" class="outline-2">
-<h2 id="org44b1982"><span class="section-number-2">1</span> Configuration</h2>
+<div id="outline-container-org432a2e8" class="outline-2">
+<h2 id="org432a2e8"><span class="section-number-2">1</span> Configuration</h2>
 <div class="outline-text-2" id="text-1">
+<p>
+To allow for easier configuration, I am using &ldquo;variables&rdquo; for parts of the config that are subject to change between different setups.
+These &ldquo;variables&rdquo; are implemented using Org mode&rsquo;s <a href="https://orgmode.org/manual/Noweb-Reference-Syntax.html">noweb</a> syntax, which allows for code blocks to insert the contents of other code blocks.
+</p>
+
+<p>
+Because the default reference syntax: <code>&lt;&lt;BLOCK_NAME&gt;&gt;</code>, is valid syntax in some languages, I changed the syntax to <code>|&gt;BLOCK_NAME&lt;|</code>.
+When the document is tangled, these <code>|&gt;BLOCK_NAME&lt;|</code> references are replaced with the contents of the corresponding named variable block in <a href="#org4bc9261">1.1</a> or elsewhere.
+Variable names are all uppercase, and their definitions will mirror the structure shown in <a href="#org4bc9261">1.1</a>.
+</p>
 </div>
-<div id="outline-container-orgedd50f7" class="outline-3">
-<h3 id="orgedd50f7"><span class="section-number-3">1.1</span> Super Keybindings</h3>
+
+<div id="outline-container-org4bc9261" class="outline-3">
+<h3 id="org4bc9261"><span class="section-number-3">1.1</span> Global Variables</h3>
 <div class="outline-text-3" id="text-1-1">
+<dl class="org-dl">
+<dt><code>KEYBOARD</code></dt><dd><div class="org-src-container">
+<pre class="src src-text" id="org018fe08">/dev/input/by-id/usb-Logitech_USB_Receiver-if02-event-kbd
+</pre>
+</div></dd>
+<dt><code>STARSHIP_RUNNER_CONFIG</code></dt><dd><p>
+I want the runner to have a different configuration than my normal shell, so this points to the other config
+</p>
+<div class="org-src-container">
+<pre class="src src-text" id="orga062c2f">~/.config/starship_runner/toml
+</pre>
+</div></dd>
+</dl>
+</div>
+<div id="outline-container-orgafdb2fa" class="outline-4">
+<h4 id="orgafdb2fa"><span class="section-number-4">1.1.1</span> Program Paths</h4>
+<div class="outline-text-4" id="text-1-1-1">
+<dl class="org-dl">
+<dt><code>ST</code></dt><dd><div class="org-src-container">
+<pre class="src src-text" id="org6fc1af0"> ~/.local/bin/st
+</pre>
+</div></dd>
+<dt><code>ROFI</code></dt><dd><div class="org-src-container">
+<pre class="src src-text" id="org7621e7f">~/.local/bin/rofi
+</pre>
+</div></dd>
+<dt><code>DISCORD</code></dt><dd><div class="org-src-container">
+<pre class="src src-text" id="orgf1df8e2">/usr/bin/Discord
+</pre>
+</div></dd>
+<dt><code>TASKWARRIOR_TUI</code></dt><dd><div class="org-src-container">
+<pre class="src src-text" id="org0bc12d4">~/.local/bin/taskwarrior-tui
+</pre>
+</div></dd>
+</dl>
+</div>
+</div>
+</div>
+<div id="outline-container-orgd99fe20" class="outline-3">
+<h3 id="orgd99fe20"><span class="section-number-3">1.2</span> Super Keybindings</h3>
+<div class="outline-text-3" id="text-1-2">
 <p>
 I want to be able to use Super like a leader key when tapped.
 Each headline represents a key to be pressed after tapping Super.
 </p>
 </div>
-<div id="outline-container-orgc4561f7" class="outline-4">
-<h4 id="orgc4561f7"><span class="section-number-4">1.1.1</span> Q :: Window Switcher</h4>
-<div class="outline-text-4" id="text-1-1-1">
+<div id="outline-container-org19e2a2a" class="outline-4">
+<h4 id="org19e2a2a"><span class="section-number-4">1.2.1</span> Q :: Window Switcher</h4>
+<div class="outline-text-4" id="text-1-2-1">
 <p>
 Launches the window switcher.
 </p>
 </div>
 </div>
-<div id="outline-container-orga0c93c9" class="outline-4">
-<h4 id="orga0c93c9"><span class="section-number-4">1.1.2</span> D :: Discord</h4>
-<div class="outline-text-4" id="text-1-1-2">
+<div id="outline-container-org0bff82e" class="outline-4">
+<h4 id="org0bff82e"><span class="section-number-4">1.2.2</span> D :: Discord</h4>
+<div class="outline-text-4" id="text-1-2-2">
 <p>
 Opens Discord.
 </p>
 </div>
 </div>
-<div id="outline-container-org8a9fe2f" class="outline-4">
-<h4 id="org8a9fe2f"><span class="section-number-4">1.1.3</span> B :: Brightness</h4>
-<div class="outline-text-4" id="text-1-1-3">
+<div id="outline-container-orgd2b0906" class="outline-4">
+<h4 id="orgd2b0906"><span class="section-number-4">1.2.3</span> B :: Brightness</h4>
+<div class="outline-text-4" id="text-1-2-3">
 <p>
 Opens <code>BrightnessControl</code> GUI <b>OR</b> initiates <code>BrightnessControl</code> layer, where we can manipulate brightness with <code>hjkl</code>.
 Also look into <a href="https://github.com/maoserr/redshiftgui">redshiftgui</a> to see if we can use this instead. I left it alone because building it requires a library that isn&rsquo;t in the Fedora repos called &ldquo;<a href="https://sourceforge.net/projects/iup/files/3.30/Linux%20Libraries/">IUP</a>&rdquo;.
 </p>
 </div>
 <ol class="org-ol">
-<li><a id="org6127adb"></a>BrightnessControl Layer<br />
+<li><a id="org44cf19b"></a>BrightnessControl Layer<br />
 <ol class="org-ol">
-<li><a id="orgef8029a"></a>H<br />
-<div class="outline-text-6" id="text-1-1-3-1-1">
+<li><a id="org72925b7"></a>H<br />
+<div class="outline-text-6" id="text-1-2-3-1-1">
 <p>
 Rotate active monitor to the left.
 </p>
 </div>
 </li>
-<li><a id="orgc41fa13"></a>L<br />
-<div class="outline-text-6" id="text-1-1-3-1-2">
+<li><a id="orgcd43ae2"></a>L<br />
+<div class="outline-text-6" id="text-1-2-3-1-2">
 <p>
 Rotate active monitor to the right.
 </p>
 </div>
 </li>
-<li><a id="org9798604"></a>K<br />
-<div class="outline-text-6" id="text-1-1-3-1-3">
+<li><a id="org0f262a1"></a>K<br />
+<div class="outline-text-6" id="text-1-2-3-1-3">
 <p>
 Brightness Up.
 </p>
 </div>
 </li>
-<li><a id="orgdd8c7fd"></a>J<br />
-<div class="outline-text-6" id="text-1-1-3-1-4">
+<li><a id="org6fb5df2"></a>J<br />
+<div class="outline-text-6" id="text-1-2-3-1-4">
 <p>
 Brightness Down.
 </p>
 </div>
 </li>
-<li><a id="orge592a1a"></a>Esc | Super<br />
-<div class="outline-text-6" id="text-1-1-3-1-5">
+<li><a id="org9293ac3"></a>Esc | Super<br />
+<div class="outline-text-6" id="text-1-2-3-1-5">
 <p>
 Exit layer.
 </p>
@@ -466,23 +523,23 @@ Exit layer.
 </li>
 </ol>
 </div>
-<div id="outline-container-orgeb28a90" class="outline-4">
-<h4 id="orgeb28a90"><span class="section-number-4">1.1.4</span> T :: Terminal (Scratchpad)</h4>
-<div class="outline-text-4" id="text-1-1-4">
+<div id="outline-container-org9f78aad" class="outline-4">
+<h4 id="org9f78aad"><span class="section-number-4">1.2.4</span> T :: Terminal (Scratchpad)</h4>
+<div class="outline-text-4" id="text-1-2-4">
 <p>
 Opens terminal scratchpad.
 </p>
 </div>
 <ol class="org-ol">
-<li><a id="orge46554f"></a>Hold<br />
-<div class="outline-text-5" id="text-1-1-4-1">
+<li><a id="org197ac4c"></a>Hold<br />
+<div class="outline-text-5" id="text-1-2-4-1">
 <p>
 Opens menu with all of the available scratchpads.
 </p>
 </div>
 </li>
-<li><a id="org4e4301e"></a>Tap<br />
-<div class="outline-text-5" id="text-1-1-4-2">
+<li><a id="org5b18b41"></a>Tap<br />
+<div class="outline-text-5" id="text-1-2-4-2">
 <p>
 <del>Opens most recently opened scratchpad</del>.
 We can use <code>yakuake</code> for this basic functionality.
@@ -490,31 +547,31 @@ Instead, dedicate this to the <b>Terminal Layer</b>?.
 </p>
 </div>
 </li>
-<li><a id="org293a57d"></a>Terminal Layer<br />
+<li><a id="orgf8e503f"></a>Terminal Layer<br />
 <ol class="org-ol">
-<li><a id="orgc5cd7cf"></a><del>Super,</del>​] :: Next<br />
-<div class="outline-text-6" id="text-1-1-4-3-1">
+<li><a id="org27eb93b"></a><del>Super,</del>​] :: Next<br />
+<div class="outline-text-6" id="text-1-2-4-3-1">
 <p>
 Next terminal scratchpad (cycle).
 </p>
 </div>
 </li>
-<li><a id="org5354280"></a><del>Super,</del>​[ :: Previous<br />
-<div class="outline-text-6" id="text-1-1-4-3-2">
+<li><a id="orgf6e430b"></a><del>Super,</del>​[ :: Previous<br />
+<div class="outline-text-6" id="text-1-2-4-3-2">
 <p>
 Last terminal scratchpad (cycle).
 </p>
 </div>
 </li>
-<li><a id="org3cefd76"></a>L :: List<br />
-<div class="outline-text-6" id="text-1-1-4-3-3">
+<li><a id="orgca06e2c"></a>L :: List<br />
+<div class="outline-text-6" id="text-1-2-4-3-3">
 <p>
 Show all open scratchpads and prompt for which one to open.
 </p>
 </div>
 </li>
-<li><a id="org243d230"></a>V :: Vim<br />
-<div class="outline-text-6" id="text-1-1-4-3-4">
+<li><a id="org9320660"></a>V :: Vim<br />
+<div class="outline-text-6" id="text-1-2-4-3-4">
 <p>
 Create a Vim scratchpad that will be deleted immediately after Vim closes.
 </p>
@@ -524,9 +581,9 @@ Create a Vim scratchpad that will be deleted immediately after Vim closes.
 </li>
 </ol>
 </div>
-<div id="outline-container-org357ef60" class="outline-4">
-<h4 id="org357ef60"><span class="section-number-4">1.1.5</span> R :: Run</h4>
-<div class="outline-text-4" id="text-1-1-5">
+<div id="outline-container-orge507bb2" class="outline-4">
+<h4 id="orge507bb2"><span class="section-number-4">1.2.5</span> R :: Run</h4>
+<div class="outline-text-4" id="text-1-2-5">
 <p>
 Run a single command in a small popup window.
 </p>
@@ -540,17 +597,17 @@ This could be super useful for things like <code>remind-in 10m Do something</cod
 </p>
 </div>
 <ol class="org-ol">
-<li><a id="org5e29c29"></a>Layer<br />
+<li><a id="org6fb024e"></a>Layer<br />
 <ol class="org-ol">
-<li><a id="orgcd71898"></a>Super, Esc (in sequence)<br />
-<div class="outline-text-6" id="text-1-1-5-1-1">
+<li><a id="org5b3643d"></a>Super, Esc (in sequence)<br />
+<div class="outline-text-6" id="text-1-2-5-1-1">
 <p>
 Exit layer and close <code>run</code> window.
 </p>
 </div>
 </li>
-<li><a id="orga1c4a23"></a>E<br />
-<div class="outline-text-6" id="text-1-1-5-1-2">
+<li><a id="orgd311c0a"></a>E<br />
+<div class="outline-text-6" id="text-1-2-5-1-2">
 <p>
 Make window taller.
 </p>
@@ -558,10 +615,10 @@ Make window taller.
 </li>
 </ol>
 </li>
-<li><a id="orgf52c77f"></a>Notes<br />
+<li><a id="org65265b5"></a>Notes<br />
 <ol class="org-ol">
-<li><a id="org7d448e1"></a>Keybindings<br />
-<div class="outline-text-6" id="text-1-1-5-2-1">
+<li><a id="org50bdcb9"></a>Keybindings<br />
+<div class="outline-text-6" id="text-1-2-5-2-1">
 <p>
 In the spawned window, bind Ctrl+R to resize the window to the necessary length, Esc/Enter to revert the size.
 </p>
@@ -572,8 +629,8 @@ Might have to use kitty for this.
 </p>
 </div>
 </li>
-<li><a id="orga1605a3"></a>Window Properties<br />
-<div class="outline-text-6" id="text-1-1-5-2-2">
+<li><a id="orgd525d2f"></a>Window Properties<br />
+<div class="outline-text-6" id="text-1-2-5-2-2">
 <p>
 Source: <a href="https://www.reddit.com/r/kde/comments/d5ne9s/can_you_have_no_titlebar_and_frame_but_keep_the/">https://www.reddit.com/r/kde/comments/d5ne9s/can_you_have_no_titlebar_and_frame_but_keep_the/</a>
 Made a window-specific override for the window class &ldquo;st-runner&rdquo; that disabled the title bar.
@@ -585,24 +642,24 @@ This lets us havae the nice shadow but without the title bar.
 </li>
 </ol>
 </div>
-<div id="outline-container-org1cd66c2" class="outline-4">
-<h4 id="org1cd66c2"><span class="section-number-4">1.1.6</span> P :: Prompt</h4>
-<div class="outline-text-4" id="text-1-1-6">
+<div id="outline-container-orgaafdc43" class="outline-4">
+<h4 id="orgaafdc43"><span class="section-number-4">1.2.6</span> P :: Prompt</h4>
+<div class="outline-text-4" id="text-1-2-6">
 <p>
 Opens prompt to open <code>rofi</code> and launch custom actions by typing.
 </p>
 </div>
 <ol class="org-ol">
-<li><a id="org8a5d234"></a>thyme<br />
-<div class="outline-text-5" id="text-1-1-6-1">
+<li><a id="org38a1ad9"></a>thyme<br />
+<div class="outline-text-5" id="text-1-2-6-1">
 <p>
 Opens <code>rofi</code> with list of <code>thyme</code> files.
 Choose a date and then view the breakdown for that date.
 </p>
 </div>
 </li>
-<li><a id="org2be59c5"></a>incognito<br />
-<div class="outline-text-5" id="text-1-1-6-2">
+<li><a id="org2ee5190"></a>incognito<br />
+<div class="outline-text-5" id="text-1-2-6-2">
 <p>
 Turns on VPN.
 Disables <code>thyme</code>.
@@ -615,21 +672,21 @@ If called a second time, disables both of these.
 </li>
 </ol>
 </div>
-<div id="outline-container-org14571d4" class="outline-4">
-<h4 id="org14571d4"><span class="section-number-4">1.1.7</span> A :: Agenda</h4>
-<div class="outline-text-4" id="text-1-1-7">
+<div id="outline-container-org762faf9" class="outline-4">
+<h4 id="org762faf9"><span class="section-number-4">1.2.7</span> A :: Agenda</h4>
+<div class="outline-text-4" id="text-1-2-7">
 <p>
 Opens agenda.
 </p>
 </div>
 </div>
-<div id="outline-container-org2d94756" class="outline-4">
-<h4 id="org2d94756"><span class="section-number-4">1.1.8</span> O :: Open Preset</h4>
-<div class="outline-text-4" id="text-1-1-8">
+<div id="outline-container-org4e1369e" class="outline-4">
+<h4 id="org4e1369e"><span class="section-number-4">1.2.8</span> O :: Open Preset</h4>
+<div class="outline-text-4" id="text-1-2-8">
 </div>
 <ol class="org-ol">
-<li><a id="org84de2c6"></a>Tap<br />
-<div class="outline-text-5" id="text-1-1-8-1">
+<li><a id="orgea4c027"></a>Tap<br />
+<div class="outline-text-5" id="text-1-2-8-1">
 <p>
 Gives you preset-local shortcuts.
 </p>
@@ -640,8 +697,8 @@ Emacs <code>which-key</code> style help.
 </p>
 </div>
 </li>
-<li><a id="orgec26237"></a>Hold<br />
-<div class="outline-text-5" id="text-1-1-8-2">
+<li><a id="org4ede882"></a>Hold<br />
+<div class="outline-text-5" id="text-1-2-8-2">
 <p>
 Opens <code>rofi</code> with list of available &ldquo;presets&rdquo;.
 </p>
@@ -657,20 +714,20 @@ Add support for virtual-desktop-local presets in the future.
 </p>
 </div>
 </li>
-<li><a id="org0f0d378"></a>Presets<br />
+<li><a id="org6e20e69"></a>Presets<br />
 <ol class="org-ol">
-<li><a id="orgfed6e09"></a>leetcode<br />
+<li><a id="orgf6d7c07"></a>leetcode<br />
 <ol class="org-ol">
-<li><a id="org46180a1"></a>Left Monitor<br />
-<div class="outline-text-7" id="text-1-1-8-3-1-1">
+<li><a id="org41bdf89"></a>Left Monitor<br />
+<div class="outline-text-7" id="text-1-2-8-3-1-1">
 <ol class="org-ol">
 <li>Open fullscreen terminal.</li>
 <li><code>cd ~/Development/leetcode/problems</code>.</li>
 </ol>
 </div>
 </li>
-<li><a id="org0003cc7"></a>Right Monitor<br />
-<div class="outline-text-7" id="text-1-1-8-3-1-2">
+<li><a id="org0de6e47"></a>Right Monitor<br />
+<div class="outline-text-7" id="text-1-2-8-3-1-2">
 <p>
 <del>1. Open firefox</del>.
 <del>2. Navigate to <a href="https://www.teamblind.com/post/New-Year-Gift---Curated-List-of-Top-75-LeetCode-Questions-to-Save-Your-Time-OaM1orEU">New Year Gift - Curated List of Top 75 LeetCode Questions to Save Your Time</a></del>.
@@ -686,10 +743,10 @@ This would be so that when you press enter in emacs, it would open the link in t
 </ol>
 </div>
 </li>
-<li><a id="orgced94f8"></a>Preset-Local Shortcuts<br />
+<li><a id="orgfda6c3b"></a>Preset-Local Shortcuts<br />
 <ol class="org-ol">
-<li><a id="org4237b39"></a>O :: Open Problem List<br />
-<div class="outline-text-8" id="text-1-1-8-3-1-3-1">
+<li><a id="org48e91c6"></a>O :: Open Problem List<br />
+<div class="outline-text-8" id="text-1-2-8-3-1-3-1">
 <p>
 Opens the <code>emacs</code> window once again and loops from step #1.
 </p>
@@ -703,62 +760,62 @@ Opens the <code>emacs</code> window once again and loops from step #1.
 </li>
 </ol>
 </div>
-<div id="outline-container-org01fb44e" class="outline-4">
-<h4 id="org01fb44e"><span class="section-number-4">1.1.9</span> C :: Org-Capure</h4>
-<div class="outline-text-4" id="text-1-1-9">
+<div id="outline-container-orga53e631" class="outline-4">
+<h4 id="orga53e631"><span class="section-number-4">1.2.9</span> C :: Org-Capure</h4>
+<div class="outline-text-4" id="text-1-2-9">
 <p>
 Opens org-capture.
 I already have this bound to <code>Super+C</code>, but having it on <code>Super, C</code> would make it easier to invoke.
 </p>
 </div>
 </div>
-<div id="outline-container-org390fb71" class="outline-4">
-<h4 id="org390fb71"><span class="section-number-4">1.1.10</span> S :: Scroll</h4>
-<div class="outline-text-4" id="text-1-1-10">
+<div id="outline-container-orged5a932" class="outline-4">
+<h4 id="orged5a932"><span class="section-number-4">1.2.10</span> S :: Scroll</h4>
+<div class="outline-text-4" id="text-1-2-10">
 <p>
 Layer that lets you emulate mouse wheel scrolling using vim keys
 </p>
 </div>
 <ol class="org-ol">
-<li><a id="org507efad"></a>Scroll Layer<br />
+<li><a id="org70363af"></a>Scroll Layer<br />
 <ol class="org-ol">
-<li><a id="orgfb2629d"></a>H<br />
-<div class="outline-text-6" id="text-1-1-10-1-1">
+<li><a id="org087b0ac"></a>H<br />
+<div class="outline-text-6" id="text-1-2-10-1-1">
 <p>
 Scroll to the left
 </p>
 </div>
 </li>
-<li><a id="orgc82e575"></a>J<br />
-<div class="outline-text-6" id="text-1-1-10-1-2">
+<li><a id="org7eef15d"></a>J<br />
+<div class="outline-text-6" id="text-1-2-10-1-2">
 <p>
 Scroll down
 </p>
 </div>
 </li>
-<li><a id="org1b1bfde"></a>K<br />
-<div class="outline-text-6" id="text-1-1-10-1-3">
+<li><a id="orgf095c81"></a>K<br />
+<div class="outline-text-6" id="text-1-2-10-1-3">
 <p>
 Scroll up
 </p>
 </div>
 </li>
-<li><a id="org9edf6ea"></a>L<br />
-<div class="outline-text-6" id="text-1-1-10-1-4">
+<li><a id="org266230e"></a>L<br />
+<div class="outline-text-6" id="text-1-2-10-1-4">
 <p>
 Scroll to the right
 </p>
 </div>
 </li>
-<li><a id="org5e8c136"></a>Shift<br />
-<div class="outline-text-6" id="text-1-1-10-1-5">
+<li><a id="orgf4c27e7"></a>Shift<br />
+<div class="outline-text-6" id="text-1-2-10-1-5">
 <p>
 Increase scroll speed while held
 </p>
 </div>
 </li>
-<li><a id="orgf139079"></a>Ctrl<br />
-<div class="outline-text-6" id="text-1-1-10-1-6">
+<li><a id="orgab89809"></a>Ctrl<br />
+<div class="outline-text-6" id="text-1-2-10-1-6">
 <p>
 Decrease scroll speed while held
 </p>
@@ -768,53 +825,53 @@ Decrease scroll speed while held
 </li>
 </ol>
 </div>
-<div id="outline-container-org65b5721" class="outline-4">
-<h4 id="org65b5721"><span class="section-number-4">1.1.11</span> V :: Volume</h4>
-<div class="outline-text-4" id="text-1-1-11">
+<div id="outline-container-org2e75162" class="outline-4">
+<h4 id="org2e75162"><span class="section-number-4">1.2.11</span> V :: Volume</h4>
+<div class="outline-text-4" id="text-1-2-11">
 <p>
 Layer that allows you to easily change the volume using the keyboard
 </p>
 </div>
 <ol class="org-ol">
-<li><a id="org1e97268"></a>Volume Layer<br />
+<li><a id="orgc1894cc"></a>Volume Layer<br />
 <ol class="org-ol">
-<li><a id="orge07504a"></a>H<br />
-<div class="outline-text-6" id="text-1-1-11-1-1">
+<li><a id="org6c4e978"></a>H<br />
+<div class="outline-text-6" id="text-1-2-11-1-1">
 <p>
 Rotate current output left.
 </p>
 </div>
 </li>
-<li><a id="org95e73a9"></a>J<br />
-<div class="outline-text-6" id="text-1-1-11-1-2">
+<li><a id="orgdc3007e"></a>J<br />
+<div class="outline-text-6" id="text-1-2-11-1-2">
 <p>
 Rotate current output right.
 </p>
 </div>
 </li>
-<li><a id="org53c9a62"></a>K<br />
-<div class="outline-text-6" id="text-1-1-11-1-3">
+<li><a id="orge345f83"></a>K<br />
+<div class="outline-text-6" id="text-1-2-11-1-3">
 <p>
 Volume up by 5.
 </p>
 </div>
 </li>
-<li><a id="org8403c2e"></a>L<br />
-<div class="outline-text-6" id="text-1-1-11-1-4">
+<li><a id="org2ef56f5"></a>L<br />
+<div class="outline-text-6" id="text-1-2-11-1-4">
 <p>
 Volume down by 5.
 </p>
 </div>
 </li>
-<li><a id="org28a4c10"></a>M<br />
-<div class="outline-text-6" id="text-1-1-11-1-5">
+<li><a id="org749ce0b"></a>M<br />
+<div class="outline-text-6" id="text-1-2-11-1-5">
 <p>
 Toggles the muteness (?) of the current output and exits the Volume Layer
 </p>
 </div>
 </li>
-<li><a id="orgd4b0a5d"></a>Q<br />
-<div class="outline-text-6" id="text-1-1-11-1-6">
+<li><a id="org490b750"></a>Q<br />
+<div class="outline-text-6" id="text-1-2-11-1-6">
 <p>
 Toggles volume <code>osd</code> visibility.
 </p>
@@ -822,8 +879,8 @@ Toggles volume <code>osd</code> visibility.
 </li>
 </ol>
 </li>
-<li><a id="org32a0ac3"></a><span class="done DONE">DONE</span> Figure out which library to use to create the volume applet<br />
-<div class="outline-text-5" id="text-1-1-11-2">
+<li><a id="orgfd9c385"></a><span class="done DONE">DONE</span> Figure out which library to use to create the volume applet<br />
+<div class="outline-text-5" id="text-1-2-11-2">
 <blockquote>
 <p>
 I did a bunch of research into GUI overlays on Linux that can render over fullscreen applications.
@@ -845,31 +902,31 @@ This has the benefit of fitting in with the system theme, and only took a single
 </li>
 </ol>
 </div>
-<div id="outline-container-org5f06303" class="outline-4">
-<h4 id="org5f06303"><span class="section-number-4">1.1.12</span> \ :: Local Leader Key</h4>
-<div class="outline-text-4" id="text-1-1-12">
+<div id="outline-container-org1b2e54e" class="outline-4">
+<h4 id="org1b2e54e"><span class="section-number-4">1.2.12</span> \ :: Local Leader Key</h4>
+<div class="outline-text-4" id="text-1-2-12">
 <p>
 Use this in conjunction with presets to have local preset keybindings.
 </p>
 </div>
 </div>
-<div id="outline-container-orgfb99d60" class="outline-4">
-<h4 id="orgfb99d60"><span class="section-number-4">1.1.13</span> Super :: Super</h4>
-<div class="outline-text-4" id="text-1-1-13">
+<div id="outline-container-org2b1f6a2" class="outline-4">
+<h4 id="org2b1f6a2"><span class="section-number-4">1.2.13</span> Super :: Super</h4>
+<div class="outline-text-4" id="text-1-2-13">
 <p>
 Acts as a regular press of Super (hands it to KDE).
 </p>
 </div>
 </div>
 </div>
-<div id="outline-container-org80fdf1c" class="outline-3">
-<h3 id="org80fdf1c"><span class="section-number-3">1.2</span> Layer Templates</h3>
-<div class="outline-text-3" id="text-1-2">
+<div id="outline-container-orgbf9af2c" class="outline-3">
+<h3 id="orgbf9af2c"><span class="section-number-3">1.3</span> Layer Templates</h3>
+<div class="outline-text-3" id="text-1-3">
 </div>
-<div id="outline-container-orgb65d890" class="outline-4">
-<h4 id="orgb65d890"><span class="section-number-4">1.2.1</span> Passthrough</h4>
-<div class="outline-text-4" id="text-1-2-1">
-<pre class="example" id="orgf6f1efe">
+<div id="outline-container-org28cc9b1" class="outline-4">
+<h4 id="org28cc9b1"><span class="section-number-4">1.3.1</span> Passthrough</h4>
+<div class="outline-text-4" id="text-1-3-1">
+<pre class="example" id="org6d13f77">
 (deflayer layer-name
   _    _    _    _    _    _    _    _    _    _    _    _    _    _
   _    _    _    _    _    _    _    _    _    _    _    _    _    _
@@ -881,10 +938,10 @@ Acts as a regular press of Super (hands it to KDE).
 </pre>
 </div>
 </div>
-<div id="outline-container-orgc802651" class="outline-4">
-<h4 id="orgc802651"><span class="section-number-4">1.2.2</span> Inclusive</h4>
-<div class="outline-text-4" id="text-1-2-2">
-<pre class="example" id="orge38b238">
+<div id="outline-container-orgcab6177" class="outline-4">
+<h4 id="orgcab6177"><span class="section-number-4">1.3.2</span> Inclusive</h4>
+<div class="outline-text-4" id="text-1-3-2">
+<pre class="example" id="orgdd1afd1">
 (deflayer layer-name
   grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
   tab  q    w    e    r    t    y    u    i    o    p    [    ]    \
@@ -897,13 +954,13 @@ Acts as a regular press of Super (hands it to KDE).
 </div>
 </div>
 </div>
-<div id="outline-container-orgd2c6a43" class="outline-3">
-<h3 id="orgd2c6a43"><span class="section-number-3">1.3</span> Configuration</h3>
-<div class="outline-text-3" id="text-1-3">
+<div id="outline-container-orga7901ee" class="outline-3">
+<h3 id="orga7901ee"><span class="section-number-3">1.4</span> Configuration</h3>
+<div class="outline-text-3" id="text-1-4">
 <div class="org-src-container">
 <pre class="src src-kbd"><span style="color: #51afef;">(</span><span style="color: #51afef; font-style: italic;">defcfg</span>
   <span style="color: #5B6268; font-style: italic;">;; </span><span style="color: #5B6268; font-style: italic;">For Linux</span>
-  <span style="color: #c678dd;">input</span>  <span style="color: #c678dd;">(</span><span style="color: #c678dd;">device-file</span> <span style="color: #98be65;">"/dev/input/by-id/usb-Logitech_USB_Receiver-if02-event-kbd"</span><span style="color: #c678dd;">)</span>
+  <span style="color: #c678dd;">input</span>  <span style="color: #c678dd;">(</span><span style="color: #c678dd;">device-file</span> <span style="color: #98be65;">"|&gt;KEYBOARD&lt;|"</span><span style="color: #c678dd;">)</span>
   <span style="color: #c678dd;">output</span> <span style="color: #c678dd;">(</span><span style="color: #c678dd;">uinput-sink</span> <span style="color: #98be65;">"Logitech KMonad Output"</span>
                        <span style="color: #5B6268; font-style: italic;">;; </span><span style="color: #5B6268; font-style: italic;">To understand the importance of the following line, see the section on</span>
                        <span style="color: #5B6268; font-style: italic;">;; </span><span style="color: #5B6268; font-style: italic;">Compose-key sequences at the near-bottom of this file.</span>
@@ -921,9 +978,9 @@ Acts as a regular press of Super (hands it to KDE).
 </div>
 </div>
 </div>
-<div id="outline-container-org79693e7" class="outline-3">
-<h3 id="org79693e7"><span class="section-number-3">1.4</span> Source Layer</h3>
-<div class="outline-text-3" id="text-1-4">
+<div id="outline-container-orgcde62e9" class="outline-3">
+<h3 id="orgcde62e9"><span class="section-number-3">1.5</span> Source Layer</h3>
+<div class="outline-text-3" id="text-1-5">
 <div class="org-src-container">
 <pre class="src src-kbd"><span style="color: #51afef;">(</span><span style="color: #51afef; font-style: italic;">defsrc</span>
   grv  <span style="color: #da8548; font-weight: bold;">1</span>    <span style="color: #da8548; font-weight: bold;">2</span>    <span style="color: #da8548; font-weight: bold;">3</span>    <span style="color: #da8548; font-weight: bold;">4</span>    <span style="color: #da8548; font-weight: bold;">5</span>    <span style="color: #da8548; font-weight: bold;">6</span>    <span style="color: #da8548; font-weight: bold;">7</span>    <span style="color: #da8548; font-weight: bold;">8</span>    <span style="color: #da8548; font-weight: bold;">9</span>    <span style="color: #da8548; font-weight: bold;">0</span>    -    =    bspc
@@ -938,9 +995,9 @@ Acts as a regular press of Super (hands it to KDE).
 </div>
 </div>
 
-<div id="outline-container-org2804902" class="outline-3">
-<h3 id="org2804902"><span class="section-number-3">1.5</span> Default Layer</h3>
-<div class="outline-text-3" id="text-1-5">
+<div id="outline-container-org03fdccf" class="outline-3">
+<h3 id="org03fdccf"><span class="section-number-3">1.6</span> Default Layer</h3>
+<div class="outline-text-3" id="text-1-6">
 <blockquote>
 <p>
 Optional: as many layers as you please
@@ -990,15 +1047,15 @@ When we are trying to use the super key in a tap melody, we have the key down fo
 </div>
 </div>
 </div>
-<div id="outline-container-org41bd1f6" class="outline-3">
-<h3 id="org41bd1f6"><span class="section-number-3">1.6</span> Base Leader Key Layer</h3>
-<div class="outline-text-3" id="text-1-6">
+<div id="outline-container-org487d109" class="outline-3">
+<h3 id="org487d109"><span class="section-number-3">1.7</span> Base Leader Key Layer</h3>
+<div class="outline-text-3" id="text-1-7">
 <p>
 When we define aliases to other aliases, they are eagerly evaluated and will throw an error if they are not defined at that point.
-We solve this by plugging this code block into <a href="#org66fa0e4">1.19</a>, which gets tangled at the very end.
+We solve this by plugging this code block into <a href="#orge5b852d">1.20</a>, which gets tangled at the very end.
 </p>
 <div class="org-src-container">
-<pre class="src src-kbd" id="org4264823"><span style="color: #51afef;">(</span><span style="color: #51afef; font-style: italic;">defalias</span>
+<pre class="src src-kbd" id="org871b7c5"><span style="color: #51afef;">(</span><span style="color: #51afef; font-style: italic;">defalias</span>
 <span id="coderef-window-switcher" class="coderef-off">  win <span style="color: #dcaeea;">@window-switcher</span> <span style="color: #5B6268; font-style: italic;">;;</span></span>
 <span id="coderef-discord" class="coderef-off">  dsc <span style="color: #dcaeea;">@discord</span> <span style="color: #5B6268; font-style: italic;">;;</span></span>
 <span id="coderef-brightness" class="coderef-off">  bri b <span style="color: #5B6268; font-style: italic;">;;</span></span>
@@ -1025,16 +1082,16 @@ We solve this by plugging this code block into <a href="#org66fa0e4">1.19</a>, w
 </div>
 </div>
 </div>
-<div id="outline-container-org9d34cd5" class="outline-3">
-<h3 id="org9d34cd5"><span class="section-number-3">1.7</span> <a href="#coderef-window-switcher" class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-window-switcher');" onmouseout="CodeHighlightOff(this, 'coderef-window-switcher');">Window Switcher</a></h3>
-<div class="outline-text-3" id="text-1-7">
+<div id="outline-container-org3f09964" class="outline-3">
+<h3 id="org3f09964"><span class="section-number-3">1.8</span> <a href="#coderef-window-switcher" class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-window-switcher');" onmouseout="CodeHighlightOff(this, 'coderef-window-switcher');">Window Switcher</a></h3>
+<div class="outline-text-3" id="text-1-8">
 <p>
 Opens the Window Switcher
 </p>
 
 <div class="org-src-container">
 <pre class="src src-kbd"><span style="color: #51afef;">(</span><span style="color: #51afef; font-style: italic;">defalias</span>
-  window-switcher <span style="color: #c678dd;">(</span><span style="color: #c678dd;">cmd-button</span> <span style="color: #98be65;">"~/.local/bin/rofi -noplugins -modi window -show window -lines 5 --normal-window"</span><span style="color: #c678dd;">)</span>
+  window-switcher <span style="color: #c678dd;">(</span><span style="color: #c678dd;">cmd-button</span> <span style="color: #98be65;">"|&gt;ROFI&lt;| -noplugins -modi window -show window -lines 5 --normal-window"</span><span style="color: #c678dd;">)</span>
   <span style="color: #51afef;">)</span>
 </pre>
 </div>
@@ -1046,41 +1103,33 @@ I noticed that the startup animation was faster with <code>--normal-window</code
 </p>
 </div>
 </div>
-<div id="outline-container-org9fac1da" class="outline-3">
-<h3 id="org9fac1da"><span class="section-number-3">1.8</span> <a href="#coderef-discord" class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-discord');" onmouseout="CodeHighlightOff(this, 'coderef-discord');">Discord</a></h3>
-<div class="outline-text-3" id="text-1-8">
+<div id="outline-container-orga50c45d" class="outline-3">
+<h3 id="orga50c45d"><span class="section-number-3">1.9</span> <a href="#coderef-discord" class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-discord');" onmouseout="CodeHighlightOff(this, 'coderef-discord');">Discord</a></h3>
+<div class="outline-text-3" id="text-1-9">
 <p>
 This command uses <code>wmctrl</code> to switch to a currently-existing Discord window, and if it fails opens a new instance of Discord.
 </p>
 
 <div class="org-src-container">
 <pre class="src src-kbd"><span style="color: #51afef;">(</span><span style="color: #51afef; font-style: italic;">defalias</span>
-  discord <span style="color: #c678dd;">(</span><span style="color: #c678dd;">cmd-button</span> <span style="color: #98be65;">"wmctrl -a discord || /usr/bin/Discord"</span><span style="color: #c678dd;">)</span>
+  discord <span style="color: #c678dd;">(</span><span style="color: #c678dd;">cmd-button</span> <span style="color: #98be65;">"wmctrl -a discord || |&gt;DISCORD&lt;|"</span><span style="color: #c678dd;">)</span>
   <span style="color: #51afef;">)</span>
 </pre>
 </div>
 </div>
-<div id="outline-container-org33dd135" class="outline-4">
-<h4 id="org33dd135"><span class="section-number-4">1.8.1</span> <span class="todo TODO">TODO</span> Switch back to the previous window when invoked a second time</h4>
-</div>
-<div id="outline-container-orgfb539f4" class="outline-4">
-<h4 id="orgfb539f4"><span class="section-number-4">1.8.2</span> Discord Script</h4>
-<div class="outline-text-4" id="text-1-8-2">
-<p>
-This script keeps track of the window you had focused before switching to Discord, and switches back when you invoke it the second time
-</p>
+<div id="outline-container-orgac3b0b0" class="outline-4">
+<h4 id="orgac3b0b0"><span class="section-number-4">1.9.1</span> <span class="todo TODO">TODO</span> Switch back to the previous window when invoked a second time</h4>
 </div>
 </div>
+<div id="outline-container-org5c28202" class="outline-3">
+<h3 id="org5c28202"><span class="section-number-3">1.10</span> <span class="todo TODO">TODO</span> <a href="#coderef-brightness" class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-brightness');" onmouseout="CodeHighlightOff(this, 'coderef-brightness');">Brightness</a></h3>
 </div>
-<div id="outline-container-orgdc3b53e" class="outline-3">
-<h3 id="orgdc3b53e"><span class="section-number-3">1.9</span> <span class="todo TODO">TODO</span> <a href="#coderef-brightness" class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-brightness');" onmouseout="CodeHighlightOff(this, 'coderef-brightness');">Brightness</a></h3>
+<div id="outline-container-orgd235bd2" class="outline-3">
+<h3 id="orgd235bd2"><span class="section-number-3">1.11</span> <span class="todo TODO">TODO</span> <a href="#coderef-terminal" class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-terminal');" onmouseout="CodeHighlightOff(this, 'coderef-terminal');">Terminal</a></h3>
 </div>
-<div id="outline-container-org007af98" class="outline-3">
-<h3 id="org007af98"><span class="section-number-3">1.10</span> <span class="todo TODO">TODO</span> <a href="#coderef-terminal" class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-terminal');" onmouseout="CodeHighlightOff(this, 'coderef-terminal');">Terminal</a></h3>
-</div>
-<div id="outline-container-orgb52077d" class="outline-3">
-<h3 id="orgb52077d"><span class="section-number-3">1.11</span> <a href="#coderef-run" class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-run');" onmouseout="CodeHighlightOff(this, 'coderef-run');">Run</a></h3>
-<div class="outline-text-3" id="text-1-11">
+<div id="outline-container-orgabfe756" class="outline-3">
+<h3 id="orgabfe756"><span class="section-number-3">1.12</span> <a href="#coderef-run" class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-run');" onmouseout="CodeHighlightOff(this, 'coderef-run');">Run</a></h3>
+<div class="outline-text-3" id="text-1-12">
 <p>
 We use tap macros to execute the &ldquo;buttons&rdquo; in sequence.
 To enter the run mode, we execute the <code>runner</code> script and then enter the <code>run</code> layer.
@@ -1088,12 +1137,19 @@ We can do this because the leader layer only lasts for one keypress.
 When the run layer is added, the layer beneath it is qwerty.
 </p>
 
+<dl class="org-dl">
+<dt><code>RUNNER_SCRIPT</code></dt><dd><div class="org-src-container">
+<pre class="src src-text" id="org4334bea">~/.config/kmonad/runner/runner.sh
+</pre>
+</div></dd>
+</dl>
+
 <p>
 To exit the run mode, we remove the <code>run</code> layer and then kill all instances of <code>st</code>: the terminal we are using for the runner (and nothing else).
 </p>
 <div class="org-src-container">
 <pre class="src src-kbd"><span style="color: #51afef;">(</span><span style="color: #51afef; font-style: italic;">defalias</span>
-  enter-run #<span style="color: #c678dd;">(</span><span style="color: #98be65;">(</span><span style="color: #c678dd;">cmd-button</span> <span style="color: #98be65;">"~/.config/kmonad/runner/runner.sh"</span><span style="color: #98be65;">)</span> <span style="color: #98be65;">(</span><span style="color: #c678dd;">layer-add</span> run<span style="color: #98be65;">)</span><span style="color: #c678dd;">)</span>
+  enter-run #<span style="color: #c678dd;">(</span><span style="color: #98be65;">(</span><span style="color: #c678dd;">cmd-button</span> <span style="color: #98be65;">"|&gt;RUNNER_SCRIPT&lt;|"</span><span style="color: #98be65;">)</span> <span style="color: #98be65;">(</span><span style="color: #c678dd;">layer-add</span> run<span style="color: #98be65;">)</span><span style="color: #c678dd;">)</span>
   exit-run #<span style="color: #c678dd;">(</span><span style="color: #98be65;">(</span><span style="color: #c678dd;">layer-rem</span> run<span style="color: #98be65;">)</span> <span style="color: #98be65;">(</span><span style="color: #c678dd;">cmd-button</span> <span style="color: #98be65;">"killall st"</span><span style="color: #98be65;">)</span><span style="color: #c678dd;">)</span>
   <span style="color: #51afef;">)</span>
 </pre>
@@ -1118,9 +1174,9 @@ We named it like this to avoid conflicts with other aliases.
 </pre>
 </div>
 </div>
-<div id="outline-container-org72b5466" class="outline-4">
-<h4 id="org72b5466"><span class="section-number-4">1.11.1</span> Runner Script</h4>
-<div class="outline-text-4" id="text-1-11-1">
+<div id="outline-container-org37e9fa7" class="outline-4">
+<h4 id="org37e9fa7"><span class="section-number-4">1.12.1</span> Runner Script</h4>
+<div class="outline-text-4" id="text-1-12-1">
 <p>
 Using the <code>dash</code> shell for speed
 </p>
@@ -1136,13 +1192,12 @@ Setting environment variables for the <code>fish</code> process to inherit.
 <dl class="org-dl">
 <dt><code>SKIP_FISH_GREETING</code></dt><dd>This is a custom variable that determines whether a message should display on startup.
 I set it to 1 because I do not want it to output for the runner.</dd>
-<dt><code>STARSHIP_CONFIG</code></dt><dd><a href="https://github.com/starship/starship/">Starship</a> is the shell prompt I am using.
-I want the runner to have a different configuration than my normal shell, so this points to the other config</dd>
+<dt><code>STARSHIP_CONFIG</code></dt><dd><a href="https://github.com/starship/starship/">Starship</a> is the shell prompt I am using.</dd>
 </dl>
 
 <div class="org-src-container">
 <pre class="src src-sh"><span style="color: #c678dd;">export</span> <span style="color: #dcaeea;">SKIP_FISH_GREETING</span>=<span style="color: #da8548; font-weight: bold;">1</span>
-<span style="color: #c678dd;">export</span> <span style="color: #dcaeea;">STARSHIP_CONFIG</span>=~/.config/starship_runner.toml
+<span style="color: #c678dd;">export</span> <span style="color: #dcaeea;">STARSHIP_CONFIG</span>=|&gt;STARSHIP_RUNNER_CONFIG&lt;|
 </pre>
 </div>
 
@@ -1155,7 +1210,7 @@ Sets the working directory back to home
 </div>
 
 <dl class="org-dl">
-<dt><code>~/.local/bin/st</code></dt><dd><code>st</code> is the terminal emulator
+<dt><code>|&gt;ST&lt;|</code></dt><dd><code>st</code> is the terminal emulator
 <dl class="org-dl">
 <dt><code>-c "..."</code></dt><dd>This sets the X11 classnames for the window.
 My KDE config contains window rules that rounds the corners of windows with the <code>rounded</code> class and gives transparency and several other properties to the <code>st-runner</code> class</dd>
@@ -1182,7 +1237,7 @@ Some of <code>screen</code>&rsquo;s flag combinations seem a little arbitrary.</
 </dl>
 
 <div class="org-src-container">
-<pre class="src src-sh">~/.local/bin/st -c <span style="color: #98be65;">"rounded st-runner"</span> -g 100x8+225+50 screen -c ~/.config/kmonad/runner/screenrc -DR runner -s /bin/fish
+<pre class="src src-sh"><span style="color: #98be65;">"|&gt;ST&lt;|"</span> -c <span style="color: #98be65;">"rounded st-runner"</span> -g 100x8+225+50 screen -c ~/.config/kmonad/runner/screenrc -DR runner -s /bin/fish
 </pre>
 </div>
 
@@ -1210,50 +1265,50 @@ Before, I was getting a lot of text that wasn&rsquo;t being highlighted.</dd>
 </div>
 </div>
 </div>
-<div id="outline-container-org4598741" class="outline-4">
-<h4 id="org4598741"><span class="section-number-4">1.11.2</span> <span class="todo TODO">TODO</span> Cleanup exit command</h4>
-<div class="outline-text-4" id="text-1-11-2">
+<div id="outline-container-org854d25d" class="outline-4">
+<h4 id="org854d25d"><span class="section-number-4">1.12.2</span> <span class="todo TODO">TODO</span> Cleanup exit command</h4>
+<div class="outline-text-4" id="text-1-12-2">
 <p>
 Right now, we are doing <code>killall st</code>, which only does what we want because we do not use <code>st</code> for anything else.
 We should aim for a more robust solution.
 </p>
 </div>
 </div>
-<div id="outline-container-org696ac39" class="outline-4">
-<h4 id="org696ac39"><span class="section-number-4">1.11.3</span> <span class="done DONE">DONE</span> Reuse the <code>runner</code> terminal and shell between invocations</h4>
+<div id="outline-container-orga5cbaae" class="outline-4">
+<h4 id="orga5cbaae"><span class="section-number-4">1.12.3</span> <span class="done DONE">DONE</span> Reuse the <code>runner</code> terminal and shell between invocations</h4>
 </div>
 </div>
-<div id="outline-container-org2cebf0b" class="outline-3">
-<h3 id="org2cebf0b"><span class="section-number-3">1.12</span> <span class="todo TODO">TODO</span> <a href="#coderef-prompt" class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-prompt');" onmouseout="CodeHighlightOff(this, 'coderef-prompt');">Prompt</a></h3>
+<div id="outline-container-orge72fe8a" class="outline-3">
+<h3 id="orge72fe8a"><span class="section-number-3">1.13</span> <span class="todo TODO">TODO</span> <a href="#coderef-prompt" class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-prompt');" onmouseout="CodeHighlightOff(this, 'coderef-prompt');">Prompt</a></h3>
 </div>
-<div id="outline-container-orgb7a95a2" class="outline-3">
-<h3 id="orgb7a95a2"><span class="section-number-3">1.13</span> <a href="#coderef-agenda" class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-agenda');" onmouseout="CodeHighlightOff(this, 'coderef-agenda');">Agenda</a></h3>
-<div class="outline-text-3" id="text-1-13">
+<div id="outline-container-org84ee6a1" class="outline-3">
+<h3 id="org84ee6a1"><span class="section-number-3">1.14</span> <a href="#coderef-agenda" class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-agenda');" onmouseout="CodeHighlightOff(this, 'coderef-agenda');">Agenda</a></h3>
+<div class="outline-text-3" id="text-1-14">
 <div class="org-src-container">
 <pre class="src src-kbd"><span style="color: #51afef;">(</span><span style="color: #51afef; font-style: italic;">defalias</span>
-  agenda <span style="color: #c678dd;">(</span><span style="color: #c678dd;">cmd-button</span> <span style="color: #98be65;">"kitty ~/.local/bin/taskwarrior-tui"</span><span style="color: #c678dd;">)</span>
+  agenda <span style="color: #c678dd;">(</span><span style="color: #c678dd;">cmd-button</span> <span style="color: #98be65;">"kitty |&gt;TASKWARRIOR_TUI&lt;|"</span><span style="color: #c678dd;">)</span>
   <span style="color: #51afef;">)</span>
 </pre>
 </div>
 </div>
-<div id="outline-container-org197998e" class="outline-4">
-<h4 id="org197998e"><span class="section-number-4">1.13.1</span> <span class="todo TODO">TODO</span> Open a floating, semi-transparent window</h4>
-<div class="outline-text-4" id="text-1-13-1">
+<div id="outline-container-orge86181a" class="outline-4">
+<h4 id="orge86181a"><span class="section-number-4">1.14.1</span> <span class="todo TODO">TODO</span> Open a floating, semi-transparent window</h4>
+<div class="outline-text-4" id="text-1-14-1">
 <p>
 Instead of a fullscreen, opaque window.
 </p>
 </div>
 </div>
-<div id="outline-container-orgb2aec3b" class="outline-4">
-<h4 id="orgb2aec3b"><span class="section-number-4">1.13.2</span> <span class="todo TODO">TODO</span> Maybe switch to org-agenda</h4>
+<div id="outline-container-orgdd23267" class="outline-4">
+<h4 id="orgdd23267"><span class="section-number-4">1.14.2</span> <span class="todo TODO">TODO</span> Maybe switch to org-agenda</h4>
 </div>
 </div>
-<div id="outline-container-org0856432" class="outline-3">
-<h3 id="org0856432"><span class="section-number-3">1.14</span> <span class="todo TODO">TODO</span> <a href="#coderef-open-preset" class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-open-preset');" onmouseout="CodeHighlightOff(this, 'coderef-open-preset');">Open Preset</a></h3>
+<div id="outline-container-orga3035b6" class="outline-3">
+<h3 id="orga3035b6"><span class="section-number-3">1.15</span> <span class="todo TODO">TODO</span> <a href="#coderef-open-preset" class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-open-preset');" onmouseout="CodeHighlightOff(this, 'coderef-open-preset');">Open Preset</a></h3>
 </div>
-<div id="outline-container-org467a96c" class="outline-3">
-<h3 id="org467a96c"><span class="section-number-3">1.15</span> <a href="#coderef-org-capture" class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-org-capture');" onmouseout="CodeHighlightOff(this, 'coderef-org-capture');">Org Capture</a></h3>
-<div class="outline-text-3" id="text-1-15">
+<div id="outline-container-org9a71f8a" class="outline-3">
+<h3 id="org9a71f8a"><span class="section-number-3">1.16</span> <a href="#coderef-org-capture" class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-org-capture');" onmouseout="CodeHighlightOff(this, 'coderef-org-capture');">Org Capture</a></h3>
+<div class="outline-text-3" id="text-1-16">
 <div class="org-src-container">
 <pre class="src src-kbd"><span style="color: #51afef;">(</span><span style="color: #51afef; font-style: italic;">defalias</span>
   org-capture <span style="color: #c678dd;">(</span><span style="color: #c678dd;">cmd-button</span> <span style="color: #98be65;">"~/.local/bin/org-capture"</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span>
@@ -1261,31 +1316,43 @@ Instead of a fullscreen, opaque window.
 </div>
 </div>
 </div>
-<div id="outline-container-orgc66687a" class="outline-3">
-<h3 id="orgc66687a"><span class="section-number-3">1.16</span> <a href="#coderef-scroll" class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-scroll');" onmouseout="CodeHighlightOff(this, 'coderef-scroll');">Scroll</a></h3>
-<div class="outline-text-3" id="text-1-16">
+<div id="outline-container-org99882f8" class="outline-3">
+<h3 id="org99882f8"><span class="section-number-3">1.17</span> <a href="#coderef-scroll" class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-scroll');" onmouseout="CodeHighlightOff(this, 'coderef-scroll');">Scroll</a></h3>
+<div class="outline-text-3" id="text-1-17">
 <p>
 We set the scroll buttons to invoke the <code>scroll.sh</code> script once on press and once on release.
 On release, the script will kill the instance created on press
 </p>
+
+<dl class="org-dl">
+<dt><code>SCROLL_SCRIPT</code></dt><dd><div class="org-src-container">
+<pre class="src src-text" id="orgae8c420">~/.config/kmonad/scroll/scroll.sh
+</pre>
+</div></dd>
+<dt><code>SCROLL_SPEED_SCRIPT</code></dt><dd><div class="org-src-container">
+<pre class="src src-text" id="org4084153">~/.config/kmonad/scroll/scroll_speed.sh
+</pre>
+</div></dd>
+</dl>
+
 <div class="org-src-container">
 <pre class="src src-kbd"><span style="color: #51afef;">(</span><span style="color: #51afef; font-style: italic;">defalias</span>
   enter-scroll <span style="color: #c678dd;">(</span><span style="color: #c678dd;">layer-add</span> scroll<span style="color: #c678dd;">)</span>
   exit-scroll <span style="color: #c678dd;">(</span><span style="color: #c678dd;">layer-rem</span> scroll<span style="color: #c678dd;">)</span>
 
-  scroll-left  <span style="color: #c678dd;">(</span><span style="color: #c678dd;">cmd-button</span> <span style="color: #98be65;">"~/.config/kmonad/scroll/scroll.sh h -"</span>
-                           <span style="color: #98be65;">"~/.config/kmonad/scroll/scroll.sh h 0"</span><span style="color: #c678dd;">)</span>
-  scroll-up    <span style="color: #c678dd;">(</span><span style="color: #c678dd;">cmd-button</span> <span style="color: #98be65;">"~/.config/kmonad/scroll/scroll.sh v -"</span>
-                           <span style="color: #98be65;">"~/.config/kmonad/scroll/scroll.sh v 0"</span><span style="color: #c678dd;">)</span>
-  scroll-down  <span style="color: #c678dd;">(</span><span style="color: #c678dd;">cmd-button</span> <span style="color: #98be65;">"~/.config/kmonad/scroll/scroll.sh v +"</span>
-                           <span style="color: #98be65;">"~/.config/kmonad/scroll/scroll.sh v 0"</span><span style="color: #c678dd;">)</span>
-  scroll-right <span style="color: #c678dd;">(</span><span style="color: #c678dd;">cmd-button</span> <span style="color: #98be65;">"~/.config/kmonad/scroll/scroll.sh h +"</span>
-                           <span style="color: #98be65;">"~/.config/kmonad/scroll/scroll.sh h 0"</span><span style="color: #c678dd;">)</span>
+  scroll-left  <span style="color: #c678dd;">(</span><span style="color: #c678dd;">cmd-button</span> <span style="color: #98be65;">"|&gt;SCROLL_SCRIPT&lt;| h -"</span>
+                           <span style="color: #98be65;">"|&gt;SCROLL_SCRIPT&lt;| h 0"</span><span style="color: #c678dd;">)</span>
+  scroll-up    <span style="color: #c678dd;">(</span><span style="color: #c678dd;">cmd-button</span> <span style="color: #98be65;">"|&gt;SCROLL_SCRIPT&lt;| v -"</span>
+                           <span style="color: #98be65;">"|&gt;SCROLL_SCRIPT&lt;| v 0"</span><span style="color: #c678dd;">)</span>
+  scroll-down  <span style="color: #c678dd;">(</span><span style="color: #c678dd;">cmd-button</span> <span style="color: #98be65;">"|&gt;SCROLL_SCRIPT&lt;| v +"</span>
+                           <span style="color: #98be65;">"|&gt;SCROLL_SCRIPT&lt;| v 0"</span><span style="color: #c678dd;">)</span>
+  scroll-right <span style="color: #c678dd;">(</span><span style="color: #c678dd;">cmd-button</span> <span style="color: #98be65;">"|&gt;SCROLL_SCRIPT&lt;| h +"</span>
+                           <span style="color: #98be65;">"|&gt;SCROLL_SCRIPT&lt;| h 0"</span><span style="color: #c678dd;">)</span>
 
-  scroll-speed-up   <span style="color: #c678dd;">(</span><span style="color: #c678dd;">cmd-button</span> <span style="color: #98be65;">"~/.config/kmonad/scroll/scroll_speed.sh 50"</span>
-                              <span style="color: #98be65;">"~/.config/kmonad/scroll/scroll_speed.sh 0"</span><span style="color: #c678dd;">)</span>
-  scroll-speed-down <span style="color: #c678dd;">(</span><span style="color: #c678dd;">cmd-button</span> <span style="color: #98be65;">"~/.config/kmonad/scroll/scroll_speed.sh 200"</span>
-                                <span style="color: #98be65;">"~/.config/kmonad/scroll/scroll_speed.sh 0"</span><span style="color: #c678dd;">)</span>
+  scroll-speed-up   <span style="color: #c678dd;">(</span><span style="color: #c678dd;">cmd-button</span> <span style="color: #98be65;">"|&gt;SCROLL_SPEED_SCRIPT&lt;| 50"</span>
+                                <span style="color: #98be65;">"|&gt;SCROLL_SPEED_SCRIPT&lt;| 0"</span><span style="color: #c678dd;">)</span>
+  scroll-speed-down <span style="color: #c678dd;">(</span><span style="color: #c678dd;">cmd-button</span> <span style="color: #98be65;">"|&gt;SCROLL_SPEED_SCRIPT&lt;| 200"</span>
+                                <span style="color: #98be65;">"|&gt;SCROLL_SPEED_SCRIPT&lt;| 0"</span><span style="color: #c678dd;">)</span>
   <span style="color: #51afef;">)</span>
 </pre>
 </div>
@@ -1313,9 +1380,31 @@ On release, the script will kill the instance created on press
 </pre>
 </div>
 </div>
-<div id="outline-container-orgad2ad67" class="outline-4">
-<h4 id="orgad2ad67"><span class="section-number-4">1.16.1</span> Scroll Script</h4>
-<div class="outline-text-4" id="text-1-16-1">
+<div id="outline-container-org2793f9c" class="outline-4">
+<h4 id="org2793f9c"><span class="section-number-4">1.17.1</span> Scroll Script</h4>
+<div class="outline-text-4" id="text-1-17-1">
+<p>
+These are the files storing the scroll variables.
+</p>
+<dl class="org-dl">
+<dt><code>SCROLL_SPEED_FILE</code></dt><dd><div class="org-src-container">
+<pre class="src src-text" id="orgdffbfdd">/tmp/kmonad_scroll_script_speed
+</pre>
+</div></dd>
+<dt><code>SCROLL_SPEED_FILE_OLD</code></dt><dd><div class="org-src-container">
+<pre class="src src-text" id="orga71320a">/tmp/kmonad_scroll_script_speed_old
+</pre>
+</div></dd>
+<dt><code>SCROLL_HORIZONTAL</code></dt><dd><div class="org-src-container">
+<pre class="src src-text" id="org203ed8c">/tmp/kmonad_scroll_script_horizontal
+</pre>
+</div></dd>
+<dt><code>SCROLL_VERTICAL</code></dt><dd><div class="org-src-container">
+<pre class="src src-text" id="org652ebc5">/tmp/kmonad_scroll_script_vertical
+</pre>
+</div></dd>
+</dl>
+
 <p>
 Again using dash for speed
 </p>
@@ -1335,22 +1424,13 @@ Again using dash for speed
 </div>
 
 <p>
-Files storing the scroll speeds
-</p>
-<div class="org-src-container">
-<pre class="src src-sh"><span style="color: #dcaeea;">SCROLL_SPEED_FILE</span>=/tmp/kmonad_scroll_script_speed
-<span style="color: #dcaeea;">SCROLL_SPEED_FILE_OLD</span>=/tmp/kmonad_scroll_script_speed_old
-</pre>
-</div>
-
-<p>
 Check if a process is already running for the current direction, and kill it if necessary.
 We have separate PID files for horizontal and vertical scrolling because we want to be able to scroll in both directions simultaneously.
 </p>
 <div class="org-src-container">
 <pre class="src src-sh"><span style="color: #51afef; font-style: italic;">if</span> <span style="color: #51afef;">[</span> $<span style="color: #dcaeea;">DIRECTION</span> = <span style="color: #98be65;">"h"</span> <span style="color: #51afef;">]</span>
 <span style="color: #51afef; font-style: italic;">then</span>
-    <span style="color: #dcaeea;">DIRECTION_PID_FILE</span>=/tmp/kmonad_scroll_script_horizontal
+    <span style="color: #dcaeea;">DIRECTION_PID_FILE</span>=|&gt;SCROLL_HORIZONTAL&lt;|
 
     <span style="color: #51afef; font-style: italic;">if</span> <span style="color: #51afef;">[</span> $<span style="color: #dcaeea;">MAGNITUDE</span> = <span style="color: #98be65;">"-"</span> <span style="color: #51afef;">]</span>
     <span style="color: #51afef; font-style: italic;">then</span>
@@ -1361,7 +1441,7 @@ We have separate PID files for horizontal and vertical scrolling because we want
         <span style="color: #dcaeea;">TARGET_BUTTON</span>=<span style="color: #da8548; font-weight: bold;">7</span>
     <span style="color: #51afef; font-style: italic;">fi</span>
 <span style="color: #51afef; font-style: italic;">else</span>
-    <span style="color: #dcaeea;">DIRECTION_PID_FILE</span>=/tmp/kmonad_scroll_script_vertical
+    <span style="color: #dcaeea;">DIRECTION_PID_FILE</span>=|&gt;SCROLL_VERTICAL&lt;|
 
     <span style="color: #51afef; font-style: italic;">if</span> <span style="color: #51afef;">[</span> $<span style="color: #dcaeea;">MAGNITUDE</span> = <span style="color: #98be65;">"-"</span> <span style="color: #51afef;">]</span>
     <span style="color: #51afef; font-style: italic;">then</span>
@@ -1465,9 +1545,9 @@ If we get to the end of the &ldquo;loop&rdquo; without <code>USR1</code> signal 
 </div>
 </div>
 </div>
-<div id="outline-container-org0c4a819" class="outline-4">
-<h4 id="org0c4a819"><span class="section-number-4">1.16.2</span> Scroll Speed Script</h4>
-<div class="outline-text-4" id="text-1-16-2">
+<div id="outline-container-org4553a10" class="outline-4">
+<h4 id="org4553a10"><span class="section-number-4">1.17.2</span> Scroll Speed Script</h4>
+<div class="outline-text-4" id="text-1-17-2">
 <dl class="org-dl">
 <dt><code>NEW_DELAY</code></dt><dd>The new delay in milliseconds that we need <code>xdotool</code> to use.
 If it is equal to <code>0</code>, then reset the delay to the old delay</dd>
@@ -1480,26 +1560,17 @@ If it is equal to <code>0</code>, then reset the delay to the old delay</dd>
 </div>
 
 <p>
-Files storing the scroll speeds
-</p>
-<div class="org-src-container">
-<pre class="src src-sh"><span style="color: #dcaeea;">SCROLL_SPEED_FILE</span>=/tmp/kmonad_scroll_script_speed
-<span style="color: #dcaeea;">SCROLL_SPEED_FILE_OLD</span>=/tmp/kmonad_scroll_script_speed_old
-</pre>
-</div>
-
-<p>
 Save the current speed to another file
 </p>
 <div class="org-src-container">
 <pre class="src src-sh"><span style="color: #51afef; font-style: italic;">if</span> <span style="color: #51afef;">[</span> $<span style="color: #dcaeea;">NEW_DELAY</span> -ne <span style="color: #da8548; font-weight: bold;">0</span> <span style="color: #51afef;">]</span>
 <span style="color: #51afef; font-style: italic;">then</span>
-    <span style="color: #ECBE7B;">cat</span> /tmp/kmonad_scroll_script_speed &gt; /tmp/kmonad_scroll_script_speed_old
+    <span style="color: #ECBE7B;">cat</span> |&gt;SCROLL_SPEED_FILE&lt;| &gt; |&gt;SCROLL_SPEED_FILE_OLD&lt;|
 
     <span style="color: #5B6268; font-style: italic;"># </span><span style="color: #5B6268; font-style: italic;">write new speed to the file</span>
-    <span style="color: #ECBE7B;">echo</span> $<span style="color: #dcaeea;">NEW_DELAY</span> &gt; /tmp/kmonad_scroll_script_speed
+    <span style="color: #ECBE7B;">echo</span> $<span style="color: #dcaeea;">NEW_DELAY</span> &gt; |&gt;SCROLL_SPEED_FILE&lt;|
 <span style="color: #51afef; font-style: italic;">else</span>
-    <span style="color: #ECBE7B;">cat</span> /tmp/kmonad_scroll_script_speed_old &gt; /tmp/kmonad_scroll_script_speed
+    <span style="color: #ECBE7B;">cat</span> |&gt;SCROLL_SPEED_FILE_OLD&lt;| &gt; |&gt;SCROLL_SPEED_FILE&lt;|
 <span style="color: #51afef; font-style: italic;">fi</span>
 </pre>
 </div>
@@ -1508,18 +1579,18 @@ Save the current speed to another file
 Send <code>USR1</code> signals to both the vertical and horizontal processes, so that they will refresh their speed
 </p>
 <div class="org-src-container">
-<pre class="src src-sh"><span style="color: #ECBE7B;">kill</span> -s USR1 $<span style="color: #51afef;">(</span><span style="color: #ECBE7B;">cat</span> /tmp/kmonad_scroll_script_vertical<span style="color: #51afef;">)</span>
-<span style="color: #ECBE7B;">kill</span> -s USR1 $<span style="color: #51afef;">(</span><span style="color: #ECBE7B;">cat</span> /tmp/kmonad_scroll_script_horizontal<span style="color: #51afef;">)</span>
+<pre class="src src-sh"><span style="color: #ECBE7B;">kill</span> -s USR1 $<span style="color: #51afef;">(</span><span style="color: #ECBE7B;">cat</span> |&gt;SCROLL_VERTICAL&lt;|<span style="color: #51afef;">)</span>
+<span style="color: #ECBE7B;">kill</span> -s USR1 $<span style="color: #51afef;">(</span><span style="color: #ECBE7B;">cat</span> |&gt;SCROLL_HORIZONTAL&lt;|<span style="color: #51afef;">)</span>
 </pre>
 </div>
 </div>
 </div>
-<div id="outline-container-orgda3589c" class="outline-4">
-<h4 id="orgda3589c"><span class="section-number-4">1.16.3</span> <span class="done DONE">DONE</span> Use <code>shift</code> to control scroll speed</h4>
+<div id="outline-container-orgdbff692" class="outline-4">
+<h4 id="orgdbff692"><span class="section-number-4">1.17.3</span> <span class="done DONE">DONE</span> Use <code>shift</code> to control scroll speed</h4>
 </div>
-<div id="outline-container-orgd874d97" class="outline-4">
-<h4 id="orgd874d97"><span class="section-number-4">1.16.4</span> Original Approach</h4>
-<div class="outline-text-4" id="text-1-16-4">
+<div id="outline-container-org5c6a0de" class="outline-4">
+<h4 id="org5c6a0de"><span class="section-number-4">1.17.4</span> Original Approach</h4>
+<div class="outline-text-4" id="text-1-17-4">
 <p>
 This was my original idea, but I am now implementing scrolling through a shell script
 </p>
@@ -1564,21 +1635,39 @@ Because of this, it probably did not register as scrolling and was simply ignore
 </div>
 </div>
 </div>
-<div id="outline-container-org91963e4" class="outline-3">
-<h3 id="org91963e4"><span class="section-number-3">1.17</span> <a href="#coderef-volume" class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-volume');" onmouseout="CodeHighlightOff(this, 'coderef-volume');">Volume</a></h3>
-<div class="outline-text-3" id="text-1-17">
+<div id="outline-container-org94a2c24" class="outline-3">
+<h3 id="org94a2c24"><span class="section-number-3">1.18</span> <a href="#coderef-volume" class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-volume');" onmouseout="CodeHighlightOff(this, 'coderef-volume');">Volume</a></h3>
+<div class="outline-text-3" id="text-1-18">
+<dl class="org-dl">
+<dt><code>VOLUME_SCRIPT</code></dt><dd><div class="org-src-container">
+<pre class="src src-text" id="org9a7587a">~/.config/kmonad/volume/volume.sh
+</pre>
+</div></dd>
+<dt><code>VOLUME_TOGGLE_OSD_SCRIPT</code></dt><dd><div class="org-src-container">
+<pre class="src src-text" id="orgfe28cc5">~/.config/kmonad/volume/volume_popup_toggle.sh
+</pre>
+</div></dd>
+<dt><code>VOLUME_SCRIPT_OSD_FILE</code></dt><dd><p>
+Stores whether to show/hide volume <code>osd</code> popups
+</p>
+<div class="org-src-container">
+<pre class="src src-text" id="orgd329a5c">/tmp/kmonad_volume_script_display_osd
+</pre>
+</div></dd>
+</dl>
+
 <div class="org-src-container">
 <pre class="src src-kbd"><span style="color: #51afef;">(</span><span style="color: #51afef; font-style: italic;">defalias</span>
   <span style="color: #5B6268; font-style: italic;">;; </span><span style="color: #5B6268; font-style: italic;">Enable (overwrite) osd visibility when entering volume layer</span>
-  enter-volume #<span style="color: #c678dd;">(</span><span style="color: #98be65;">(</span><span style="color: #c678dd;">cmd-button</span> <span style="color: #98be65;">"echo 1 &gt; /tmp/kmonad_volume_script_display_osd"</span><span style="color: #98be65;">)</span> <span style="color: #98be65;">(</span><span style="color: #c678dd;">layer-add</span> volume<span style="color: #98be65;">)</span><span style="color: #c678dd;">)</span>
+  enter-volume #<span style="color: #c678dd;">(</span><span style="color: #98be65;">(</span><span style="color: #c678dd;">cmd-button</span> <span style="color: #98be65;">"echo 1 &gt; |&gt;VOLUME_SCRIPT_OSD_FILE&lt;|"</span><span style="color: #98be65;">)</span> <span style="color: #98be65;">(</span><span style="color: #c678dd;">layer-add</span> volume<span style="color: #98be65;">)</span><span style="color: #c678dd;">)</span>
   exit-volume <span style="color: #c678dd;">(</span><span style="color: #c678dd;">layer-rem</span> volume<span style="color: #c678dd;">)</span>
 
-  volume-up   <span style="color: #c678dd;">(</span><span style="color: #c678dd;">cmd-button</span> <span style="color: #98be65;">"~/.config/kmonad/volume/volume.sh +"</span>
-                          <span style="color: #98be65;">"~/.config/kmonad/volume/volume.sh 0"</span><span style="color: #c678dd;">)</span>
-  volume-down <span style="color: #c678dd;">(</span><span style="color: #c678dd;">cmd-button</span> <span style="color: #98be65;">"~/.config/kmonad/volume/volume.sh -"</span>
-                          <span style="color: #98be65;">"~/.config/kmonad/volume/volume.sh 0"</span><span style="color: #c678dd;">)</span>
+  volume-up   <span style="color: #c678dd;">(</span><span style="color: #c678dd;">cmd-button</span> <span style="color: #98be65;">"|&gt;VOLUME_SCRIPT&lt;| +"</span>
+                          <span style="color: #98be65;">"|&gt;VOLUME_SCRIPT&lt;| 0"</span><span style="color: #c678dd;">)</span>
+  volume-down <span style="color: #c678dd;">(</span><span style="color: #c678dd;">cmd-button</span> <span style="color: #98be65;">"|&gt;VOLUME_SCRIPT&lt;| -"</span>
+                          <span style="color: #98be65;">"|&gt;VOLUME_SCRIPT&lt;| 0"</span><span style="color: #c678dd;">)</span>
 
-  volume-osd-toggle <span style="color: #c678dd;">(</span><span style="color: #c678dd;">cmd-button</span> <span style="color: #98be65;">"~/.config/kmonad/volume/volume_popup_toggle.sh"</span><span style="color: #c678dd;">)</span>
+  volume-osd-toggle <span style="color: #c678dd;">(</span><span style="color: #c678dd;">cmd-button</span> <span style="color: #98be65;">"|&gt;VOLUME_SCRIPT_OSD_FILE&lt;|"</span><span style="color: #c678dd;">)</span>
 
   <span style="color: #5B6268; font-style: italic;">;; </span><span style="color: #5B6268; font-style: italic;">uses KDE&#8203;'s DBus interface to call the KMix volume mute shortcut, and also exits the layer</span>
   <span style="color: #5B6268; font-style: italic;">;; </span><span style="color: #5B6268; font-style: italic;">we can do this because we do not need the muting behavior to be different from pressing the mute button normally</span>
@@ -1610,11 +1699,22 @@ Because of this, it probably did not register as scrolling and was simply ignore
 </pre>
 </div>
 </div>
-<div id="outline-container-org54d1a5d" class="outline-4">
-<h4 id="org54d1a5d"><span class="section-number-4">1.17.1</span> Volume Script</h4>
-<div class="outline-text-4" id="text-1-17-1">
+<div id="outline-container-orgd8842c0" class="outline-4">
+<h4 id="orgd8842c0"><span class="section-number-4">1.18.1</span> Volume Script</h4>
+<div class="outline-text-4" id="text-1-18-1">
+<dl class="org-dl">
+<dt><code>VOLUME_SCRIPT_PID_FILE</code></dt><dd><div class="org-src-container">
+<pre class="src src-text" id="org6872052">/tmp/kmonad_volume_script
+</pre>
+</div></dd>
+<dt><code>VOLUME_HELPER_SCRIPT</code></dt><dd><div class="org-src-container">
+<pre class="src src-text" id="orgf77cc62">~/.config/kmonad/volume/change_volume.py
+</pre>
+</div></dd>
+</dl>
+
 <p>
-Similar to the <a href="#orgad2ad67">1.16.1</a>, this script will modulate a parameter at a given rate, writing its own PID into a file so that it can be killed when a key is released
+Similar to the <a href="#org2793f9c">1.17.1</a>, this script will modulate a parameter at a given rate, writing its own PID into a file so that it can be killed when a key is released
 </p>
 
 <dl class="org-dl">
@@ -1636,7 +1736,7 @@ Kill the instance that is currently modifying the volume (if it exists).
 <code>kill</code> will throw an error if the process is no longer alive, but that will not crash the script
 </p>
 <div class="org-src-container">
-<pre class="src src-sh"><span style="color: #dcaeea;">DIRECTION_PID_FILE</span>=/tmp/kmonad_volume_script
+<pre class="src src-sh"><span style="color: #dcaeea;">DIRECTION_PID_FILE</span>=|&gt;VOLUME_SCRIPT_PID_FILE&lt;|
 
 <span style="color: #5B6268; font-style: italic;"># </span><span style="color: #5B6268; font-style: italic;">Kill existing process if necessary</span>
 <span style="color: #51afef; font-style: italic;">if</span> <span style="color: #51afef;">[</span> -e $<span style="color: #dcaeea;">DIRECTION_PID_FILE</span> <span style="color: #51afef;">]</span>; <span style="color: #51afef; font-style: italic;">then</span>
@@ -1693,7 +1793,7 @@ I <i>believe</i> that this cached value will be valid so long as you do not chan
 Reads whether or not to display <code>osd</code> popups from the disk
 </p>
 <div class="org-src-container">
-<pre class="src src-sh">    <span style="color: #dcaeea;">DISPLAY_OSD_FILE</span>=/tmp/kmonad_volume_script_display_osd
+<pre class="src src-sh">    <span style="color: #dcaeea;">DISPLAY_OSD_FILE</span>=|&gt;VOLUME_SCRIPT_OSD_FILE&lt;|
 
     <span style="color: #5B6268; font-style: italic;"># </span><span style="color: #5B6268; font-style: italic;">I'm not exactly sure what a control is</span>
     <span style="color: #51afef; font-style: italic;">if</span> <span style="color: #51afef;">[</span> -e $<span style="color: #dcaeea;">DISPLAY_OSD_FILE</span> <span style="color: #51afef;">]</span>; <span style="color: #51afef; font-style: italic;">then</span>
@@ -1734,18 +1834,18 @@ Write the shell&rsquo;s pid to disk so the next invocation can kill it
 </dl>
 
 <p>
-The reasoning behind this section being written in Python can be found under <a href="#orga360118">1.17.1.1</a>​.
+The reasoning behind this section being written in Python can be found under <a href="#orge39cc2f">1.18.1.1</a>​.
 In this code, the <code>python2</code> process inherits the PID of the shell since we are using <code>exec</code>
 </p>
 <div class="org-src-container">
-<pre class="src src-sh">    <span style="color: #51afef; font-style: italic;">exec</span> python2 -ES ~/.config/kmonad/volume/change_volume.py $<span style="color: #dcaeea;">CURRENT_VOLUME</span> $<span style="color: #dcaeea;">VOLUME_CHANGE_DIRECTION</span> $<span style="color: #dcaeea;">DISPLAY_OSD</span>
+<pre class="src src-sh">    <span style="color: #51afef; font-style: italic;">exec</span> python2 -ES |&gt;VOLUME_HELPER_SCRIPT&lt;| $<span style="color: #dcaeea;">CURRENT_VOLUME</span> $<span style="color: #dcaeea;">VOLUME_CHANGE_DIRECTION</span> $<span style="color: #dcaeea;">DISPLAY_OSD</span>
 <span style="color: #51afef; font-style: italic;">fi</span>
 </pre>
 </div>
 </div>
 <ol class="org-ol">
-<li><a id="orga360118"></a>Volume Helper Script<br />
-<div class="outline-text-5" id="text-1-17-1-1">
+<li><a id="orge39cc2f"></a>Volume Helper Script<br />
+<div class="outline-text-5" id="text-1-18-1-1">
 <p>
 The reason I wrote this section in <del>Lua</del>​<code>python2</code> is because it requires a loop to run with a subsecond delay.
 If this were written as part of the shell script, we would be calling out to <code>/bin/sleep</code> tens of times per second, and the interval could become visibly inconsistent.
@@ -1769,7 +1869,7 @@ display_osd = <span style="color: #a9a1e1;">True</span> <span style="color: #51a
 </div>
 
 <p>
-When we receive a <code>USR1</code> signal from the <a href="#org6846e79">1.17.2</a>, invert the value of <code>display_osd</code>.
+When we receive a <code>USR1</code> signal from the <a href="#orgf53275f">1.18.2</a>, invert the value of <code>display_osd</code>.
 This is equivalent to reading the new value of the file; we know that the script would have inverted the value from what it was originally, so we can simply invert our variable to mirror it.
 </p>
 <div class="org-src-container">
@@ -1811,8 +1911,8 @@ The <a href="https://pypi.org/project/subprocess32/">subprocess32</a> package is
 </p>
 </div>
 <ol class="org-ol">
-<li><a id="org79ba7e8"></a>Lua Implementation<br />
-<div class="outline-text-6" id="text-1-17-1-1-1">
+<li><a id="orga987e53"></a>Lua Implementation<br />
+<div class="outline-text-6" id="text-1-18-1-1-1">
 <p>
 I originally wrote the helper script in Lua because I thought that Python would be too slow.
 However, upon further inspection of the startup time link, python2&rsquo;s startup time is under 3 milliseconds, which is certainly acceptable for this usecase.
@@ -1821,7 +1921,7 @@ However, upon further inspection of the startup time link, python2&rsquo;s start
 <p>
 I ran my own benchmarks to compare Lua&rsquo;s startup time without python2&rsquo;s and these were the results
 </p>
-<pre class="example" id="org914a11c">
+<pre class="example" id="org8b31580">
 $ hyperfine 'lua -E -e ""' 'python2 -S -c ""'
 Benchmark #1: lua -E -e ""
   Time (mean ± σ):       0.4 ms ±   0.2 ms    [User: 0.4 ms, System: 0.4 ms]
@@ -1844,7 +1944,7 @@ Summary
 As mentioned earlier, Lua&rsquo;s startup time is many times faster,  but python2&rsquo;s 3 milliseconds is still an acceptable speed.
 I ran my own benchmarks to compare my Lua implementation and my Python implementation (for 100 iterations of the loop) and these were the results.
 </p>
-<pre class="example" id="org6fbbdad">
+<pre class="example" id="org984b108">
 $ hyperfine 'lua -E change_volume.lua 0 1' 'python2 -S change_volume.py 0 1'
 Benchmark #1: lua -E change_volume.lua 0 1
   Time (mean ± σ):      6.747 s ±  0.066 s    [User: 1.056 s, System: 0.913 s]
@@ -1914,9 +2014,9 @@ In this code, the <code>lua</code> process inherits the PID of the shell since w
 </li>
 </ol>
 </div>
-<div id="outline-container-org6846e79" class="outline-4">
-<h4 id="org6846e79"><span class="section-number-4">1.17.2</span> Volume OSD Toggle Script</h4>
-<div class="outline-text-4" id="text-1-17-2">
+<div id="outline-container-orgf53275f" class="outline-4">
+<h4 id="orgf53275f"><span class="section-number-4">1.18.2</span> Volume OSD Toggle Script</h4>
+<div class="outline-text-4" id="text-1-18-2">
 <p>
 This script switches the contents of <code>$DISPLAY_OSD_FILE</code> between 0 and 1, setting the value to 0 if the file does not exist.
 </p>
@@ -1942,7 +2042,7 @@ This effectively maps <code>0</code> to <code>1</code> and <code>1</code> to <co
 <div class="org-src-container">
 <pre class="src src-sh"><span style="color: #5B6268; font-style: italic;">#</span><span style="color: #5B6268; font-style: italic;">!/bin/</span><span style="color: #51afef; font-style: italic;">dash</span>
 
-<span style="color: #dcaeea;">DISPLAY_OSD_FILE</span>=/tmp/kmonad_volume_script_display_osd
+<span style="color: #dcaeea;">DISPLAY_OSD_FILE</span>=|&gt;VOLUME_SCRIPT_OSD_FILE&lt;|
 
 <span style="color: #51afef; font-style: italic;">if</span> <span style="color: #51afef; font-weight: bold;">!</span> <span style="color: #51afef;">[</span> -e $<span style="color: #dcaeea;">DISPLAY_OSD_FILE</span> <span style="color: #51afef;">]</span>; <span style="color: #51afef; font-style: italic;">then</span>
     <span style="color: #ECBE7B;">echo</span> <span style="color: #98be65;">"0"</span> &gt; <span style="color: #98be65;">"</span><span style="color: #a9a1e1;">$</span><span style="color: #dcaeea;">DISPLAY_OSD_FILE</span><span style="color: #98be65;">"</span>
@@ -1950,8 +2050,8 @@ This effectively maps <code>0</code> to <code>1</code> and <code>1</code> to <co
     sed -i <span style="color: #98be65;">'y/01/10/'</span> <span style="color: #98be65;">"</span><span style="color: #a9a1e1;">$</span><span style="color: #dcaeea;">DISPLAY_OSD_FILE</span><span style="color: #98be65;">"</span>
 <span style="color: #51afef; font-style: italic;">fi</span>
 
-<span style="color: #51afef; font-style: italic;">if</span> <span style="color: #51afef;">[</span> -e /tmp/kmonad_volume_script <span style="color: #51afef;">]</span>; <span style="color: #51afef; font-style: italic;">then</span>
-    <span style="color: #ECBE7B;">kill</span> -s USR1 $<span style="color: #51afef;">(</span><span style="color: #ECBE7B;">cat</span> /tmp/kmonad_volume_script<span style="color: #51afef;">)</span>
+<span style="color: #51afef; font-style: italic;">if</span> <span style="color: #51afef;">[</span> -e |&gt;VOLUME_SCRIPT_PID_FILE&lt;| <span style="color: #51afef;">]</span>; <span style="color: #51afef; font-style: italic;">then</span>
+    <span style="color: #ECBE7B;">kill</span> -s USR1 $<span style="color: #51afef;">(</span><span style="color: #ECBE7B;">cat</span> |&gt;VOLUME_SCRIPT_PID_FILE&lt;|<span style="color: #51afef;">)</span>
 <span style="color: #51afef; font-style: italic;">fi</span>
 </pre>
 </div>
@@ -1960,35 +2060,35 @@ This effectively maps <code>0</code> to <code>1</code> and <code>1</code> to <co
 This is an alternate implementation of the swap using <code>tr</code>.
 See <a href="https://stackoverflow.com/questions/6696842/how-can-i-use-a-file-in-a-command-and-redirect-output-to-the-same-file-without-t">this</a> StackOverflow post on why we can&rsquo;t redirect the output of <code>tr</code> back into the file using <code>&gt;</code>.
 </p>
-<pre class="example" id="org8f3c2ea">
+<pre class="example" id="orgd88d89c">
 tr '01' '10' &lt; $DISPLAY_OSD_FILE | sponge $DISPLAY_OSD_FILE
 </pre>
 </div>
 </div>
-<div id="outline-container-org5a3ea66" class="outline-4">
-<h4 id="org5a3ea66"><span class="section-number-4">1.17.3</span> <span class="done DONE">DONE</span> Volume layer</h4>
-<div class="outline-text-4" id="text-1-17-3">
+<div id="outline-container-orgd573ead" class="outline-4">
+<h4 id="orgd573ead"><span class="section-number-4">1.18.3</span> <span class="done DONE">DONE</span> Volume layer</h4>
+<div class="outline-text-4" id="text-1-18-3">
 <p>
 The volume layer would remap hjkl to control the volume.
 </p>
 </div>
 </div>
-<div id="outline-container-org432a996" class="outline-4">
-<h4 id="org432a996"><span class="section-number-4">1.17.4</span> <span class="todo TODO">TODO</span> Volume Next/Prev</h4>
-<div class="outline-text-4" id="text-1-17-4">
+<div id="outline-container-org993a903" class="outline-4">
+<h4 id="org993a903"><span class="section-number-4">1.18.4</span> <span class="todo TODO">TODO</span> Volume Next/Prev</h4>
+<div class="outline-text-4" id="text-1-18-4">
 <p>
 Rotate to next/previous output with h/l
 </p>
 </div>
 </div>
 </div>
-<div id="outline-container-org47fca1a" class="outline-3">
-<h3 id="org47fca1a"><span class="section-number-3">1.18</span> <span class="todo TODO">TODO</span> <a href="#coderef-local-leader" class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-local-leader');" onmouseout="CodeHighlightOff(this, 'coderef-local-leader');">Local Leader</a></h3>
+<div id="outline-container-org8325467" class="outline-3">
+<h3 id="org8325467"><span class="section-number-3">1.19</span> <span class="todo TODO">TODO</span> <a href="#coderef-local-leader" class="coderef" onmouseover="CodeHighlightOn(this, 'coderef-local-leader');" onmouseout="CodeHighlightOff(this, 'coderef-local-leader');">Local Leader</a></h3>
 </div>
 
-<div id="outline-container-org66fa0e4" class="outline-3">
-<h3 id="org66fa0e4"><span class="section-number-3">1.19</span> Leader Key Definitions</h3>
-<div class="outline-text-3" id="text-1-19">
+<div id="outline-container-orge5b852d" class="outline-3">
+<h3 id="orge5b852d"><span class="section-number-3">1.20</span> Leader Key Definitions</h3>
+<div class="outline-text-3" id="text-1-20">
 <p>
 We need to do this in order to get the layer aliases to evaluate <i>after</i> all of the helper aliases are defined.
 Otherwise, we get an error saying that the aliases are non-existent.
@@ -2000,16 +2100,16 @@ Otherwise, we get an error saying that the aliases are non-existent.
 </div>
 </div>
 </div>
-<div id="outline-container-org0263051" class="outline-2">
-<h2 id="org0263051"><span class="section-number-2">2</span> KMonad Documentation</h2>
+<div id="outline-container-org49e1a24" class="outline-2">
+<h2 id="org49e1a24"><span class="section-number-2">2</span> KMonad Documentation</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 Documentation was copied from <a href="https://github.com/kmonad/kmonad/blob/master/keymap/tutorial.kbd">tutorial.kbd</a> and adapted for Org mode
 </p>
 </div>
 
-<div id="outline-container-orgd3f1502" class="outline-3">
-<h3 id="orgd3f1502"><span class="section-number-3">2.1</span> Basic Syntax</h3>
+<div id="outline-container-org25b5caf" class="outline-3">
+<h3 id="org25b5caf"><span class="section-number-3">2.1</span> Basic Syntax</h3>
 <div class="outline-text-3" id="text-2-1">
 <p>
 KMonad&rsquo;s configuration language is styled on various lisps, like scheme or
@@ -2053,8 +2153,8 @@ To check for syntax errors while editing, invoke kmonad with the -d option.
 </ul>
 </div>
 </div>
-<div id="outline-container-orgd4d96f7" class="outline-3">
-<h3 id="orgd4d96f7"><span class="section-number-3">2.2</span> defcfg block</h3>
+<div id="outline-container-org115e09f" class="outline-3">
+<h3 id="org115e09f"><span class="section-number-3">2.2</span> defcfg block</h3>
 <div class="outline-text-3" id="text-2-2">
 <p>
 Necessary: the `defcfg` block
@@ -2141,7 +2241,7 @@ these interfaces.
 </ul>
 </div>
 <ol class="org-ol">
-<li><a id="org8d81b78"></a>Linux<br />
+<li><a id="org71288a8"></a>Linux<br />
 <div class="outline-text-5" id="text-2-2-0-1">
 <p>
 In Linux we deal with input by performing an ioctl-grab on a specific
@@ -2166,7 +2266,7 @@ We deal with output by creating a &rsquo;uinput&rsquo; device. This requires tha
 </div>
 </li>
 
-<li><a id="orge514b6b"></a>Windows<br />
+<li><a id="org578bc13"></a>Windows<br />
 <div class="outline-text-5" id="text-2-2-0-2">
 <p>
 In Windows we do not get such fine-grained control. We use a low-level
@@ -2187,7 +2287,7 @@ programs that capture keyboard input like AHK. You specify windows output using:
 </p>
 </div>
 </li>
-<li><a id="org6d323c2"></a>MacOS<br />
+<li><a id="org5cf771d"></a>MacOS<br />
 <div class="outline-text-5" id="text-2-2-0-3">
 <p>
 For Mac questions I suggest filing an issue and tagging @thoelze1, he wrote
@@ -2211,8 +2311,8 @@ You initialize output on MacOS using:
 </li>
 </ol>
 </div>
-<div id="outline-container-orgc368b26" class="outline-3">
-<h3 id="orgc368b26"><span class="section-number-3">2.3</span> defsrc block</h3>
+<div id="outline-container-orgbaa7d70" class="outline-3">
+<h3 id="orgbaa7d70"><span class="section-number-3">2.3</span> defsrc block</h3>
 <div class="outline-text-3" id="text-2-3">
 <p>
 Necessary: the `defsrc` block
@@ -2274,8 +2374,8 @@ for &rsquo;us_ansi_60.kbd&rsquo;
 </p>
 </div>
 </div>
-<div id="outline-container-org5c76d32" class="outline-3">
-<h3 id="org5c76d32"><span class="section-number-3">2.4</span> defalias</h3>
+<div id="outline-container-org1dcc96f" class="outline-3">
+<h3 id="org1dcc96f"><span class="section-number-3">2.4</span> defalias</h3>
 <div class="outline-text-3" id="text-2-4">
 <p>
 Optional : `defalias` statements
@@ -2303,8 +2403,8 @@ config).
 </p>
 </div>
 </div>
-<div id="outline-container-org3612eaa" class="outline-3">
-<h3 id="org3612eaa"><span class="section-number-3">2.5</span> deflayer</h3>
+<div id="outline-container-org06ac40e" class="outline-3">
+<h3 id="org06ac40e"><span class="section-number-3">2.5</span> deflayer</h3>
 <div class="outline-text-3" id="text-2-5">
 <p>
 Necessary: at least 1 `deflayer` block
@@ -2360,10 +2460,10 @@ KMonad config will be the layer that is active when KMonad starts up.
 </p></li>
 </ol>
 </div>
-<div id="outline-container-org2cca666" class="outline-4">
-<h4 id="org2cca666"><span class="section-number-4">2.5.1</span> Examples</h4>
+<div id="outline-container-org7b80834" class="outline-4">
+<h4 id="org7b80834"><span class="section-number-4">2.5.1</span> Examples</h4>
 <div class="outline-text-4" id="text-2-5-1">
-<pre class="example" id="org91881cc">
+<pre class="example" id="orga23229a">
 (deflayer numbers
   _    _    _    _    _    _    _    _    _    _    _    _    _    _
   _    _    _    _    _    XX   /    7    8    9    -    _    _    _
@@ -2389,8 +2489,8 @@ KMonad config will be the layer that is active when KMonad starts up.
 </div>
 </div>
 </div>
-<div id="outline-container-org298c314" class="outline-3">
-<h3 id="org298c314"><span class="section-number-3">2.6</span> Buttons with Modifiers</h3>
+<div id="outline-container-orgbc4d0e5" class="outline-3">
+<h3 id="orgbc4d0e5"><span class="section-number-3">2.6</span> Buttons with Modifiers</h3>
 <div class="outline-text-3" id="text-2-6">
 <p>
 Optional: modded buttons
@@ -2467,10 +2567,10 @@ these buttons are in no way &rsquo;special&rsquo; in KMonad. There is no concept
 (around a (around b c)) ;; Perfectly valid
 </p>
 </div>
-<div id="outline-container-orgfc139de" class="outline-4">
-<h4 id="orgfc139de"><span class="section-number-4">2.6.1</span> Examples</h4>
+<div id="outline-container-orgb0aacfd" class="outline-4">
+<h4 id="orgb0aacfd"><span class="section-number-4">2.6.1</span> Examples</h4>
 <div class="outline-text-4" id="text-2-6-1">
-<pre class="example" id="org74b96ea">
+<pre class="example" id="orgfe22736">
 cpy C-c
 pst C-v
 cut C-x
@@ -2499,7 +2599,7 @@ context of those 4 layers overlayed on the stack. When we release `rctl`, all
 these layers will be popped again.
 </p>
 
-<pre class="example" id="org997a977">
+<pre class="example" id="org8d10ef5">
 (defalias tst (around (layer-toggle macro-test)
                       (around (layer-toggle layer-test)
                               (around (layer-toggle around-next-test)
@@ -2518,8 +2618,8 @@ these layers will be popped again.
 </div>
 </div>
 
-<div id="outline-container-orgc6e37e6" class="outline-3">
-<h3 id="orgc6e37e6"><span class="section-number-3">2.7</span> Sticky Keys</h3>
+<div id="outline-container-org928f4ec" class="outline-3">
+<h3 id="org928f4ec"><span class="section-number-3">2.7</span> Sticky Keys</h3>
 <div class="outline-text-3" id="text-2-7">
 <p>
 Optional: sticky keys
@@ -2560,13 +2660,13 @@ ssc (around
 (sticky-key 500 lctl)))
 </p>
 </div>
-<div id="outline-container-org6c44bed" class="outline-4">
-<h4 id="org6c44bed"><span class="section-number-4">2.7.1</span> Examples</h4>
+<div id="outline-container-orga6ed934" class="outline-4">
+<h4 id="orga6ed934"><span class="section-number-4">2.7.1</span> Examples</h4>
 <div class="outline-text-4" id="text-2-7-1">
 <p>
 Let&rsquo;s make both shift keys sticky
 </p>
-<pre class="example" id="orgf726aa5">
+<pre class="example" id="orgad4b1c2">
 (defalias
   sl (sticky-key 300 lsft)
   sr (sticky-key 300 rsft))
@@ -2574,8 +2674,8 @@ Let&rsquo;s make both shift keys sticky
 </div>
 </div>
 </div>
-<div id="outline-container-org3267811" class="outline-3">
-<h3 id="org3267811"><span class="section-number-3">2.8</span> Tap Macros</h3>
+<div id="outline-container-org4c28774" class="outline-3">
+<h3 id="org4c28774"><span class="section-number-3">2.8</span> Tap Macros</h3>
 <div class="outline-text-3" id="text-2-8">
 <p>
 Optional: tap-macros
@@ -2659,10 +2759,10 @@ This concludes this public service announcement.
 </p></li>
 </ol>
 </div>
-<div id="outline-container-org32a44d9" class="outline-4">
-<h4 id="org32a44d9"><span class="section-number-4">2.8.1</span> Examples</h4>
+<div id="outline-container-orgb9a4569" class="outline-4">
+<h4 id="orgb9a4569"><span class="section-number-4">2.8.1</span> Examples</h4>
 <div class="outline-text-4" id="text-2-8-1">
-<pre class="example" id="org4696d9f">
+<pre class="example" id="orgdba7949">
 (defalias
   mc1 #(K M o n a d)
   mc2 #(C-c P50 A-tab P50 C-v) ;; Careful, this might do something
@@ -2682,8 +2782,8 @@ This concludes this public service announcement.
 </div>
 </div>
 </div>
-<div id="outline-container-orga86ca26" class="outline-3">
-<h3 id="orga86ca26"><span class="section-number-3">2.9</span> Layer Manipulation</h3>
+<div id="outline-container-orgb8385d2" class="outline-3">
+<h3 id="orgb8385d2"><span class="section-number-3">2.9</span> Layer Manipulation</h3>
 <div class="outline-text-3" id="text-2-9">
 <p>
 Optional: layer manipulation
@@ -2784,10 +2884,10 @@ overlay a bit further down.
 </p></li>
 </ol>
 </div>
-<div id="outline-container-orgf7e81bd" class="outline-4">
-<h4 id="orgf7e81bd"><span class="section-number-4">2.9.1</span> Examples</h4>
+<div id="outline-container-org6765afe" class="outline-4">
+<h4 id="org6765afe"><span class="section-number-4">2.9.1</span> Examples</h4>
 <div class="outline-text-4" id="text-2-9-1">
-<pre class="example" id="orgf9d5192">
+<pre class="example" id="orgba45ab3">
 (defalias
   yah (layer-toggle asking-for-trouble) ;; Completely safe
   nah (layer-add asking-for-trouble)    ;; Completely unsafe
@@ -2842,8 +2942,8 @@ overlay a bit further down.
 </div>
 </div>
 </div>
-<div id="outline-container-org1414397" class="outline-3">
-<h3 id="org1414397"><span class="section-number-3">2.10</span> Multi-use Buttons</h3>
+<div id="outline-container-orgb3c03ea" class="outline-3">
+<h3 id="orgb3c03ea"><span class="section-number-3">2.10</span> Multi-use Buttons</h3>
 <div class="outline-text-3" id="text-2-10">
 <p>
 Optional: Multi-use buttons
@@ -2968,10 +3068,10 @@ in a testing layer down below, so give them a go and see what is nice.
 </p></li>
 </ul>
 </div>
-<div id="outline-container-org7ba4973" class="outline-4">
-<h4 id="org7ba4973"><span class="section-number-4">2.10.1</span> Examples</h4>
+<div id="outline-container-org62a550c" class="outline-4">
+<h4 id="org62a550c"><span class="section-number-4">2.10.1</span> Examples</h4>
 <div class="outline-text-4" id="text-2-10-1">
-<pre class="example" id="orga0f8513">
+<pre class="example" id="org406a451">
 (defalias
   xtn (tap-next x lsft)         ;; Shift that does 'x' on tap
   xth (tap-hold 400 x lsft)     ;; Long delay for easier testing
@@ -2995,8 +3095,8 @@ in a testing layer down below, so give them a go and see what is nice.
 </div>
 </div>
 </div>
-<div id="outline-container-org9047bb7" class="outline-3">
-<h3 id="org9047bb7"><span class="section-number-3">2.11</span> Multi-tap</h3>
+<div id="outline-container-org6d65a6a" class="outline-3">
+<h3 id="org6d65a6a"><span class="section-number-3">2.11</span> Multi-tap</h3>
 <div class="outline-text-3" id="text-2-11">
 <p>
 Optional: Multi-tap
@@ -3021,18 +3121,18 @@ Note that you can actually hold the button, so in the below example, going:
 tap-tap-hold (wait 300ms) will get you a pressed c, until you release again.
 </p>
 </div>
-<div id="outline-container-org18f96f8" class="outline-4">
-<h4 id="org18f96f8"><span class="section-number-4">2.11.1</span> Examples</h4>
+<div id="outline-container-org92d5eac" class="outline-4">
+<h4 id="org92d5eac"><span class="section-number-4">2.11.1</span> Examples</h4>
 <div class="outline-text-4" id="text-2-11-1">
-<pre class="example" id="orgba14e92">
+<pre class="example" id="org98f0d7a">
 (defalias
   mt  (multi-tap 300 a 300 b 300 c 300 d e))
 </pre>
 </div>
 </div>
 </div>
-<div id="outline-container-orgac04ebc" class="outline-3">
-<h3 id="orgac04ebc"><span class="section-number-3">2.12</span> Around-next</h3>
+<div id="outline-container-orgcb1d43e" class="outline-3">
+<h3 id="orgcb1d43e"><span class="section-number-3">2.12</span> Around-next</h3>
 <div class="outline-text-3" id="text-2-12">
 <p>
 Optional: Around-next
@@ -3050,10 +3150,10 @@ I think expansion of this button-style is probably the future of leader-key,
 hydra-style functionality support in KMonad.
 </p>
 </div>
-<div id="outline-container-org3103650" class="outline-4">
-<h4 id="org3103650"><span class="section-number-4">2.12.1</span> Examples</h4>
+<div id="outline-container-org2a053fe" class="outline-4">
+<h4 id="org2a053fe"><span class="section-number-4">2.12.1</span> Examples</h4>
 <div class="outline-text-4" id="text-2-12-1">
-<pre class="example" id="orga74a14e">
+<pre class="example" id="org71439b2">
 (defalias
   ns  (around-next sft)  ;; Shift the next press
   nnm (around-next @num) ;; Perform next press in numbers layer
@@ -3072,8 +3172,8 @@ hydra-style functionality support in KMonad.
 </div>
 </div>
 </div>
-<div id="outline-container-orga668a24" class="outline-3">
-<h3 id="orga668a24"><span class="section-number-3">2.13</span> Compose Key Sequences</h3>
+<div id="outline-container-org72250ff" class="outline-3">
+<h3 id="org72250ff"><span class="section-number-3">2.13</span> Compose Key Sequences</h3>
 <div class="outline-text-3" id="text-2-13">
 <p>
 Optional: Compose-key sequences
@@ -3132,10 +3232,10 @@ syntax.
 </p></li>
 </ol>
 </div>
-<div id="outline-container-orgc1c8af2" class="outline-4">
-<h4 id="orgc1c8af2"><span class="section-number-4">2.13.1</span> Examples</h4>
+<div id="outline-container-orgf1835bd" class="outline-4">
+<h4 id="orgf1835bd"><span class="section-number-4">2.13.1</span> Examples</h4>
 <div class="outline-text-4" id="text-2-13-1">
-<pre class="example" id="org25d2294">
+<pre class="example" id="org69243a1">
 (defalias
   sym (layer-toggle symbols)
   )
@@ -3150,8 +3250,8 @@ syntax.
 </div>
 </div>
 </div>
-<div id="outline-container-orge8652d3" class="outline-3">
-<h3 id="orge8652d3"><span class="section-number-3">2.14</span> Command Buttons</h3>
+<div id="outline-container-org5f7860f" class="outline-3">
+<h3 id="org5f7860f"><span class="section-number-3">2.14</span> Command Buttons</h3>
 <div class="outline-text-3" id="text-2-14">
 <p>
 Optional: Command buttons
@@ -3183,7 +3283,7 @@ want to push:
 (cmd-button &ldquo;rm -rf ~/*&rdquo;) ;; Delete all this user&rsquo;s data
 </p>
 
-<pre class="example" id="org9426bd2">
+<pre class="example" id="org9f1ad86">
 (defalias
   dat (cmd-button "date &gt;&gt; /tmp/kmonad_example.txt")   ;; Append date to tmpfile
   pth (cmd-button "echo $PATH &gt; /tmp/kmonad_path.txt") ;; Write out PATH
@@ -3206,7 +3306,7 @@ want to push:
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Sridaran Thoniyil</p>
-<p class="date">Created: 2021-06-26 Sat 01:30</p>
+<p class="date">Created: 2021-06-26 Sat 13:21</p>
 </div>
 </body>
 </html>
