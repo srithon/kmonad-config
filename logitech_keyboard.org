@@ -1,5 +1,47 @@
 #+TITLE: Logitech Keyboard Configuration
+#+PROPERTY: header-args:kbd :noweb yes
+#+PROPERTY: header-args:python :noweb yes
 
+To allow for easier configuration, I am using "variables" for parts of the config that are subject to change between different setups.
+These "variables" are implemented using Org mode's [[https://orgmode.org/manual/Noweb-Reference-Syntax.html][noweb]] syntax, which allows for code blocks to insert the contents of other code blocks.
+
+Because the default reference syntax: ~<<BLOCK_NAME>>~, is valid syntax in some languages, I changed the syntax to ~|>BLOCK_NAME<|~.
+When the document is tangled, these ~|>BLOCK_NAME<|~ references are replaced with the contents of the corresponding named variable block in [[Global Variables]] or elsewhere.
+Variable names are all uppercase, and their definitions will mirror the structure shown in [[Global Variables]].
+
+* Global Variables
+- ~KEYBOARD~ ::
+ #+NAME: KEYBOARD
+ #+begin_src text
+/dev/input/by-id/usb-Logitech_USB_Receiver-if02-event-kbd
+ #+end_src
+- ~STARSHIP_RUNNER_CONFIG~ ::
+  I want the runner to have a different configuration than my normal shell, so this points to the other config
+  #+NAME: STARSHIP_RUNNER_CONFIG
+  #+begin_src text
+~/.config/starship_runner/toml
+  #+end_src
+** Program Paths
+- ~ST~ ::
+ #+NAME: ST
+ #+begin_src text
+ ~/.local/bin/st
+ #+end_src
+- ~ROFI~ ::
+ #+NAME: ROFI
+ #+begin_src text
+~/.local/bin/rofi
+ #+end_src
+- ~DISCORD~ ::
+  #+NAME: DISCORD
+  #+begin_src text
+/usr/bin/Discord
+  #+end_src
+- ~TASKWARRIOR_TUI~ ::
+  #+NAME: TASKWARRIOR_TUI
+  #+begin_src text
+~/.local/bin/taskwarrior-tui
+  #+end_src
 * Super Keybindings
 I want to be able to use Super like a leader key when tapped.
 Each headline represents a key to be pressed after tapping Super.
@@ -181,7 +223,7 @@ Acts as a regular press of Super (hands it to KDE).
 #+begin_src kbd
 (defcfg
   ;; For Linux
-  input  (device-file "/dev/input/by-id/usb-Logitech_USB_Receiver-if02-event-kbd")
+  input  (device-file "|>KEYBOARD<|")
   output (uinput-sink "Logitech KMonad Output"
                        ;; To understand the importance of the following line, see the section on
                        ;; Compose-key sequences at the near-bottom of this file.
@@ -278,7 +320,7 @@ Opens the Window Switcher
 
 #+begin_src kbd
 (defalias
-  window-switcher (cmd-button "~/.local/bin/rofi -noplugins -modi window -show window -lines 5 --normal-window")
+  window-switcher (cmd-button "|>ROFI<| -noplugins -modi window -show window -lines 5 --normal-window")
   )
 #+end_src
 
@@ -290,7 +332,7 @@ This command uses ~wmctrl~ to switch to a currently-existing Discord window, and
 
 #+begin_src kbd
 (defalias
-  discord (cmd-button "wmctrl -a discord || /usr/bin/Discord")
+  discord (cmd-button "wmctrl -a discord || |>DISCORD<|")
   )
 #+end_src
 ** TODO Switch back to the previous window when invoked a second time
@@ -302,10 +344,16 @@ To enter the run mode, we execute the ~runner~ script and then enter the ~run~ l
 We can do this because the leader layer only lasts for one keypress.
 When the run layer is added, the layer beneath it is qwerty.
 
+- ~RUNNER_SCRIPT~ ::
+  #+NAME: RUNNER_SCRIPT
+  #+begin_src text
+~/.config/kmonad/runner/runner.sh
+  #+end_src
+
 To exit the run mode, we remove the ~run~ layer and then kill all instances of ~st~: the terminal we are using for the runner (and nothing else).
 #+begin_src kbd
 (defalias
-  enter-run #((cmd-button "~/.config/kmonad/runner/runner.sh") (layer-add run))
+  enter-run #((cmd-button "|>RUNNER_SCRIPT<|") (layer-add run))
   exit-run #((layer-rem run) (cmd-button "killall st"))
   )
 #+end_src
@@ -345,11 +393,10 @@ Setting environment variables for the ~fish~ process to inherit.
   I set it to 1 because I do not want it to output for the runner.
 - ~STARSHIP_CONFIG~ ::
   [[https://github.com/starship/starship/][Starship]] is the shell prompt I am using.
-  I want the runner to have a different configuration than my normal shell, so this points to the other config
 
 #+begin_src sh
 export SKIP_FISH_GREETING=1
-export STARSHIP_CONFIG=~/.config/starship_runner.toml
+export STARSHIP_CONFIG=|>STARSHIP_RUNNER_CONFIG<|
 #+end_src
 
 Sets the working directory back to home
@@ -357,7 +404,7 @@ Sets the working directory back to home
 cd
 #+end_src
 
-- ~~/.local/bin/st~ ::
+- ~|>ST<|~ ::
   ~st~ is the terminal emulator
   - ~-c "..."~ ::
     This sets the X11 classnames for the window.
@@ -379,7 +426,7 @@ cd
       Tells ~screen~ to start new sessions with the ~fish~ shell.
 
 #+begin_src sh
-~/.local/bin/st -c "rounded st-runner" -g 100x8+225+50 screen -c ~/.config/kmonad/runner/screenrc -DR runner -s /bin/fish
+"|>ST<|" -c "rounded st-runner" -g 100x8+225+50 screen -c ~/.config/kmonad/runner/screenrc -DR runner -s /bin/fish
 #+end_src
 
 After ~st~ closes, we scroll down our runner so we no longer see the commands/output from earlier.
@@ -405,7 +452,7 @@ We should aim for a more robust solution.
 * [[(agenda)][Agenda]]
 #+begin_src kbd
 (defalias
-  agenda (cmd-button "kitty ~/.local/bin/taskwarrior-tui")
+  agenda (cmd-button "kitty |>TASKWARRIOR_TUI<|")
   )
 #+end_src
 ** TODO Open a floating, semi-transparent window
@@ -420,24 +467,36 @@ Instead of a fullscreen, opaque window.
 * [[(scroll)][Scroll]]
 We set the scroll buttons to invoke the ~scroll.sh~ script once on press and once on release.
 On release, the script will kill the instance created on press
+
+- ~SCROLL_SCRIPT~ ::
+  #+NAME: SCROLL_SCRIPT
+  #+begin_src text
+~/.config/kmonad/scroll/scroll.sh
+  #+end_src
+- ~SCROLL_SPEED_SCRIPT~ ::
+  #+NAME: SCROLL_SPEED_SCRIPT
+  #+begin_src text
+~/.config/kmonad/scroll/scroll_speed.sh
+  #+end_src
+
 #+begin_src kbd
 (defalias
   enter-scroll (layer-add scroll)
   exit-scroll (layer-rem scroll)
 
-  scroll-left  (cmd-button "~/.config/kmonad/scroll/scroll.sh h -"
-                           "~/.config/kmonad/scroll/scroll.sh h 0")
-  scroll-up    (cmd-button "~/.config/kmonad/scroll/scroll.sh v -"
-                           "~/.config/kmonad/scroll/scroll.sh v 0")
-  scroll-down  (cmd-button "~/.config/kmonad/scroll/scroll.sh v +"
-                           "~/.config/kmonad/scroll/scroll.sh v 0")
-  scroll-right (cmd-button "~/.config/kmonad/scroll/scroll.sh h +"
-                           "~/.config/kmonad/scroll/scroll.sh h 0")
+  scroll-left  (cmd-button "|>SCROLL_SCRIPT<| h -"
+                           "|>SCROLL_SCRIPT<| h 0")
+  scroll-up    (cmd-button "|>SCROLL_SCRIPT<| v -"
+                           "|>SCROLL_SCRIPT<| v 0")
+  scroll-down  (cmd-button "|>SCROLL_SCRIPT<| v +"
+                           "|>SCROLL_SCRIPT<| v 0")
+  scroll-right (cmd-button "|>SCROLL_SCRIPT<| h +"
+                           "|>SCROLL_SCRIPT<| h 0")
 
-  scroll-speed-up   (cmd-button "~/.config/kmonad/scroll/scroll_speed.sh 50"
-                              "~/.config/kmonad/scroll/scroll_speed.sh 0")
-  scroll-speed-down (cmd-button "~/.config/kmonad/scroll/scroll_speed.sh 200"
-                                "~/.config/kmonad/scroll/scroll_speed.sh 0")
+  scroll-speed-up   (cmd-button "|>SCROLL_SPEED_SCRIPT<| 50"
+                                "|>SCROLL_SPEED_SCRIPT<| 0")
+  scroll-speed-down (cmd-button "|>SCROLL_SPEED_SCRIPT<| 200"
+                                "|>SCROLL_SPEED_SCRIPT<| 0")
   )
 #+end_src
 
@@ -467,6 +526,28 @@ On release, the script will kill the instance created on press
 :header-args:sh:  :tangle ~/.config/kmonad/scroll/scroll.sh :mkdirp yes :tangle-mode (identity #o744) :padline no
 :END:
 
+These are the files storing the scroll variables.
+- ~SCROLL_SPEED_FILE~ ::
+  #+NAME: SCROLL_SPEED_FILE
+  #+begin_src text
+/tmp/kmonad_scroll_script_speed
+  #+end_src
+- ~SCROLL_SPEED_FILE_OLD~ ::
+  #+NAME: SCROLL_SPEED_FILE_OLD
+  #+begin_src text
+/tmp/kmonad_scroll_script_speed_old
+  #+end_src
+- ~SCROLL_HORIZONTAL~ ::
+  #+NAME: SCROLL_HORIZONTAL
+  #+begin_src text
+/tmp/kmonad_scroll_script_horizontal
+  #+end_src
+- ~SCROLL_VERTICAL~ ::
+  #+NAME: SCROLL_VERTICAL
+  #+begin_src text
+/tmp/kmonad_scroll_script_vertical
+  #+end_src
+
 Again using dash for speed
 #+begin_src sh
 #!/bin/dash
@@ -481,18 +562,12 @@ DIRECTION="$1"
 MAGNITUDE="$2"
 #+end_src
 
-Files storing the scroll speeds
-#+begin_src sh
-SCROLL_SPEED_FILE=/tmp/kmonad_scroll_script_speed
-SCROLL_SPEED_FILE_OLD=/tmp/kmonad_scroll_script_speed_old
-#+end_src
-
 Check if a process is already running for the current direction, and kill it if necessary.
 We have separate PID files for horizontal and vertical scrolling because we want to be able to scroll in both directions simultaneously.
 #+begin_src sh
 if [ $DIRECTION = "h" ]
 then
-    DIRECTION_PID_FILE=/tmp/kmonad_scroll_script_horizontal
+    DIRECTION_PID_FILE=|>SCROLL_HORIZONTAL<|
 
     if [ $MAGNITUDE = "-" ]
     then
@@ -503,7 +578,7 @@ then
         TARGET_BUTTON=7
     fi
 else
-    DIRECTION_PID_FILE=/tmp/kmonad_scroll_script_vertical
+    DIRECTION_PID_FILE=|>SCROLL_VERTICAL<|
 
     if [ $MAGNITUDE = "-" ]
     then
@@ -590,29 +665,23 @@ fi
 NEW_DELAY=$1
 #+end_src
 
-Files storing the scroll speeds
-#+begin_src sh
-SCROLL_SPEED_FILE=/tmp/kmonad_scroll_script_speed
-SCROLL_SPEED_FILE_OLD=/tmp/kmonad_scroll_script_speed_old
-#+end_src
-
 Save the current speed to another file
 #+begin_src sh
 if [ $NEW_DELAY -ne 0 ]
 then
-    cat /tmp/kmonad_scroll_script_speed > /tmp/kmonad_scroll_script_speed_old
+    cat |>SCROLL_SPEED_FILE<| > |>SCROLL_SPEED_FILE_OLD<|
 
     # write new speed to the file
-    echo $NEW_DELAY > /tmp/kmonad_scroll_script_speed
+    echo $NEW_DELAY > |>SCROLL_SPEED_FILE<|
 else
-    cat /tmp/kmonad_scroll_script_speed_old > /tmp/kmonad_scroll_script_speed
+    cat |>SCROLL_SPEED_FILE_OLD<| > |>SCROLL_SPEED_FILE<|
 fi
 #+end_src
 
 Send ~USR1~ signals to both the vertical and horizontal processes, so that they will refresh their speed
 #+begin_src sh
-kill -s USR1 $(cat /tmp/kmonad_scroll_script_vertical)
-kill -s USR1 $(cat /tmp/kmonad_scroll_script_horizontal)
+kill -s USR1 $(cat |>SCROLL_VERTICAL<|)
+kill -s USR1 $(cat |>SCROLL_HORIZONTAL<|)
 #+end_src
 ** DONE Use ~shift~ to control scroll speed
 ** Original Approach
@@ -643,18 +712,35 @@ Whenever you scroll a scrollbar on your mouse, the speed at which you scroll det
 I believe the reason the vertical scrolling was not working is because KMonad was repeating the keypresses too quickly.
 Because of this, it probably did not register as scrolling and was simply ignored.
 * [[(volume)][Volume]]
+- ~VOLUME_SCRIPT~ ::
+  #+NAME: VOLUME_SCRIPT
+  #+begin_src text
+~/.config/kmonad/volume/volume.sh
+  #+end_src
+- ~VOLUME_TOGGLE_OSD_SCRIPT~ ::
+  #+NAME: VOLUME_SCRIPT
+  #+begin_src text
+~/.config/kmonad/volume/volume_popup_toggle.sh
+  #+end_src
+- ~VOLUME_SCRIPT_OSD_FILE~ ::
+  Stores whether to show/hide volume ~osd~ popups
+  #+NAME: VOLUME_SCRIPT_OSD_FILE
+  #+begin_src text
+/tmp/kmonad_volume_script_display_osd
+  #+end_src
+
 #+begin_src kbd
 (defalias
   ;; Enable (overwrite) osd visibility when entering volume layer
-  enter-volume #((cmd-button "echo 1 > /tmp/kmonad_volume_script_display_osd") (layer-add volume))
+  enter-volume #((cmd-button "echo 1 > |>VOLUME_SCRIPT_OSD_FILE<|") (layer-add volume))
   exit-volume (layer-rem volume)
 
-  volume-up   (cmd-button "~/.config/kmonad/volume/volume.sh +"
-                          "~/.config/kmonad/volume/volume.sh 0")
-  volume-down (cmd-button "~/.config/kmonad/volume/volume.sh -"
-                          "~/.config/kmonad/volume/volume.sh 0")
+  volume-up   (cmd-button "|>VOLUME_SCRIPT<| +"
+                          "|>VOLUME_SCRIPT<| 0")
+  volume-down (cmd-button "|>VOLUME_SCRIPT<| -"
+                          "|>VOLUME_SCRIPT<| 0")
 
-  volume-osd-toggle (cmd-button "~/.config/kmonad/volume/volume_popup_toggle.sh")
+  volume-osd-toggle (cmd-button "|>VOLUME_SCRIPT_OSD_FILE<|")
 
   ;; uses KDE​'s DBus interface to call the KMix volume mute shortcut, and also exits the layer
   ;; we can do this because we do not need the muting behavior to be different from pressing the mute button normally
@@ -688,6 +774,17 @@ Because of this, it probably did not register as scrolling and was simply ignore
 :header-args:sh:  :tangle ~/.config/kmonad/volume/volume.sh :mkdirp yes :tangle-mode (identity #o744) :padline no
 :END:
 
+- ~VOLUME_SCRIPT_PID_FILE~ ::
+  #+NAME: VOLUME_SCRIPT_PID_FILE
+  #+begin_src text
+/tmp/kmonad_volume_script
+  #+end_src
+- ~VOLUME_HELPER_SCRIPT~ ::
+  #+NAME: VOLUME_HELPER_SCRIPT
+  #+begin_src text
+~/.config/kmonad/volume/change_volume.py
+  #+end_src
+
 Similar to the [[Scroll Script]], this script will modulate a parameter at a given rate, writing its own PID into a file so that it can be killed when a key is released
 
 - ~VOLUME_CHANGE_DIRECTION~ ::
@@ -703,7 +800,7 @@ VOLUME_CHANGE_DIRECTION="$1"
 Kill the instance that is currently modifying the volume (if it exists).
 ~kill~ will throw an error if the process is no longer alive, but that will not crash the script
 #+begin_src sh
-DIRECTION_PID_FILE=/tmp/kmonad_volume_script
+DIRECTION_PID_FILE=|>VOLUME_SCRIPT_PID_FILE<|
 
 # Kill existing process if necessary
 if [ -e $DIRECTION_PID_FILE ]; then
@@ -745,7 +842,7 @@ I /believe/ that this cached value will be valid so long as you do not change so
 
 Reads whether or not to display ~osd~ popups from the disk
 #+begin_src sh
-    DISPLAY_OSD_FILE=/tmp/kmonad_volume_script_display_osd
+    DISPLAY_OSD_FILE=|>VOLUME_SCRIPT_OSD_FILE<|
 
     # I'm not exactly sure what a control is
     if [ -e $DISPLAY_OSD_FILE ]; then
@@ -780,7 +877,7 @@ Write the shell's pid to disk so the next invocation can kill it
 The reasoning behind this section being written in Python can be found under [[Volume Helper Script]]​.
 In this code, the ~python2~ process inherits the PID of the shell since we are using ~exec~
 #+begin_src sh
-    exec python2 -ES ~/.config/kmonad/volume/change_volume.py $CURRENT_VOLUME $VOLUME_CHANGE_DIRECTION $DISPLAY_OSD
+    exec python2 -ES |>VOLUME_HELPER_SCRIPT<| $CURRENT_VOLUME $VOLUME_CHANGE_DIRECTION $DISPLAY_OSD
 fi
 #+end_src
 *** Volume Helper Script
@@ -938,7 +1035,7 @@ This script switches the contents of ~$DISPLAY_OSD_FILE~ between 0 and 1, settin
 #+begin_src sh
 #!/bin/dash
 
-DISPLAY_OSD_FILE=/tmp/kmonad_volume_script_display_osd
+DISPLAY_OSD_FILE=|>VOLUME_SCRIPT_OSD_FILE<|
 
 if ! [ -e $DISPLAY_OSD_FILE ]; then
     echo "0" > "$DISPLAY_OSD_FILE"
@@ -946,8 +1043,8 @@ else
     sed -i 'y/01/10/' "$DISPLAY_OSD_FILE"
 fi
 
-if [ -e /tmp/kmonad_volume_script ]; then
-    kill -s USR1 $(cat /tmp/kmonad_volume_script)
+if [ -e |>VOLUME_SCRIPT_PID_FILE<| ]; then
+    kill -s USR1 $(cat |>VOLUME_SCRIPT_PID_FILE<|)
 fi
 #+end_src
 
@@ -968,3 +1065,8 @@ Otherwise, we get an error saying that the aliases are non-existent.
 #+begin_src kbd :noweb strip-export
 <<base_leader_key_layer>>
 #+end_src
+
+# Local Variables:
+# org-babel-noweb-wrap-start: "|>"
+# org-babel-noweb-wrap-end: "<|"
+# End:
