@@ -298,7 +298,8 @@ This command uses ~wmctrl~ to switch to a currently-existing Discord window, and
 * [[(volume)][Volume]]
 #+begin_src kbd
 (defalias
-  enter-volume (layer-add volume)
+  ;; Enable (overwrite) osd visibility when entering volume layer
+  enter-volume #((cmd-button "echo 1 > /tmp/kmonad_volume_script_display_osd") (layer-add volume))
   exit-volume (layer-rem volume)
 
   volume-up   (cmd-button "~/.config/kmonad/volume/volume.sh +"
