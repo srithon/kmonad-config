@@ -635,7 +635,7 @@ We want this section of code in a loop, so that if the speed changes we can reac
     do
 #+end_src
 
-Get the current delay from ~$SCROLL_SPEED_FILE~, creating it if necessary
+Get the current delay from ~SCROLL_SPEED_FILE~, creating it if necessary
 #+begin_src sh
         if ! [ -e |>SCROLL_SPEED_FILE<| ]
         then
