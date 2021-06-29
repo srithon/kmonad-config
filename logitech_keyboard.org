@@ -31,6 +31,11 @@ Variable names are all uppercase, and their definitions will mirror the structur
  #+begin_src text
 ~/.local/bin/rofi
  #+end_src
+- ~EMACSCLIENT~ ::
+  #+NAME: EMACSCLIENT
+  #+begin_src text
+/usr/local/bin/emacsclient
+  #+end_src
 - ~DISCORD~ ::
   #+NAME: DISCORD
   #+begin_src text
@@ -48,6 +53,8 @@ Each headline represents a key to be pressed after tapping Super.
 Launches the window switcher.
 ** D :: Discord
 Opens Discord.
+** E :: Emacs
+Opens Emacs
 ** B :: Brightness
 Opens ~BrightnessControl~ GUI *OR* initiates ~BrightnessControl~ layer, where we can manipulate brightness with ~hjkl~.
 Also look into [[https://github.com/maoserr/redshiftgui][redshiftgui]] to see if we can use this instead. I left it alone because building it requires a library that isn't in the Fedora repos called "[[https://sourceforge.net/projects/iup/files/3.30/Linux%20Libraries/][IUP]]".
@@ -293,6 +300,7 @@ We solve this by plugging this code block into [[Leader Key Definitions]], which
 (defalias
   win @window-switcher ;; (ref:window-switcher)
   dsc @discord ;; (ref:discord)
+  ema @emacs ;; (ref:emacs)
   bri b ;; (ref:brightness)
   vol @enter-volume ;; (ref:volume)
   trm t ;; (ref:terminal)
@@ -307,8 +315,8 @@ We solve this by plugging this code block into [[Leader Key Definitions]], which
 
 (deflayer leader
   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX
-  XX   @win XX   XX   @run XX   XX   XX   XX   XX   @pro XX   XX   XX
   XX   @age @scr @dsc XX   XX   XX   XX   XX   XX   XX   XX   XX
+  XX   @win XX   @ema @run XX   XX   XX   XX   XX   @pro XX   XX   XX
   XX   XX   XX   @cap @vol @bri XX   XX   XX   XX   XX   XX                 XX
   XX   lmet XX             XX             XX   XX                        XX  XX
                                                                            XX
@@ -335,6 +343,14 @@ This command uses ~wmctrl~ to switch to a currently-existing Discord window, and
   )
 #+end_src
 ** TODO Switch back to the previous window when invoked a second time
+* [[(emacs)][Emacs]]
+Opens Emacs: specifically an ~emacsclient~ instance.
+
+#+begin_src kbd
+(defalias
+  emacs (cmd-button "|>EMACSCLIENT<| --create-frame")
+  )
+#+end_src
 * TODO [[(brightness)][Brightness]]
 * TODO [[(terminal)][Terminal]]
 * [[(run)][Run]]
