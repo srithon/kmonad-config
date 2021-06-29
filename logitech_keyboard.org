@@ -55,6 +55,8 @@ Launches the window switcher.
 Opens Discord.
 ** E :: Emacs
 Opens Emacs
+** F :: Firefox
+Opens Firefox
 ** B :: Brightness
 Opens ~BrightnessControl~ GUI *OR* initiates ~BrightnessControl~ layer, where we can manipulate brightness with ~hjkl~.
 Also look into [[https://github.com/maoserr/redshiftgui][redshiftgui]] to see if we can use this instead. I left it alone because building it requires a library that isn't in the Fedora repos called "[[https://sourceforge.net/projects/iup/files/3.30/Linux%20Libraries/][IUP]]".
@@ -301,6 +303,7 @@ We solve this by plugging this code block into [[Leader Key Definitions]], which
   win @window-switcher ;; (ref:window-switcher)
   dsc @discord ;; (ref:discord)
   ema @emacs ;; (ref:emacs)
+  ffx @firefox ;; (ref:firefox)
   bri b ;; (ref:brightness)
   vol @enter-volume ;; (ref:volume)
   trm t ;; (ref:terminal)
@@ -315,8 +318,8 @@ We solve this by plugging this code block into [[Leader Key Definitions]], which
 
 (deflayer leader
   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX
-  XX   @age @scr @dsc XX   XX   XX   XX   XX   XX   XX   XX   XX
   XX   @win XX   @ema @run XX   XX   XX   XX   XX   @pro XX   XX   XX
+  XX   @age @scr @dsc @ffx XX   XX   XX   XX   XX   XX   XX   XX
   XX   XX   XX   @cap @vol @bri XX   XX   XX   XX   XX   XX                 XX
   XX   lmet XX             XX             XX   XX                        XX  XX
                                                                            XX
@@ -349,6 +352,14 @@ Opens Emacs: specifically an ~emacsclient~ instance.
 #+begin_src kbd
 (defalias
   emacs (cmd-button "|>EMACSCLIENT<| --create-frame")
+  )
+#+end_src
+* [[(firefox)][Firefox]]
+Opens a new Firefox window
+
+#+begin_src kbd
+(defalias
+  firefox (cmd-button "firefox")
   )
 #+end_src
 * TODO [[(brightness)][Brightness]]
