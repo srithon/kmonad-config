@@ -452,7 +452,7 @@ cd
       Tells ~screen~ to start new sessions with the ~fish~ shell.
 
 #+begin_src sh
-"|>ST<|" -c "rounded st-runner" -g 100x8+225+50 screen -c ~/.config/kmonad/runner/screenrc -DR runner -s /bin/fish
+|>ST<| -c "rounded st-runner" -g 100x8+225+50 screen -c ~/.config/kmonad/runner/screenrc -DR runner -s /bin/fish
 #+end_src
 
 After ~st~ closes, we scroll down our runner so we no longer see the commands/output from earlier.
