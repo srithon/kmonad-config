@@ -310,7 +310,7 @@ We solve this by plugging this code block into [[Leader Key Definitions]], which
   run @enter-run ;; (ref:run)
   pro p ;; (ref:prompt)
   age @agenda ;; (ref:agenda)
-  pre o ;; (ref:open-preset)
+  pre @open-preset ;; (ref:open-preset)
   cap @org-capture ;; (ref:org-capture)
   scr @enter-scroll ;; (ref:scroll)
   lld \\ ;; (ref:local-leader)
@@ -318,7 +318,7 @@ We solve this by plugging this code block into [[Leader Key Definitions]], which
 
 (deflayer leader
   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX
-  XX   @win XX   @ema @run XX   XX   XX   XX   XX   @pro XX   XX   XX
+  XX   @win XX   @ema @run XX   XX   XX   XX   @pre @pro XX   XX   XX
   XX   @age @scr @dsc @ffx XX   XX   XX   XX   XX   XX   XX   XX
   XX   XX   XX   @cap @vol @bri XX   XX   XX   XX   XX   XX                 XX
   XX   lmet XX             XX             XX   XX                        XX  XX
@@ -484,7 +484,18 @@ We should aim for a more robust solution.
 ** TODO Open a floating, semi-transparent window
 Instead of a fullscreen, opaque window.
 ** TODO Maybe switch to org-agenda
-* TODO [[(open-preset)][Open Preset]]
+* [[(open-preset)][Open Preset]]
+- ~OPEN_PRESET_SCRIPT~ ::
+  #+NAME: OPEN_PRESET_SCRIPT
+  #+begin_src text
+~/Development/Scripts/DE/presets/rofi_menu.sh
+  #+end_src
+
+#+begin_src kbd
+(defalias
+  open-preset (cmd-button "|>OPEN_PRESET_SCRIPT<|")
+  )
+#+end_src
 * [[(org-capture)][Org Capture]]
 #+begin_src kbd
 (defalias
