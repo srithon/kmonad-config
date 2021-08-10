@@ -771,6 +771,8 @@ Because of this, it probably did not register as scrolling and was simply ignore
   ;; uses KDE​'s DBus interface to call the KMix volume mute shortcut, and also exits the layer
   ;; we can do this because we do not need the muting behavior to be different from pressing the mute button normally
   volume-mute (cmd-button "qdbus org.kde.kglobalaccel /component/kmix invokeShortcut mute")
+
+  volume-play-pause PlayPause
   )
 #+end_src
 
@@ -783,12 +785,14 @@ Because of this, it probably did not register as scrolling and was simply ignore
 
   v_q @volume-osd-toggle ;; pneumonic is "quiet"
 
+  v_p @volume-play-pause
+
   v_e @exit-volume
   )
 
 (deflayer volume
   _    _    _    _    _    _    _    _    _    _    _    _    _    _
-  _    @v_q _    _    _    _    _    _    _    _    _    _    _    _
+  _    @v_q _    _    _    _    _    _    _    _    @v_p _    _    _
   _    _    _    _    _    _    _    @v_j @v_k _    _    _    _
   _    _    _    _    _    _    _    @v_m _    _    _    _                  _
   _    @v_e _              _              _    _                         _   _
