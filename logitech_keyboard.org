@@ -202,30 +202,6 @@ This has the benefit of fitting in with the system theme, and only took a single
 Use this in conjunction with presets to have local preset keybindings.
 ** Super :: Super
 Acts as a regular press of Super (hands it to KDE).
-* Layer Templates
-#+PROPERTY: header-args :tangle no
-** Passthrough
-#+begin_example kbd
-(deflayer layer-name
-  _    _    _    _    _    _    _    _    _    _    _    _    _    _        _
-  _    _    _    _    _    _    _    _    _    _    _    _    _    _
-  _    _    _    _    _    _    _    _    _    _    _    _    _
-  _    _    _    _    _    _    _    _    _    _    _    _                  _
-  _    _    _              _              _    _    _                    _   _
-                                                                           _
-  )
-#+end_example
-** Inclusive
-#+begin_example kbd
-(deflayer layer-name
-  grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc        slck
-  tab  q    w    e    r    t    y    u    i    o    p    [    ]    \
-  caps a    s    d    f    g    h    j    k    l    ;    '    ret
-  lsft z    x    c    v    b    n    m    ,    .    /    rsft               up
-  lctl lmet lalt           spc            ralt rctl                     lft rght
-                                                                          down
-  )
-#+end_example
 * Configuration
 #+PROPERTY: header-args :tangle yes :noweb tangle
 #+begin_src kbd
