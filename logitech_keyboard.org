@@ -235,34 +235,48 @@ available in the './keymap/template' directory.
 #+end_quote
 
 Enable the "leader" layer for the next keypress.
-If we release @ldr /before/ the next key, we treat the keypress as a *tap*, even if for a short period of time both keys were down.
-If we release @ldr /after/ the next key, we treat it as holding.
+If we release @leader_key /before/ the next key, we treat the keypress as a *tap*, even if for a short period of time both keys were down.
+If we release @leader_key /after/ the next key, we treat it as holding.
 
 Also, if we hold the key for more than 250 milliseconds, treat it like we are holding the key.
 When we are trying to use the super key in a tap melody, we have the key down for a very short time, so having the hold timeout on 250ms lets us use it for chords more conveniently
 
-~ctl_e~ is short for ~ctl_escape~
-#+begin_src kbd
-(defalias
-  ldr (tap-hold-next-release 250 (around-next (layer-toggle leader)) lmet)
-  ctl_e (tap-hold-next-release 125 esc lctl)
-  )
+#+begin_src kbdx
+[enter-leader]
+[[private]]
+leader-key = (tap-hold-next-release 250 (around-next (layer-toggle leader)) lmet)
+[[keys]]
+lmet = leader-key
+#+end_src
+
+#+begin_src kbdx
+[qwerty]
+parent = enter-leader
+[[private]]
+enable-homerow-mods = (layer-switch qwerty-homerow-mods)
+[[keys]]
+ScrollLock = enable-homerow-mods
+caps = 'lctrl'
+#+end_src
+
+#+begin_src kbdx
+[qwerty-homerow-mods]
+parent = enter-leader
+[[private]]
+disable-homerow-mods = (layer-switch qwerty)
+lctrl-or-escape = (tap-hold-next-release 125 esc lctl)
 #+end_src
 
 This is a ~GACS~ home-row-mods configuration detailed on [[https://precondition.github.io/home-row-mods#kmonad-home-row-mods-code-generator][this page]].
 ~k~ is bound to ~lctl~ rather than ~rctl~ because ~rctl~ is the compose key on my system.
-#+begin_src kbd
-(defalias
-  ctl_d (tap-hold-next-release 200 d lctl)
-  ctl_k (tap-hold-next-release 200 k lctl)
+#+begin_src kbdx
+hmod-delay = 200
 
-  sft_f (tap-hold-next-release 200 f lsft)
-  sft_j (tap-hold-next-release 200 j rsft)
+d_lctrl = (tap-hold-next-release $hmod-delay d lctl)
+f_lshift = (tap-hold-next-release $hmod-delay f lshift)
 
-  rsft_homerow (around (layer-toggle qwerty-no-homerow-mods) rsft)
-  ;; I couldn't fit lsft_homerow in because it's on the very left column
-  lsft_ (around (layer-toggle qwerty-no-homerow-mods) lsft)
-  )
+k_lctrl = (tap-hold-next-release $hmod-delay k lctl)
+j_rshift = (tap-hold-next-release $hmod-delay j rshift)
 #+end_src
 
 - TODO:
@@ -271,32 +285,22 @@ This is a ~GACS~ home-row-mods configuration detailed on [[https://precondition.
   While holding caps, disable home row modifiers?
   Disable home-row modifiers while ~rshift~ or ~lshift~ are being held; basically any explicit modifier
 
-#+begin_src kbd
-(defalias
-  hmrw (layer-switch qwerty-homerow-mods)
-  hmrw_ (layer-switch qwerty-no-homerow-mods))
+#+begin_src kbdx
+[[keys]]
+ScrollLock = disable-homerow-mods
+caps = lctrl-or-escape
+
+d = d_lctrl
+f = f_lshift
+k = k_lctrl
+j = j_rshift
 #+end_src
 
-#+begin_src kbd
-(deflayer qwerty-homerow-mods
-  grv    1      2      3      4      5      6      7      8      9      0      -      =      bspc        @hmrw_
-  tab    q      w      e      r      t      y      u      i      o      p      [      ]      \
-  @ctl_e a      s      @ctl_d @sft_f g      h      @sft_j @ctl_k l      ;      '      ret
-  @lsft_ z      x      c      v      b      n      m      ,      .      /      @rsft_homerow       up
-  lctl   @ldr   lalt                 spc                  ralt   rctl                           lft rght
-                                                                                                  down
-  )
-#+end_src
-
-#+begin_src kbd
-(deflayer qwerty-no-homerow-mods
-  grv    1      2      3      4      5      6      7      8      9      0      -      =      bspc        @hmrw
-  tab    q      w      e      r      t      y      u      i      o      p      [      ]      \
-  lctl   a      s      d      f      g      h      j      k      l      ;      '      ret
-  lsft   z      x      c      v      b      n      m      ,      .      /      rsft                up
-  lctl   @ldr   lalt                 spc                  ralt   rctl                           lft rght
-                                                                                                  down
-  )
+We want to disable the homerow mods whenever we explicitly hit a modifier key.
+#+begin_src kbdx
+lshift = (around (layer-toggle qwerty) lshift)
+rshift = (around (layer-toggle qwerty) rshift)
+lctrl = (around (layer-toggle qwerty) lctrl)
 #+end_src
 * Base Leader Key Layer
 When we define aliases to other aliases, they are eagerly evaluated and will throw an error if they are not defined at that point.
