@@ -288,10 +288,11 @@ When we are trying to use the super key in a tap melody, we have the key down fo
 #+end_src
 
 This is a ~GACS~ home-row-mods configuration detailed on [[https://precondition.github.io/home-row-mods#kmonad-home-row-mods-code-generator][this page]].
+~k~ is bound to ~lctl~ rather than ~rctl~ because ~rctl~ is the compose key on my system.
 #+begin_src kbd
 (defalias
   ctl_d (tap-hold-next-release 200 d lctl)
-  ctl_k (tap-hold-next-release 200 k rctl)
+  ctl_k (tap-hold-next-release 200 k lctl)
 
   sft_f (tap-hold-next-release 200 f lsft)
   sft_j (tap-hold-next-release 200 j rsft)
