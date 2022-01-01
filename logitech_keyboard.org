@@ -207,7 +207,7 @@ Acts as a regular press of Super (hands it to KDE).
 ** Passthrough
 #+begin_example kbd
 (deflayer layer-name
-  _    _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _        _
   _    _    _    _    _    _    _    _    _    _    _    _    _    _
   _    _    _    _    _    _    _    _    _    _    _    _    _
   _    _    _    _    _    _    _    _    _    _    _    _                  _
@@ -218,7 +218,7 @@ Acts as a regular press of Super (hands it to KDE).
 ** Inclusive
 #+begin_example kbd
 (deflayer layer-name
-  grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
+  grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc        slck
   tab  q    w    e    r    t    y    u    i    o    p    [    ]    \
   caps a    s    d    f    g    h    j    k    l    ;    '    ret
   lsft z    x    c    v    b    n    m    ,    .    /    rsft               up
@@ -249,7 +249,7 @@ Acts as a regular press of Super (hands it to KDE).
 * Source Layer
 #+begin_src kbd
 (defsrc
-  grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
+  grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc        slck
   tab  q    w    e    r    t    y    u    i    o    p    [    ]    \
   caps a    s    d    f    g    h    j    k    l    ;    '    ret
   lsft z    x    c    v    b    n    m    ,    .    /    rsft               up
@@ -299,10 +299,27 @@ This is a ~GACS~ home-row-mods configuration detailed on [[https://precondition.
 #+end_src
 
 #+begin_src kbd
-(deflayer qwerty
-  grv    1      2      3      4      5      6      7      8      9      0      -      =      bspc
+(defalias
+  hmrw (layer-switch qwerty-homerow-mods)
+  hmrw_ (layer-switch qwerty-no-homerow-mods))
+#+end_src
+
+#+begin_src kbd
+(deflayer qwerty-homerow-mods
+  grv    1      2      3      4      5      6      7      8      9      0      -      =      bspc        @hmrw_
   tab    q      w      e      r      t      y      u      i      o      p      [      ]      \
   @ctl_e a      s      @ctl_d @sft_f g      h      @sft_j @ctl_k l      ;      '      ret
+  lsft   z      x      c      v      b      n      m      ,      .      /      rsft                up
+  lctl   @ldr   lalt                 spc                  ralt   rctl                           lft rght
+                                                                                                  down
+  )
+#+end_src
+
+#+begin_src kbd
+(deflayer qwerty-no-homerow-mods
+  grv    1      2      3      4      5      6      7      8      9      0      -      =      bspc        @hmrw
+  tab    q      w      e      r      t      y      u      i      o      p      [      ]      \
+  lctl   a      s      d      f      g      h      j      k      l      ;      '      ret
   lsft   z      x      c      v      b      n      m      ,      .      /      rsft                up
   lctl   @ldr   lalt                 spc                  ralt   rctl                           lft rght
                                                                                                   down
@@ -331,7 +348,7 @@ We solve this by plugging this code block into [[Leader Key Definitions]], which
   )
 
 (deflayer leader
-  XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX
+  XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX       XX
   XX   @win XX   @ema @run XX   XX   XX   XX   @pre @pro XX   XX   XX
   XX   @age @scr @dsc @ffx XX   XX   XX   XX   XX   XX   XX   XX
   XX   XX   XX   @cap @vol @bri XX   XX   XX   XX   XX   XX                 XX
@@ -406,7 +423,7 @@ We named it like this to avoid conflicts with other aliases.
   )
 
 (deflayer run
-  _    _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _        _
   _    _    _    _    _    _    _    _    _    _    _    _    _    _
   _    _    _    _    _    _    _    _    _    _    _    _    _
   _    _    _    _    _    _    _    _    _    _    _    _                  _
@@ -565,7 +582,7 @@ On release, the script will kill the instance created on press
   s_e @exit-scroll)
 
 (deflayer scroll
-  _    _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _        _
   _    _    _    _    _    _    _    _    _    _    _    _    _    _
   @s_d _    _    _    _    _    @s_h @s_j @s_k @s_l _    _    _
   @s_u _    _    _    _    _    _    _    _    _    _    _                  _
@@ -817,7 +834,7 @@ Because of this, it probably did not register as scrolling and was simply ignore
   )
 
 (deflayer volume
-  _    _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _        _
   _    @v_q _    _    _    _    _    _    _    _    @v_p _    _    _
   _    _    _    _    _    _    _    @v_j @v_k _    _    _    _
   _    _    _    _    _    _    _    @v_m _    _    _    _                  _
