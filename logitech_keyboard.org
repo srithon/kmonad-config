@@ -295,6 +295,10 @@ This is a ~GACS~ home-row-mods configuration detailed on [[https://precondition.
 
   sft_f (tap-hold-next-release 200 f lsft)
   sft_j (tap-hold-next-release 200 j rsft)
+
+  rsft_homerow (around (layer-toggle qwerty-no-homerow-mods) rsft)
+  ;; I couldn't fit lsft_homerow in because it's on the very left column
+  lsft_ (around (layer-toggle qwerty-no-homerow-mods) lsft)
   )
 #+end_src
 
@@ -309,7 +313,7 @@ This is a ~GACS~ home-row-mods configuration detailed on [[https://precondition.
   grv    1      2      3      4      5      6      7      8      9      0      -      =      bspc        @hmrw_
   tab    q      w      e      r      t      y      u      i      o      p      [      ]      \
   @ctl_e a      s      @ctl_d @sft_f g      h      @sft_j @ctl_k l      ;      '      ret
-  lsft   z      x      c      v      b      n      m      ,      .      /      rsft                up
+  @lsft_ z      x      c      v      b      n      m      ,      .      /      @rsft_homerow       up
   lctl   @ldr   lalt                 spc                  ralt   rctl                           lft rght
                                                                                                   down
   )
