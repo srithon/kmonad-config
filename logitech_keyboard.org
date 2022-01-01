@@ -283,7 +283,7 @@ When we are trying to use the super key in a tap melody, we have the key down fo
 #+begin_src kbd
 (defalias
   ldr (tap-hold-next-release 250 (around-next (layer-toggle leader)) lmet)
-  ctl_e (tap-hold-next-release 90 esc lctl)
+  ctl_e (tap-hold-next-release 125 esc lctl)
   )
 #+end_src
 
