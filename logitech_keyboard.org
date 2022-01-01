@@ -302,6 +302,12 @@ This is a ~GACS~ home-row-mods configuration detailed on [[https://precondition.
   )
 #+end_src
 
+- TODO:
+  Use ~caps~ key to enable key repeat on home row modifiers
+- TODO:
+  While holding caps, disable home row modifiers?
+  Disable home-row modifiers while ~rshift~ or ~lshift~ are being held; basically any explicit modifier
+
 #+begin_src kbd
 (defalias
   hmrw (layer-switch qwerty-homerow-mods)
