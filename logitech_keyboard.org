@@ -322,14 +322,20 @@ c = org-capture # (ref:org-capture)
 s = scroll:enter # (ref:scroll)
 backslash = 'backslash' # (ref:local-leader)
 #+end_src
+* Program Paths
+#+begin_src kbdx
+[aliases]
+ROFI = "~/.local/bin/rofi"
+DISCORD = "/usr/bin/Discord"
+EMACSCLIENT = "/usr/local/bin/emacsclient"
+TASKWARRIOR_TUI = "~/.local/bin/taskwarrior-tui"
 #+end_src
 * [[(window-switcher)][Window Switcher]]
 Opens the Window Switcher
 
-#+begin_src kbd
-(defalias
-  window-switcher (cmd-button "|>ROFI<| -noplugins -modi window -show window -lines 5 --normal-window -matching fuzzy")
-  )
+#+begin_src kbdx
+[aliases]
+window-switcher = (cmd-button "$ROFI -noplugins -modi window -show window -lines 5 --normal-window -matching fuzzy")
 #+end_src
 
 I compiled ~rofi~ from source and put it in ~~/.local/bin~ because the RPM version was too slow for my taste.
@@ -339,27 +345,24 @@ I noticed that the startup animation was faster with ~--normal-window~, and the 
 * [[(discord)][Discord]]
 This command uses ~wmctrl~ to switch to a currently-existing Discord window, and if it fails opens a new instance of Discord.
 
-#+begin_src kbd
-(defalias
-  discord (cmd-button "wmctrl -a discord || |>DISCORD<|")
-  )
+#+begin_src kbdx
+[aliases]
+discord = (cmd-button "wmctrl -a discord || $DISCORD")
 #+end_src
 ** TODO Switch back to the previous window when invoked a second time
 * [[(emacs)][Emacs]]
 Opens Emacs: specifically an ~emacsclient~ instance.
 
-#+begin_src kbd
-(defalias
-  emacs (cmd-button "|>EMACSCLIENT<| --create-frame")
-  )
+#+begin_src kbdx
+[aliases]
+emacs = (cmd-button "$EMACSCLIENT --create-frame")
 #+end_src
 * [[(firefox)][Firefox]]
 Opens a new Firefox window
 
-#+begin_src kbd
-(defalias
-  firefox (cmd-button "firefox")
-  )
+#+begin_src kbdx
+[aliases]
+firefox = (cmd-button "firefox")
 #+end_src
 * TODO [[(brightness)][Brightness]]
 * TODO [[(terminal)][Terminal]]
@@ -369,34 +372,20 @@ To enter the run mode, we execute the ~runner~ script and then enter the ~run~ l
 We can do this because the leader layer only lasts for one keypress.
 When the run layer is added, the layer beneath it is qwerty.
 
-- ~RUNNER_SCRIPT~ ::
-  #+NAME: RUNNER_SCRIPT
-  #+begin_src text
-~/.config/kmonad/runner/runner.sh
-  #+end_src
-
-To exit the run mode, we remove the ~run~ layer and then kill all instances of ~st~: the terminal we are using for the runner (and nothing else).
-#+begin_src kbd
-(defalias
-  enter-run #((cmd-button "|>RUNNER_SCRIPT<|") (layer-add run))
-  exit-run #((layer-rem run) (cmd-button "killall st"))
-  )
+#+begin_src kbdx
+[run]
+[[private]]
+runner_script = "~/.config/kmonad/runner/runner.sh"
+[[public]]
+enter = #((cmd-button "$runner_script") (layer-add run))
 #+end_src
 
-We named it like this to avoid conflicts with other aliases.
-#+begin_src kbd
-(defalias
-  r_e @exit-run ;; exit run layer; stands for run_exit
-  )
-
-(deflayer run
-  _    _    _    _    _    _    _    _    _    _    _    _    _    _        _
-  _    _    _    _    _    _    _    _    _    _    _    _    _    _
-  _    _    _    _    _    _    _    _    _    _    _    _    _
-  _    _    _    _    _    _    _    _    _    _    _    _                  _
-  _    @r_e _              _              _    _                         _   _
-                                                                           _
-  )
+To exit the run mode, we remove the ~run~ layer and then kill all instances of ~st~: the terminal we are using for the runner (and nothing else).
+#+begin_src kbdx
+[[private]]
+exit = #((layer-rem run) (cmd-button "killall st"))
+[[keys]]
+lmet = exit
 #+end_src
 ** Runner Script
 :PROPERTIES:
@@ -475,10 +464,9 @@ We should aim for a more robust solution.
 ** DONE Reuse the ~runner~ terminal and shell between invocations
 * TODO [[(prompt)][Prompt]]
 * [[(agenda)][Agenda]]
-#+begin_src kbd
-(defalias
-  agenda (cmd-button "kitty |>TASKWARRIOR_TUI<|")
-  )
+#+begin_src kbdx
+[aliases]
+agenda = (cmd-button "kitty $TASKWARRIOR_TUI")
 #+end_src
 ** TODO Open a floating, semi-transparent window
 Instead of a fullscreen, opaque window.
@@ -490,15 +478,15 @@ Instead of a fullscreen, opaque window.
 ~/Development/Scripts/DE/presets/rofi_menu.sh
   #+end_src
 
-#+begin_src kbd
-(defalias
-  open-preset (cmd-button "|>OPEN_PRESET_SCRIPT<|")
-  )
+#+begin_src kbdx
+[aliases]
+OPEN_PRESET_SCRIPT = "~/Development/Scripts/DE/presets/rofi_menu.sh"
+open-preset = (cmd-button $OPEN_PRESET_SCRIPT)
 #+end_src
 * [[(org-capture)][Org Capture]]
-#+begin_src kbd
-(defalias
-  org-capture (cmd-button "~/.local/bin/org-capture"))
+#+begin_src kbdx
+[aliases]
+org-capture = (cmd-button "~/.local/bin/org-capture")
 #+end_src
 * [[(scroll)][Scroll]]
 We set the scroll buttons to invoke the ~scroll.sh~ script once on press and once on release.
