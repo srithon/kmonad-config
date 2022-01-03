@@ -1087,13 +1087,6 @@ The volume layer would remap hjkl to control the volume.
 Rotate to next/previous output with h/l
 * TODO [[(local-leader)][Local Leader]]
 
-* Leader Key Definitions
-We need to do this in order to get the layer aliases to evaluate /after/ all of the helper aliases are defined.
-Otherwise, we get an error saying that the aliases are non-existent.
-#+begin_src kbd :noweb strip-export
-|>base_leader_key_layer<|
-#+end_src
-
 # Local Variables:
 # org-babel-noweb-wrap-start: "|>"
 # org-babel-noweb-wrap-end: "<|"
