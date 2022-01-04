@@ -200,6 +200,9 @@ I ended up using KDE's ~osd~ with its DBus interface, emulating the normal volum
 This has the benefit of fitting in with the system theme, and only took a single line to implement
 ** \ :: Local Leader Key
 Use this in conjunction with presets to have local preset keybindings.
+** Tab :: Switch Focus
+When tapped, should switch the focus between monitors.
+When held for more than a certain duration, should move the cursor over to the next monitor.
 ** Super :: Super
 Acts as a regular press of Super (hands it to KDE).
 * Layer Templates
@@ -355,12 +358,13 @@ We solve this by plugging this code block into [[Leader Key Definitions]], which
   pre @open-preset ;; (ref:open-preset)
   cap @org-capture ;; (ref:org-capture)
   scr @enter-scroll ;; (ref:scroll)
+  sfc @switch_focus_composite ;; (ref:switch-focus)
   lld \\ ;; (ref:local-leader)
   )
 
 (deflayer leader
   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX   XX       XX
-  XX   @win XX   @ema @run XX   XX   XX   XX   @pre @pro XX   XX   XX
+  @sfc @win XX   @ema @run XX   XX   XX   XX   @pre @pro XX   XX   XX
   XX   @age @scr @dsc @ffx XX   XX   XX   XX   XX   XX   XX   XX
   XX   XX   XX   @cap @vol @bri XX   XX   XX   XX   XX   XX                 XX
   XX   lmet XX             XX             XX   XX                        XX  XX
@@ -1141,6 +1145,19 @@ tr '01' '10' < $DISPLAY_OSD_FILE | sponge $DISPLAY_OSD_FILE
 The volume layer would remap hjkl to control the volume.
 ** TODO Volume Next/Prev
 Rotate to next/previous output with h/l
+* [[(switch-focus)][Switch Focus]]
+- ~SWITCH_MOUSE_SCREEN_SCRIPT~ ::
+  #+NAME: SWITCH_MOUSE_SCREEN_SCRIPT
+  #+begin_src text
+/home/sridaran/Development/Scripts/DE/mouseToNextDesktop.sh
+  #+end_src
+
+#+begin_src kbd
+(defalias
+  switch_mouse_screen (cmd-button "|>SWITCH_MOUSE_SCREEN_SCRIPT<|")
+  switch_focus_screen (cmd-button "qdbus org.kde.kglobalaccel /component/kwin invokeShortcut \"Switch to Next Screen\"")
+  switch_focus_composite (tap-hold 200 @switch_focus_screen @switch_mouse_screen))
+#+end_src
 * TODO [[(local-leader)][Local Leader]]
 
 * Leader Key Definitions
