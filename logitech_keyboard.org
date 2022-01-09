@@ -916,49 +916,35 @@ Because of this, it probably did not register as scrolling and was simply ignore
 /tmp/kmonad_volume_script_display_osd
   #+end_src
 
-#+begin_src kbd
-(defalias
-  ;; Enable (overwrite) osd visibility when entering volume layer
-  enter-volume #((cmd-button "echo 1 > |>VOLUME_SCRIPT_OSD_FILE<|") (layer-add volume))
-  exit-volume (layer-rem volume)
+#+begin_src kbdx
+[volume]
+[[private]]
+volume_script = "|>VOLUME_SCRIPT<|"
+toggle_osd_script = "|>VOLUME_TOGGLE_OSD_SCRIPT<|"
 
-  volume-up   (cmd-button "|>VOLUME_SCRIPT<| +"
-                          "|>VOLUME_SCRIPT<| 0")
-  volume-down (cmd-button "|>VOLUME_SCRIPT<| -"
-                          "|>VOLUME_SCRIPT<| 0")
+up   = (cmd-button "$volume_script +"
+                   "$volume_script 0")
+down = (cmd-button "$volume_script -"
+                   "$volume_script 0")
 
-  volume-osd-toggle (cmd-button "|>VOLUME_TOGGLE_OSD_SCRIPT<|")
+toggle-osd = (cmd-button "$toggle_osd_script")
+mute = (cmd-button "qdbus org.kde.kglobalaccel /component/kmix invokeShortcut mute")
 
-  ;; uses KDE​'s DBus interface to call the KMix volume mute shortcut, and also exits the layer
-  ;; we can do this because we do not need the muting behavior to be different from pressing the mute button normally
-  volume-mute (cmd-button "qdbus org.kde.kglobalaccel /component/kmix invokeShortcut mute")
+play-pause = 'PlayPause'
 
-  volume-play-pause PlayPause
-  )
-#+end_src
+exit = (layer-rem volume)
+[[public]]
+enter = (layer-add volume)
+[[keys]]
+k = up
+j = down
 
-#+begin_src kbd
-(defalias
-  v_k @volume-up
-  v_j @volume-down
+m = mute
+q = toggle-osd
 
-  v_m @volume-mute
+p = play-pause
 
-  v_q @volume-osd-toggle ;; pneumonic is "quiet"
-
-  v_p @volume-play-pause
-
-  v_e @exit-volume
-  )
-
-(deflayer volume
-  _    _    _    _    _    _    _    _    _    _    _    _    _    _        _
-  _    @v_q _    _    _    _    _    _    _    _    @v_p _    _    _
-  _    _    _    _    _    _    _    @v_j @v_k _    _    _    _
-  _    _    _    _    _    _    _    @v_m _    _    _    _                  _
-  _    @v_e _              _              _    _                         _   _
-                                                                           _
-  )
+lmet = exit
 #+end_src
 ** Volume Script
 :PROPERTIES:
