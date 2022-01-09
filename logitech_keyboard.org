@@ -61,9 +61,9 @@ Opens Firefox
 Opens ~BrightnessControl~ GUI *OR* initiates ~BrightnessControl~ layer, where we can manipulate brightness with ~hjkl~.
 Also look into [[https://github.com/maoserr/redshiftgui][redshiftgui]] to see if we can use this instead. I left it alone because building it requires a library that isn't in the Fedora repos called "[[https://sourceforge.net/projects/iup/files/3.30/Linux%20Libraries/][IUP]]".
 *** BrightnessControl Layer
-**** H
+**** TODO H
 Rotate active monitor to the left.
-**** L
+**** TODO L
 Rotate active monitor to the right.
 **** K
 Brightness Up.
