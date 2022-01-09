@@ -61,14 +61,18 @@ Opens Firefox
 Opens ~BrightnessControl~ GUI *OR* initiates ~BrightnessControl~ layer, where we can manipulate brightness with ~hjkl~.
 Also look into [[https://github.com/maoserr/redshiftgui][redshiftgui]] to see if we can use this instead. I left it alone because building it requires a library that isn't in the Fedora repos called "[[https://sourceforge.net/projects/iup/files/3.30/Linux%20Libraries/][IUP]]".
 *** BrightnessControl Layer
-**** H
+**** TODO H
 Rotate active monitor to the left.
-**** L
+**** TODO L
 Rotate active monitor to the right.
 **** K
 Brightness Up.
 **** J
 Brightness Down.
+**** 0-9
+Used to change brightness by a percentage; typing ~5k~ will raise the brightness by 5.
+**** Tab
+Switches focus per the base leader behavior.
 **** Esc | Super
 Exit layer.
 ** T :: Terminal (Scratchpad)
@@ -200,6 +204,9 @@ I ended up using KDE's ~osd~ with its DBus interface, emulating the normal volum
 This has the benefit of fitting in with the system theme, and only took a single line to implement
 ** \ :: Local Leader Key
 Use this in conjunction with presets to have local preset keybindings.
+** Tab :: Switch Focus
+When tapped, should switch the focus between monitors.
+When held for more than a certain duration, should move the cursor over to the next monitor.
 ** Super :: Super
 Acts as a regular press of Super (hands it to KDE).
 * Configuration
@@ -311,7 +318,7 @@ q = window-switcher # (ref:window-switcher)
 d = discord # (ref:discord)
 e = emacs # (ref:emacs)
 f = firefox # (ref:firefox)
-b = 'b' # (ref:brightness)
+b = brightness:enter # (ref:brightness)
 v = volume:enter # (ref:volume)
 t = 't' # (ref:terminal)
 r = run:enter # (ref:run)
@@ -320,6 +327,7 @@ a = agenda # (ref:agenda)
 p = open-preset # (ref:open-preset)
 c = org-capture # (ref:org-capture)
 s = scroll:enter # (ref:scroll)
+tab = switch_focus_composite
 backslash = 'backslash' # (ref:local-leader)
 #+end_src
 * Program Paths
@@ -364,7 +372,175 @@ Opens a new Firefox window
 [aliases]
 firefox = (cmd-button "firefox")
 #+end_src
-* TODO [[(brightness)][Brightness]]
+* [[(brightness)][Brightness]]
+- ~CHANGE_BRIGHTNESS_SCRIPT~ ::
+  #+NAME: CHANGE_BRIGHTNESS_SCRIPT
+  #+begin_src text
+~/.config/kmonad/brightness/change_brightness.sh
+  #+end_src
+- ~QUEUE_DIGIT_SCRIPT~ ::
+  #+NAME: QUEUE_DIGIT_SCRIPT
+  #+begin_src text
+~/.config/kmonad/brightness/queue_digit.sh
+  #+end_src
+- ~DIGIT_QUEUE_FILE~ ::
+  #+NAME: DIGIT_QUEUE_FILE
+  #+begin_src text
+/tmp/kmonad_digit_queue
+  #+end_src
+- ~LAST_BRIGHTNESS_CHANGE_FILE~ ::
+  #+NAME: LAST_BRIGHTNESS_CHANGE_FILE
+  #+begin_src text
+/tmp/kmonad_last_brightness_change
+  #+end_src
+
+#+begin_src kbd
+(defalias
+  enter-brightness (layer-add brightness)
+  exit-brightness (layer-rem brightness)
+
+  b_0 (cmd-button "|>QUEUE_DIGIT_SCRIPT<| 0")
+  b_1 (cmd-button "|>QUEUE_DIGIT_SCRIPT<| 1")
+  b_2 (cmd-button "|>QUEUE_DIGIT_SCRIPT<| 2")
+  b_3 (cmd-button "|>QUEUE_DIGIT_SCRIPT<| 3")
+  b_4 (cmd-button "|>QUEUE_DIGIT_SCRIPT<| 4")
+  b_5 (cmd-button "|>QUEUE_DIGIT_SCRIPT<| 5")
+  b_6 (cmd-button "|>QUEUE_DIGIT_SCRIPT<| 6")
+  b_7 (cmd-button "|>QUEUE_DIGIT_SCRIPT<| 7")
+  b_8 (cmd-button "|>QUEUE_DIGIT_SCRIPT<| 8")
+  b_9 (cmd-button "|>QUEUE_DIGIT_SCRIPT<| 9")
+
+  b_k (cmd-button "|>CHANGE_BRIGHTNESS_SCRIPT<| +")
+  b_j (cmd-button "|>CHANGE_BRIGHTNESS_SCRIPT<| -")
+
+  ;; b_q (cmd-button "|>CHANGE_BRIGHTNESS_SCRIPT<| -")
+  ;; display brightnesses on each monitor
+  )
+#+end_src
+
+We named it like this to avoid conflicts with other aliases.
+#+begin_src kbd
+(defalias
+  b_e @exit-brightness ;; exit run layer; stands for run_exit
+  )
+
+(deflayer brightness
+  _    @b_0 @b_1 @b_2 @b_3 @b_4 @b_5 @b_6 @b_7 @b_8 @b_9 _    _    _        _
+  @sfs _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _    _    _    _    _    @b_j @b_k _    _    _    _
+  _    _    _    _    _    _    _    _    _    _    _    _                  _
+  _    @b_e _              _              _    _                         _   _
+                                                                           _
+  )
+#+end_src
+** Queue Digit Script
+:PROPERTIES:
+:header-args:sh: :tangle ~/.config/kmonad/brightness/queue_digit.sh :mkdirp yes :tangle-mode (identity #o744)
+:END:
+This script takes a digit and appends it to the queue of currently waiting digits. The change brightness script consumes the queue as a single integer.
+
+Using ~dash~ shell for speed
+#+begin_src sh
+#!/bin/dash
+
+FILE="|>DIGIT_QUEUE_FILE<|"
+#+end_src
+
+Verify that the argument is a number by using ~case~ and globbing.
+See [[https://stackoverflow.com/questions/806906/how-do-i-test-if-a-variable-is-a-number-in-bash/806923]](this) StackOverflow post.
+#+begin_src sh
+DIGIT=$1
+
+case $DIGIT in
+'' | *[!0-9]*) echo "Need to pass in a number!" >/dev/stderr; exit 1;;
+*) ;;
+esac
+#+end_src
+
+Next, read the current file contents, prepend it to ~DIGIT~, and then write it back.
+
+#+begin_src sh
+# read file
+if [ -e "$FILE" ]; then
+    CURRENT_INT=$(cat "$FILE")
+fi
+
+NEW_INT="$CURRENT_INT$DIGIT"
+
+# also print it to stdout; helpful for debugging
+echo "$NEW_INT" | tee "$FILE"
+#+end_src
+** Change Brightness Script
+:PROPERTIES:
+:header-args:sh: :tangle ~/.config/kmonad/brightness/change_brightness.sh :mkdirp yes :tangle-mode (identity #o744)
+:END:
+
+#+begin_src sh
+#!/bin/dash
+
+DIGIT_FILE="|>DIGIT_QUEUE_FILE<|"
+LAST_BRIGHTNESS_CHANGE_FILE="|>LAST_BRIGHTNESS_CHANGE_FILE<|"
+
+DIRECTION=$1
+#+end_src
+
+Depending on ~DIRECTION~, set ~SIGN~ to the sign. There's a special case for ~.~; with ~.~, ~SIGN~ becomes zero and triggers special behavior further on.
+#+begin_src sh
+
+case $DIRECTION in
+'+') SIGN=1 ;;
+'-') SIGN=-1 ;;
+'.') ;;
+*)
+    echo "Invalid direction" >/dev/stderr
+    exit 1
+    ;;
+esac
+#+end_src
+
+In the normal case, check if there are queued digits, and if there aren't then default to ~7~.
+After reading the saved digits, clear the file's contents.
+#+begin_src sh
+
+if [ "$DIRECTION" != '.' ]; then
+    CHANGE=$(cat "$DIGIT_FILE" 2>/dev/null)
+
+    if [ -n "$CHANGE" ]; then
+        if [ "$CHANGE" -ge 100 ]; then
+            CHANGE=100
+        fi
+
+        echo "" >"$DIGIT_FILE"
+    else
+        CHANGE=7
+    fi
+#+end_src
+
+To get the final value for ~CHANGE~, multiply ~SIGN~ by its current value.
+Then, write the new value to ~LAST_BRIGHTNESS_CHANGE_FILE~.
+#+begin_src sh
+
+    CHANGE=$(echo "$SIGN * $CHANGE" | bc)
+    echo "$CHANGE" >"$LAST_BRIGHTNESS_CHANGE_FILE"
+#+end_src
+
+If ~DIRECTION~ /is/ ~.~, then read ~CHANGE~ directly from ~LAST_BRIGHTNESS_CHANGE_FILE~. If it doesn't exist, then fail.
+#+begin_src sh
+else
+    if [ -e "$LAST_BRIGHTNESS_CHANGE_FILE" ]; then
+        CHANGE=$(cat "$LAST_BRIGHTNESS_CHANGE_FILE")
+    else
+        echo "Last brightness change file does not yet exist!" >/dev/stderr
+        exit 1
+    fi
+fi
+#+end_src
+
+Finally, pass ~CHANGE~ to our main ~changeBrightness~ script (not shown), which changes the brightness on the actively focused monitor.
+#+begin_src sh
+
+/home/sridaran/Development/Scripts/DE/changeBrightness.sh "$CHANGE" -n
+#+end_src
 * TODO [[(terminal)][Terminal]]
 * [[(run)][Run]]
 We use tap macros to execute the "buttons" in sequence.
@@ -1085,6 +1261,23 @@ tr '01' '10' < $DISPLAY_OSD_FILE | sponge $DISPLAY_OSD_FILE
 The volume layer would remap hjkl to control the volume.
 ** TODO Volume Next/Prev
 Rotate to next/previous output with h/l
+* [[(switch-focus)][Switch Focus]]
+- ~SWITCH_MOUSE_SCREEN_SCRIPT~ ::
+  #+NAME: SWITCH_MOUSE_SCREEN_SCRIPT
+  #+begin_src text
+/home/sridaran/Development/Scripts/DE/mouseToNextDesktop.sh
+  #+end_src
+
+The ~sfs~ alias is here for other layers that want to use it.
+#+begin_src kbd
+(defalias
+  switch_mouse_screen (cmd-button "|>SWITCH_MOUSE_SCREEN_SCRIPT<|")
+  switch_focus_screen (cmd-button "qdbus org.kde.kglobalaccel /component/kwin invokeShortcut \"Switch to Next Screen\"")
+
+  sfs @switch_focus_screen
+
+  switch_focus_composite (tap-hold 200 @switch_focus_screen @switch_mouse_screen))
+#+end_src
 * TODO [[(local-leader)][Local Leader]]
 
 # Local Variables:
