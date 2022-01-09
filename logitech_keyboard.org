@@ -69,6 +69,10 @@ Rotate active monitor to the right.
 Brightness Up.
 **** J
 Brightness Down.
+**** 0-9
+Used to change brightness by a percentage; typing ~5k~ will raise the brightness by 5.
+**** Tab
+Switches focus per the base leader behavior.
 **** Esc | Super
 Exit layer.
 ** T :: Terminal (Scratchpad)
