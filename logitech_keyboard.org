@@ -1268,15 +1268,14 @@ Rotate to next/previous output with h/l
 /home/sridaran/Development/Scripts/DE/mouseToNextDesktop.sh
   #+end_src
 
-The ~sfs~ alias is here for other layers that want to use it.
-#+begin_src kbd
-(defalias
-  switch_mouse_screen (cmd-button "|>SWITCH_MOUSE_SCREEN_SCRIPT<|")
-  switch_focus_screen (cmd-button "qdbus org.kde.kglobalaccel /component/kwin invokeShortcut \"Switch to Next Screen\"")
+#+begin_src kbdx
+[aliases]
+SWITCH_MOUSE_SCREEN_SCRIPT = "|>SWITCH_MOUSE_SCREEN_SCRIPT<|"
 
-  sfs @switch_focus_screen
+switch_mouse_screen = (cmd-button "$SWITCH_MOUSE_SCREEN_SCRIPT")
+switch_focus_screen = (cmd-button "qdbus org.kde.kglobalaccel /component/kwin invokeShortcut \"Switch to Next Screen\"")
 
-  switch_focus_composite (tap-hold 200 @switch_focus_screen @switch_mouse_screen))
+switch_focus_composite = (tap-hold 200 @switch_focus_screen @switch_mouse_screen)
 #+end_src
 * TODO [[(local-leader)][Local Leader]]
 
