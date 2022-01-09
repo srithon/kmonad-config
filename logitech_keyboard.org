@@ -394,44 +394,38 @@ firefox = (cmd-button "firefox")
 /tmp/kmonad_last_brightness_change
   #+end_src
 
-#+begin_src kbd
-(defalias
-  enter-brightness (layer-add brightness)
-  exit-brightness (layer-rem brightness)
+#+begin_src kbdx
+[brightness]
+[[private]]
+QUEUE_DIGIT_SCRIPT = "|>QUEUE_DIGIT_SCRIPT<|"
+CHANGE_BRIGHTNESS_SCRIPT = "|>CHANGE_BRIGHTNESS_SCRIPT<|"
 
-  b_0 (cmd-button "|>QUEUE_DIGIT_SCRIPT<| 0")
-  b_1 (cmd-button "|>QUEUE_DIGIT_SCRIPT<| 1")
-  b_2 (cmd-button "|>QUEUE_DIGIT_SCRIPT<| 2")
-  b_3 (cmd-button "|>QUEUE_DIGIT_SCRIPT<| 3")
-  b_4 (cmd-button "|>QUEUE_DIGIT_SCRIPT<| 4")
-  b_5 (cmd-button "|>QUEUE_DIGIT_SCRIPT<| 5")
-  b_6 (cmd-button "|>QUEUE_DIGIT_SCRIPT<| 6")
-  b_7 (cmd-button "|>QUEUE_DIGIT_SCRIPT<| 7")
-  b_8 (cmd-button "|>QUEUE_DIGIT_SCRIPT<| 8")
-  b_9 (cmd-button "|>QUEUE_DIGIT_SCRIPT<| 9")
+exit = (layer-rem brightness)
+[[public]]
+enter = (layer-add brightness)
 
-  b_k (cmd-button "|>CHANGE_BRIGHTNESS_SCRIPT<| +")
-  b_j (cmd-button "|>CHANGE_BRIGHTNESS_SCRIPT<| -")
+up = (cmd-button "$CHANGE_BRIGHTNESS_SCRIPT +")
+down = (cmd-button "$CHANGE_BRIGHTNESS_SCRIPT -")
+[[keys]]
+0 = (cmd-button "$QUEUE_DIGIT_SCRIPT 0")
+1 = (cmd-button "$QUEUE_DIGIT_SCRIPT 1")
+2 = (cmd-button "$QUEUE_DIGIT_SCRIPT 2")
+3 = (cmd-button "$QUEUE_DIGIT_SCRIPT 3")
+4 = (cmd-button "$QUEUE_DIGIT_SCRIPT 4")
+5 = (cmd-button "$QUEUE_DIGIT_SCRIPT 5")
+6 = (cmd-button "$QUEUE_DIGIT_SCRIPT 6")
+7 = (cmd-button "$QUEUE_DIGIT_SCRIPT 7")
+8 = (cmd-button "$QUEUE_DIGIT_SCRIPT 8")
+9 = (cmd-button "$QUEUE_DIGIT_SCRIPT 9")
 
-  ;; b_q (cmd-button "|>CHANGE_BRIGHTNESS_SCRIPT<| -")
-  ;; display brightnesses on each monitor
-  )
-#+end_src
+k = up
+j = down
 
-We named it like this to avoid conflicts with other aliases.
-#+begin_src kbd
-(defalias
-  b_e @exit-brightness ;; exit run layer; stands for run_exit
-  )
+# q displays brightness on each monitor
 
-(deflayer brightness
-  _    @b_0 @b_1 @b_2 @b_3 @b_4 @b_5 @b_6 @b_7 @b_8 @b_9 _    _    _        _
-  @sfs _    _    _    _    _    _    _    _    _    _    _    _    _
-  _    _    _    _    _    _    _    @b_j @b_k _    _    _    _
-  _    _    _    _    _    _    _    _    _    _    _    _                  _
-  _    @b_e _              _              _    _                         _   _
-                                                                           _
-  )
+tab = switch_focus_composite
+
+lmet = exit
 #+end_src
 ** Queue Digit Script
 :PROPERTIES:
@@ -657,7 +651,7 @@ Instead of a fullscreen, opaque window.
 #+begin_src kbdx
 [aliases]
 OPEN_PRESET_SCRIPT = "~/Development/Scripts/DE/presets/rofi_menu.sh"
-open-preset = (cmd-button $OPEN_PRESET_SCRIPT)
+open-preset = (cmd-button "$OPEN_PRESET_SCRIPT")
 #+end_src
 * [[(org-capture)][Org Capture]]
 #+begin_src kbdx
