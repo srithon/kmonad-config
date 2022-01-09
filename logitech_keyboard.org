@@ -673,47 +673,40 @@ On release, the script will kill the instance created on press
 ~/.config/kmonad/scroll/scroll_speed.sh
   #+end_src
 
-#+begin_src kbd
-(defalias
-  enter-scroll (layer-add scroll)
-  exit-scroll (layer-rem scroll)
+#+begin_src kbdx
+[scroll]
+[[private]]
+scroll_script = "|>SCROLL_SCRIPT<|"
+speed_script = "|>SCROLL_SPEED_SCRIPT<|"
 
-  scroll-left  (cmd-button "|>SCROLL_SCRIPT<| h -"
-                           "|>SCROLL_SCRIPT<| h 0")
-  scroll-up    (cmd-button "|>SCROLL_SCRIPT<| v -"
-                           "|>SCROLL_SCRIPT<| v 0")
-  scroll-down  (cmd-button "|>SCROLL_SCRIPT<| v +"
-                           "|>SCROLL_SCRIPT<| v 0")
-  scroll-right (cmd-button "|>SCROLL_SCRIPT<| h +"
-                           "|>SCROLL_SCRIPT<| h 0")
+left  = (cmd-button "$scroll_script h -"
+                    "$scroll_script h 0")
+up    = (cmd-button "$scroll_script v -"
+                    "$scroll_script v 0")
+down  = (cmd-button "$scroll_script v +"
+                    "$scroll_script v 0")
+right = (cmd-button "$scroll_script h +"
+                    "$scroll_script h 0")
 
-  scroll-speed-up   (cmd-button "|>SCROLL_SPEED_SCRIPT<| 50"
-                                "|>SCROLL_SPEED_SCRIPT<| 0")
-  scroll-speed-down (cmd-button "|>SCROLL_SPEED_SCRIPT<| 200"
-                                "|>SCROLL_SPEED_SCRIPT<| 0")
-  )
-#+end_src
+speed-up   = (cmd-button "$speed_script 50"
+                         "$speed_script 0")
+speed-down = (cmd-button "$speed_script 200"
+                         "$speed_script 0")
 
-#+begin_src kbd
-(defalias
-  s_h @scroll-left
-  s_l @scroll-right
-  s_k @scroll-up
-  s_j @scroll-down
+exit = (layer-rem scroll)
+[[public]]
+enter = (layer-add scroll)
+[[keys]]
+h = left
+l = right
+k = up
+j = down
 
-  s_u @scroll-speed-up
-  s_d @scroll-speed-down
+caps = speed-down
+lctrl = speed-down
+lshift = speed-up
 
-  s_e @exit-scroll)
-
-(deflayer scroll
-  _    _    _    _    _    _    _    _    _    _    _    _    _    _        _
-  _    _    _    _    _    _    _    _    _    _    _    _    _    _
-  @s_d _    _    _    _    _    @s_h @s_j @s_k @s_l _    _    _
-  @s_u _    _    _    _    _    _    _    _    _    _    _                  _
-  @s_d @s_e _              _              _    _                         _   _
-                                                                           _
-  )
+lmet = exit
 #+end_src
 ** Scroll Script
 :PROPERTIES:
