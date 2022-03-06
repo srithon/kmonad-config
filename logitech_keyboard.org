@@ -344,7 +344,7 @@ backslash = 'backslash' # (ref:local-leader)
 [aliases]
 ROFI = "~/.local/bin/rofi"
 DISCORD = "/usr/bin/Discord"
-EMACSCLIENT = "/usr/local/bin/emacsclient"
+EMACSCLIENT = "/usr/bin/emacsclient"
 TASKWARRIOR_TUI = "~/.local/bin/taskwarrior-tui"
 #+end_src
 * [[(window-switcher)][Window Switcher]]
