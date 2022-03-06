@@ -407,7 +407,7 @@ CHANGE_BRIGHTNESS_SCRIPT = "|>CHANGE_BRIGHTNESS_SCRIPT<|"
 
 exit = (layer-rem brightness)
 [[public]]
-enter = (layer-add brightness)
+enter = (tap-hold-next-release $tap-hold-delay (layer-add brightness) (layer-toggle brightness))
 
 up = (cmd-button "$CHANGE_BRIGHTNESS_SCRIPT +")
 down = (cmd-button "$CHANGE_BRIGHTNESS_SCRIPT -")
@@ -700,7 +700,7 @@ speed-down = (cmd-button "$speed_script 200"
 
 exit = (layer-rem scroll)
 [[public]]
-enter = (layer-add scroll)
+enter = (tap-hold-next-release $tap-hold-delay (layer-add scroll) (layer-toggle scroll))
 [[keys]]
 h = left
 l = right
@@ -939,7 +939,7 @@ play-pause = 'PlayPause'
 
 exit = (layer-rem volume)
 [[public]]
-enter = (layer-add volume)
+enter = (tap-hold-next-release $tap-hold-delay (layer-add volume) (layer-toggle volume))
 [[keys]]
 k = up
 j = down
