@@ -360,7 +360,8 @@ This command uses ~wmctrl~ to switch to a currently-existing Discord window, and
 
 #+begin_src kbdx
 [aliases]
-discord = (cmd-button "wmctrl -a discord || $DISCORD")
+DISCORD_SCRIPT = "~/.config/kmonad/discord/discord.sh"
+discord = (cmd-button "$DISCORD_SCRIPT")
 #+end_src
 ** TODO Switch back to the previous window when invoked a second time
 * [[(emacs)][Emacs]]
