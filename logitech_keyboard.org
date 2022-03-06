@@ -227,6 +227,11 @@ allow-cmd = true
 # indicate which layer you want to be in when KMonad launches
 starting-layer = qwerty-homerow-mods
 #+end_src
+** Constants
+#+begin_src kbdx
+[aliases]
+tap-hold-delay = 200
+#+end_src
 * Default Layer
 #+begin_quote
 Optional: as many layers as you please
@@ -277,7 +282,7 @@ lctrl-or-escape = (tap-hold-next-release 125 esc lctl)
 This is a ~GACS~ home-row-mods configuration detailed on [[https://precondition.github.io/home-row-mods#kmonad-home-row-mods-code-generator][this page]].
 ~k~ is bound to ~lctl~ rather than ~rctl~ because ~rctl~ is the compose key on my system.
 #+begin_src kbdx
-hmod-delay = 200
+hmod-delay = $tap-hold-delay
 
 d_lctrl = (tap-hold-next-release $hmod-delay d lctl)
 f_lshift = (tap-hold-next-release $hmod-delay f lshift)
