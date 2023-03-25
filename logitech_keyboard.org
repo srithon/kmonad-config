@@ -293,6 +293,7 @@ This is a ~GACS~ home-row-mods configuration detailed on [[https://precondition.
 #+begin_src kbdx
 hmod-delay = $tap-hold-delay
 
+a_homerow_chords = (tap-hold $hmod-delay a (layer-toggle home-row-chord))
 q_homerow_movement = (tap-hold $hmod-delay q (layer-toggle home-row-movement))
 backslash_desktop_window = (tap-hold-next-release $hmod-delay \ (layer-toggle desktop-window))
 s_lalt = (tap-hold-next-release $hmod-delay s lalt)
@@ -315,6 +316,7 @@ l_ralt = (tap-hold-next-release $hmod-delay l ralt)
 ScrollLock = disable-homerow-mods
 caps = lctrl-or-escape
 
+a = a_homerow_chords
 q = q_homerow_movement
 backslash = backslash_desktop_window
 s = s_lalt
