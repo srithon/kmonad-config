@@ -1066,6 +1066,7 @@ if ! [ "$VOLUME_CHANGE_DIRECTION" = "0" ]; then
 
 Get the current volume using KMix's DBus interface.
 
+#+begin_quote
 I'm doing it this way because [[https://unix.stackexchange.com/questions/132230/read-out-pulseaudio-volume-from-commandline-i-want-pactl-get-sink-volume][this]] StackOverflow post about getting the current volume from ~pactl/pacmd~ did not yield a clean enough solution.
 [[https://unix.stackexchange.com/questions/132230/read-out-pulseaudio-volume-from-commandline-i-want-pactl-get-sink-volume][This]] StackOverflow post details several solutions to get the volume from ~pacmd~, but none of them are pretty.
 Unfortunately, these programs do not allow you to /get/ values cleanly, only set them.
@@ -1077,7 +1078,7 @@ All of the following ~qdbus~ commands are listed in this [[https://gist.github.c
 I found that the delay was just long enough to bother me, and a benchmark showed that everything before the ~python2~ invocation took around 60 milliseconds to run before caching.
 /With/ caching, this became around 25 milliseconds
 I /believe/ that this cached value will be valid so long as you do not change sound cards.
-#+begin_src sh
+#+begin_src sh :tangle no
     ACTIVE_CONTROL_CACHE_FILE=/tmp/kmonad_volume_script_active_control
 
     # I'm not exactly sure what a control is
@@ -1089,6 +1090,7 @@ I /believe/ that this cached value will be valid so long as you do not change so
         echo $ACTIVE_CONTROL > $ACTIVE_CONTROL_CACHE_FILE &
     fi
 #+end_src
+#+end_quote
 
 Reads whether or not to display ~osd~ popups from the disk
 #+begin_src sh
@@ -1103,9 +1105,19 @@ Reads whether or not to display ~osd~ popups from the disk
     fi
 #+end_src
 
-#+begin_src sh
+#+begin_quote
+#+begin_src sh :tangle no
     # Use the active control path and read the volume property from it
     CURRENT_VOLUME=$(qdbus org.kde.kded5 "$ACTIVE_CONTROL" org.kde.KMix.Control.volume)
+#+end_src
+#+end_quote
+
+I had to go to the dark side and use text parsing to get the volume because when I revisited Arch Linux, I saw that the DBus interface for getting the audio control and manipulating the volume no longer existed.
+
+I found the following command on [[https://unix.stackexchange.com/questions/89571/how-to-get-volume-level-from-the-command-line][StackOverflow]]
+#+begin_src sh
+    # Use amixer to get the current volume
+    CURRENT_VOLUME=$(amixer get Master | grep % | awk '{print $5}' | sed -e 's/\[//' -e 's/%\]//' | head -n 1)
 #+end_src
 
 Explicitly unmute the output.
