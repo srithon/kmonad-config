@@ -254,7 +254,7 @@ Also, if we hold the key for more than 250 milliseconds, treat it like we are ho
 When we are trying to use the super key in a tap melody, we have the key down for a very short time, so having the hold timeout on 250ms lets us use it for chords more conveniently
 
 #+begin_src kbdx
-[enter-leader]
+[base]
 [[private]]
 leader-key = (tap-hold-next-release 250 (around-next (layer-toggle leader)) lmet)
 [[keys]]
@@ -263,7 +263,7 @@ lmet = leader-key
 
 #+begin_src kbdx
 [qwerty]
-parent = enter-leader
+parent = base
 [[private]]
 enable-homerow-mods = (layer-switch qwerty-homerow-mods)
 [[keys]]
@@ -273,7 +273,7 @@ caps = 'lctrl'
 
 #+begin_src kbdx
 [qwerty-homerow-mods]
-parent = enter-leader
+parent = base
 [[private]]
 disable-homerow-mods = (layer-switch qwerty)
 lctrl-or-escape = (tap-hold-next-release 125 esc lctl)
