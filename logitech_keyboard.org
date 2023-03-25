@@ -356,6 +356,8 @@ s = scroll:enter # (ref:scroll)
 tab = switch_focus_composite
 f1 = vim
 backslash = 'backslash' # (ref:local-leader)
+lmet = 'lmet'
+
 * Home Row Chord Layer
 #+begin_src kbdx
 [home-row-chord]
