@@ -290,6 +290,7 @@ This is a ~GACS~ home-row-mods configuration detailed on [[https://precondition.
 #+begin_src kbdx
 hmod-delay = $tap-hold-delay
 
+q_homerow_movement = (tap-hold $hmod-delay q (layer-toggle home-row-movement))
 s_lalt = (tap-hold-next-release $hmod-delay s lalt)
 d_lctrl = (tap-hold-next-release $hmod-delay d lctl)
 f_lshift = (tap-hold-next-release $hmod-delay f lshift)
@@ -310,6 +311,7 @@ l_ralt = (tap-hold-next-release $hmod-delay l ralt)
 ScrollLock = disable-homerow-mods
 caps = lctrl-or-escape
 
+q = q_homerow_movement
 s = s_lalt
 d = d_lctrl
 f = f_lshift
@@ -345,6 +347,14 @@ s = scroll:enter # (ref:scroll)
 tab = switch_focus_composite
 f1 = vim
 backslash = 'backslash' # (ref:local-leader)
+* Home Row Movement Layer
+#+begin_src kbdx
+[home-row-movement]
+[[keys]]
+h = 'Left'
+j = 'Down'
+k = 'Up'
+l = 'Right'
 #+end_src
 * Program Paths
 #+begin_src kbdx
