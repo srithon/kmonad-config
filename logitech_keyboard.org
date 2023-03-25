@@ -46,6 +46,11 @@ Variable names are all uppercase, and their definitions will mirror the structur
   #+begin_src text
 ~/.local/bin/taskwarrior-tui
   #+end_src
+- ~BROTAB~ ::
+  #+NAME: BROTAB
+  #+begin_src text
+~/.local/bin/brotab
+  #+end_src
 * Super Keybindings
 I want to be able to use Super like a leader key when tapped.
 Each headline represents a key to be pressed after tapping Super.
@@ -326,7 +331,7 @@ parent = block
 q = window-switcher # (ref:window-switcher)
 d = discord # (ref:discord)
 e = emacs # (ref:emacs)
-f = firefox # (ref:firefox)
+f = firefox_composite # (ref:firefox)
 b = brightness:enter # (ref:brightness)
 v = volume:enter # (ref:volume)
 t = 't' # (ref:terminal)
@@ -379,9 +384,46 @@ emacs = (cmd-button "$EMACSCLIENT --create-frame")
 * [[(firefox)][Firefox]]
 Opens a new Firefox window
 
+- ~FIREFOX_TAB_SWITCHER_SCRIPT~ ::
+  #+NAME: FIREFOX_TAB_SWITCHER_SCRIPT
+  #+begin_src text
+~/.config/kmonad/firefox/firefox_tab_switcher.sh
+  #+end_src
+
 #+begin_src kbdx
 [aliases]
-firefox = (cmd-button "firefox")
+FIREFOX_TAB_SWITCHER_SCRIPT = "|>FIREFOX_TAB_SWITCHER_SCRIPT<|"
+
+open_firefox = (cmd-button "firefox")
+select_firefox_tab = (cmd-button "$FIREFOX_TAB_SWITCHER_SCRIPT")
+
+firefox_composite = (tap-hold 135 @open_firefox @select_firefox_tab)
+#+end_src
+
+** Firefox Tab Switcher
+:PROPERTIES:
+:header-args:sh: :tangle ~/.config/kmonad/firefox/firefox_tab_switcher.sh :mkdirp yes :tangle-mode (identity #o744)
+:END:
+
+#+begin_src sh
+#!/bin/sh
+
+IFS="
+"
+
+tabs=$(|>BROTAB<| list)
+
+echo "$tabs" > /tmp/kmonadtabs
+
+selected=$(echo "$tabs" | awk -F '\t' '{print $2}' | rofi -noplugins -dmenu -i -lines 8 --normal-window -matching fuzzy -format 'd')
+
+selection=$(echo "$tabs" | tail -n "+$selected" | head -n 1)
+
+activation="$(echo "$selection" | awk -F '\t' '{print $1}')"
+|>BROTAB<| activate "$activation"
+
+title="$(echo "$selection" | awk -F '\t' '{print $2}')"
+wmctrl -a "$title"
 #+end_src
 * [[(brightness)][Brightness]]
 - ~CHANGE_BRIGHTNESS_SCRIPT~ ::
