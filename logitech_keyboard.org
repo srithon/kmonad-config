@@ -352,6 +352,34 @@ s = scroll:enter # (ref:scroll)
 tab = switch_focus_composite
 f1 = vim
 backslash = 'backslash' # (ref:local-leader)
+* Home Row Chord Layer
+#+begin_src kbdx
+[home-row-chord]
+parent = { block, numeric-desktop-switching }
+[[private]]
+show_desktop_grid = (cmd-button "$kwin_shortcut_cmd \"ShowDesktopGrid\"")
+[[keys]]
+# this binding interferes with rolls
+# t = (around lshift 5)
+
+# these are just the special characters above them
+y = (around lshift 6)
+u = (around lshift 7)
+i = (around lshift 8)
+
+o = (around lshift ')
+p = (around lshift =)
+
+h = (around lmet (around lalt Left))
+j = (around lmet (around lalt Down))
+k = (around lmet (around lalt Up))
+l = (around lmet (around lalt Right))
+
+# go to previous desktop
+semicolon = (tap-hold-next-release $tap-hold-delay-min (cmd-button "$kwin_shortcut_cmd \"Switch to Previous Desktop\"") @show_desktop_grid)
+# go to next desktop
+apostrophe = (tap-hold-next-release $tap-hold-delay-min (cmd-button "$kwin_shortcut_cmd \"Switch to Next Desktop\"") @show_desktop_grid)
+#+end_src
 * Numeric Desktop Switching Layer
 This is a layer where the numeric keys are mapped to buttons that switch to that numbered desktop.
 
