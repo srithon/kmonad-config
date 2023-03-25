@@ -236,6 +236,9 @@ starting-layer = qwerty-homerow-mods
 #+begin_src kbdx
 [aliases]
 tap-hold-delay = 200
+tap-hold-delay-min = 160
+
+kwin_shortcut_cmd = "qdbus org.kde.kglobalaccel /component/kwin invokeShortcut"
 #+end_src
 * Default Layer
 #+begin_quote
