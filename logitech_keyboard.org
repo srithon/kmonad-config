@@ -350,6 +350,64 @@ s = scroll:enter # (ref:scroll)
 tab = switch_focus_composite
 f1 = vim
 backslash = 'backslash' # (ref:local-leader)
+* Numeric Desktop Switching Layer
+This is a layer where the numeric keys are mapped to buttons that switch to that numbered desktop.
+
+- ~SWAP_MONITOR_WINDOWS_SCRIPT~ ::
+  #+NAME: SWAP_MONITOR_WINDOWS_SCRIPT
+  #+begin_src text
+~/.config/kmonad/windows/swap_monitor_windows.sh
+  #+end_src
+
+#+begin_src kbdx
+[numeric-desktop-switching]
+[[private]]
+SWAP_MONITOR_WINDOWS_SCRIPT = "|>SWAP_MONITOR_WINDOWS_SCRIPT<|"
+[[keys]]
+1 = (tap-hold $tap-hold-delay-min (cmd-button "$kwin_shortcut_cmd \"Switch to Desktop 1\"") (cmd-button "$kwin_shortcut_cmd \"Window to Desktop 1\""))
+2 = (tap-hold $tap-hold-delay-min (cmd-button "$kwin_shortcut_cmd \"Switch to Desktop 2\"") (cmd-button "$kwin_shortcut_cmd \"Window to Desktop 2\""))
+3 = (tap-hold $tap-hold-delay-min (cmd-button "$kwin_shortcut_cmd \"Switch to Desktop 3\"") (cmd-button "$kwin_shortcut_cmd \"Window to Desktop 3\""))
+4 = (tap-hold $tap-hold-delay-min (cmd-button "$kwin_shortcut_cmd \"Switch to Desktop 4\"") (cmd-button "$kwin_shortcut_cmd \"Window to Desktop 4\""))
+5 = (tap-hold $tap-hold-delay-min (cmd-button "$kwin_shortcut_cmd \"Switch to Desktop 5\"") (cmd-button "$kwin_shortcut_cmd \"Window to Desktop 5\""))
+6 = (tap-hold $tap-hold-delay-min (cmd-button "$kwin_shortcut_cmd \"Switch to Desktop 6\"") (cmd-button "$kwin_shortcut_cmd \"Window to Desktop 6\""))
+7 = (tap-hold $tap-hold-delay-min (cmd-button "$kwin_shortcut_cmd \"Switch to Desktop 7\"") (cmd-button "$kwin_shortcut_cmd \"Window to Desktop 7\""))
+8 = (tap-hold $tap-hold-delay-min (cmd-button "$kwin_shortcut_cmd \"Switch to Desktop 8\"") (cmd-button "$kwin_shortcut_cmd \"Window to Desktop 8\""))
+9 = (tap-hold $tap-hold-delay-min (cmd-button "$kwin_shortcut_cmd \"Switch to Desktop 9\"") (cmd-button "$kwin_shortcut_cmd \"Window to Desktop 9\""))
+Minus = (cmd-button "$SWAP_MONITOR_WINDOWS_SCRIPT")
+Equal = (cmd-button "$kwin_shortcut_cmd \"Window to Next Screen\"")
+#+end_src
+** Swap Monitors Script
+:PROPERTIES:
+:header-args:sh: :tangle ~/.config/kmonad/windows/swap_monitor_windows.sh :mkdirp yes :tangle-mode (identity #o744)
+:END:
+
+#+begin_src sh
+#!/bin/dash
+
+# first, get the current window ID
+WINDOW_ID=$(xdotool getactivewindow)
+
+runShortcut() {
+    qdbus org.kde.kglobalaccel /component/kwin invokeShortcut "$1"
+}
+
+# next, switch focus to the other monitor
+runShortcut "Switch to Next Screen"
+
+sleep 0.05
+
+# now, move the window to the previous monitor
+runShortcut "Window to Next Screen"
+
+sleep 0.05
+
+# finally, focus the original window and move it to the other monitor
+xdotool windowfocus "$WINDOW_ID"
+
+sleep 0.05
+
+runShortcut "Window to Next Screen"
+#+end_src
 * Home Row Movement Layer
 #+begin_src kbdx
 [home-row-movement]
