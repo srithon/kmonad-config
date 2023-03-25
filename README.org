@@ -4,4 +4,6 @@ This repo contains my work-in-progress [[https://en.wikipedia.org/wiki/Literate_
 
 The ported KMonad documentation can be found in [[./documentation.org][documentation.org]], and my configuration can be found in [[./logitech_keyboard.org][logitech_keyboard.org]].
 
+My configuration is written using my custom `kbdx` language, which transpiles into KMonad's `kbd` format using my [[https://github.com/srithon/kmonadx][KMonadX]] compiler.
+
 *You can view the HTML-exported version of both the documentation and the configuration [[https://srithon.github.io/kmonad-config/][here]]*. GitHub's rendering of Org documents is not perfect, so the HTML version is better-suited for in-browser reading
