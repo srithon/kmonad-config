@@ -408,6 +408,22 @@ sleep 0.05
 
 runShortcut "Window to Next Screen"
 #+end_src
+* Alphabetic Window Tiling Layer
+#+begin_src kbdx
+[alphabetic-window-tiling]
+[[keys]]
+u = (cmd-button "$kwin_shortcut_cmd 'Window Quick Tile Top Left'")
+i = (cmd-button "$kwin_shortcut_cmd 'Window Quick Tile Top'")
+o = (cmd-button "$kwin_shortcut_cmd 'Window Quick Tile Top Right'")
+
+j = (cmd-button "$kwin_shortcut_cmd 'Window Quick Tile Left'")
+k = (cmd-button "$kwin_shortcut_cmd 'Window Maximize'")
+l = (cmd-button "$kwin_shortcut_cmd 'Window Quick Tile Right'")
+
+m = (cmd-button "$kwin_shortcut_cmd 'Window Quick Tile Bottom Left'")
+comma = (cmd-button "$kwin_shortcut_cmd 'Window Quick Tile Bottom'")
+dot = (cmd-button "$kwin_shortcut_cmd 'Window Quick Tile Bottom Right'")
+#+end_src
 * Home Row Movement Layer
 #+begin_src kbdx
 [home-row-movement]
