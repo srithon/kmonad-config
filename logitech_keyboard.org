@@ -358,6 +358,9 @@ f1 = vim
 backslash = 'backslash' # (ref:local-leader)
 lmet = 'lmet'
 
+[leader-no-block]
+parent = { source, leader }
+#+end_src
 * Home Row Chord Layer
 #+begin_src kbdx
 [home-row-chord]
