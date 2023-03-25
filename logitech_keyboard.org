@@ -264,6 +264,7 @@ When we are trying to use the super key in a tap melody, we have the key down fo
 leader-key = (tap-hold-next-release 250 (around-next (layer-toggle leader)) lmet)
 [[keys]]
 lmet = leader-key
+grave = (tap-hold $tap-hold-delay-min grave @simple-datetime-overlay) # (ref:simple-datetime-overlay)
 #+end_src
 
 #+begin_src kbdx
@@ -1362,6 +1363,70 @@ vim = (cmd-button "kitty fish -C \"$NVIM_SCRIPT\"")
 
 ELAPSED_TIME=$(/bin/time -f '%E' |>NEOVIM<|)
 zenity --text "Ran for $ELAPSED_TIME" --notification
+#+end_src
+* [[(simple-datetime-overlay)][Simple Datetime Overlay]]
+- Simple Datetime Overlay Path ::
+  #+NAME: SIMPLE_DATETIME_OVERLAY
+  #+begin_src text
+/home/sridaran/.local/bin/simple-datetime-overlay
+  #+end_src
+
+This is a simple button that spawns my program and then kills all instances of it.
+#+begin_src kbdx
+[aliases]
+SIMPLE_DATETIME_OVERLAY = "|>SDO_SCRIPT_PATH<|"
+simple-datetime-overlay = (cmd-button "/bin/dash -c '$SIMPLE_DATETIME_OVERLAY'" "sleep 0.15; killall simple-datetime-overlay")
+#+end_src
+
+Here are my issues with ~simple-datetime-overlay~:
+1. Setting it to show up on all monitors is ideal, but it feels too slow unless I have my CPU profile on high or max
+2. *Setting it to show up on the active monitor is nice, but sometimes I don't know which monitor is active so I don't know where to look*
+3. Setting it to show up on monitor 0 makes it consistently fast, but I don't want to have to turn my head to look at it
+
+Ideally, show up on all monitors when we are on max performance, active monitor otherwise.
+** Invoke Simple Datetime Overlay Script
+:PROPERTIES:
+:header-args:sh:  :tangle ~/.config/kmonad/simple-datetime-overlay/simple-datetime-overlay.sh :mkdirp yes :tangle-mode (identity #o744) :padline no
+:END:
+
+- SDO Script Path  ::
+  #+NAME: SDO_SCRIPT_PATH
+  #+begin_src text
+/home/sridaran/.config/kmonad/simple-datetime-overlay/simple-datetime-overlay.sh
+  #+end_src
+
+- CPUFreq Active Profile Path ::
+  #+NAME: CPUFREQ_ACTIVE_PROFILE
+  #+begin_src text
+/home/sridaran/.cache/set-cpufreq-profile/active-profile
+  #+end_src
+
+This script checks what my current cpu profile is, and if it is on max performance, then it displays the datetime overlay on all monitors.
+Otherwise, it displays it only on the active monitor.
+
+*TODO*: also disable pretty effects like fading on lower performance profiles
+#+begin_src sh
+#!/bin/dash
+
+CURRENT_CPUFREQ_PROFILE=$(cat "|>CPUFREQ_ACTIVE_PROFILE<|")
+
+PARAMS="--only-monitor 0"
+
+case "$CURRENT_CPUFREQ_PROFILE" in
+    "Max Performance")
+        PARAMS=""
+        ;;
+     "High Performance")
+         PARAMS="-a"
+         ;;
+     "Low Performance")
+         PARAMS="$PARAMS --no-fade"
+         ;;
+     ,*)
+       ;;
+esac
+
+|>SIMPLE_DATETIME_OVERLAY<| $PARAMS
 #+end_src
 * TODO [[(local-leader)][Local Leader]]
 
