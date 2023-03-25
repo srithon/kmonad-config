@@ -424,6 +424,11 @@ m = (cmd-button "$kwin_shortcut_cmd 'Window Quick Tile Bottom Left'")
 comma = (cmd-button "$kwin_shortcut_cmd 'Window Quick Tile Bottom'")
 dot = (cmd-button "$kwin_shortcut_cmd 'Window Quick Tile Bottom Right'")
 #+end_src
+* Desktop/Window Layer
+#+begin_src kbdx
+[desktop-window]
+parent = { numeric-desktop-switching, alphabetic-window-tiling }
+#+end_src
 * Home Row Movement Layer
 #+begin_src kbdx
 [home-row-movement]
