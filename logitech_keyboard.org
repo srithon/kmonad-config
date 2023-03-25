@@ -459,6 +459,8 @@ enter = (tap-hold-next-release $tap-hold-delay (layer-add brightness) (layer-tog
 
 up = (cmd-button "$CHANGE_BRIGHTNESS_SCRIPT +")
 down = (cmd-button "$CHANGE_BRIGHTNESS_SCRIPT -")
+
+toggle_nightlight = (cmd-button "$CHANGE_BRIGHTNESS_SCRIPT '*'")
 [[keys]]
 0 = (cmd-button "$QUEUE_DIGIT_SCRIPT 0")
 1 = (cmd-button "$QUEUE_DIGIT_SCRIPT 1")
@@ -473,6 +475,8 @@ down = (cmd-button "$CHANGE_BRIGHTNESS_SCRIPT -")
 
 k = up
 j = down
+
+h = toggle_nightlight
 
 # q displays brightness on each monitor
 
@@ -521,7 +525,6 @@ echo "$NEW_INT" | tee "$FILE"
 :PROPERTIES:
 :header-args:sh: :tangle ~/.config/kmonad/brightness/change_brightness.sh :mkdirp yes :tangle-mode (identity #o744)
 :END:
-
 #+begin_src sh
 #!/bin/dash
 
@@ -538,6 +541,7 @@ case $DIRECTION in
 '+') SIGN=1 ;;
 '-') SIGN=-1 ;;
 '.') ;;
+'*') ;;
 *)
     echo "Invalid direction" >/dev/stderr
     exit 1
@@ -545,21 +549,26 @@ case $DIRECTION in
 esac
 #+end_src
 
+We preset ~CHANGE~ so that any code path which never sets ~CHANGE~ will use the value of ~7~.
+#+begin_src sh
+
+CHANGE=7
+#+end_src
+
 In the normal case, check if there are queued digits, and if there aren't then default to ~7~.
 After reading the saved digits, clear the file's contents.
 #+begin_src sh
 
-if [ "$DIRECTION" != '.' ]; then
-    CHANGE=$(cat "$DIGIT_FILE" 2>/dev/null)
+if [ "$DIRECTION" != '.' ] && [ "$DIRECTION" != '*' ]; then
+    QUEUED_DIGITS=$(cat "$DIGIT_FILE" 2>/dev/null)
 
-    if [ -n "$CHANGE" ]; then
-        if [ "$CHANGE" -ge 100 ]; then
-            CHANGE=100
+    if [ -n "$QUEUED_DIGITS" ]; then
+        if [ "$QUEUED_DIGITS" -ge 100 ]; then
+            QUEUED_DIGITS=100
         fi
 
         echo "" >"$DIGIT_FILE"
-    else
-        CHANGE=7
+        CHANGE=$QUEUED_DIGITS
     fi
 #+end_src
 
@@ -574,11 +583,22 @@ Then, write the new value to ~LAST_BRIGHTNESS_CHANGE_FILE~.
 If ~DIRECTION~ /is/ ~.~, then read ~CHANGE~ directly from ~LAST_BRIGHTNESS_CHANGE_FILE~. If it doesn't exist, then fail.
 #+begin_src sh
 else
-    if [ -e "$LAST_BRIGHTNESS_CHANGE_FILE" ]; then
-        CHANGE=$(cat "$LAST_BRIGHTNESS_CHANGE_FILE")
+    if [ "$DIRECTION" = "." ]; then
+        if [ -e "$LAST_BRIGHTNESS_CHANGE_FILE" ]; then
+            CHANGE=$(cat "$LAST_BRIGHTNESS_CHANGE_FILE")
+        else
+            echo "Last brightness change file does not yet exist!" >/dev/stderr
+            exit 1
+        fi
+#+end_src
+
+Otherwise, it is ~*~, which means that we want to toggle the nightlight.
+In this case, we call a different script for toggling the nightlight on the actively focused monitor.
+We exit the script afterwards so that we don't end up calling the standard ~changeBrightness~ script next.
+#+begin_src sh
     else
-        echo "Last brightness change file does not yet exist!" >/dev/stderr
-        exit 1
+        /home/sridaran/Development/Scripts/DE/toggleNightlight.sh
+        exit 0
     fi
 fi
 #+end_src
