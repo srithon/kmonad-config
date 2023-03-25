@@ -354,8 +354,8 @@ a = agenda # (ref:agenda)
 o = open-preset # (ref:open-preset)
 c = org-capture # (ref:org-capture)
 s = scroll:enter # (ref:scroll)
-tab = switch_focus_composite
-f1 = vim
+tab = switch_focus_composite # (ref:switch-focus)
+f1 = vim # (ref:vim)
 backslash = 'backslash' # (ref:local-leader)
 lmet = 'lmet'
 
