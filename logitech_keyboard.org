@@ -286,6 +286,8 @@ parent = base
 [[private]]
 disable-homerow-mods = (layer-switch qwerty)
 lctrl-or-escape = (tap-hold-next-release 125 esc lctl)
+lshift-or-caps-lock = (tap-hold-next-release 125 caps lshift)
+rshift-or-caps-lock = (tap-hold-next-release 125 caps rshift)
 #+end_src
 
 This is a ~GACS~ home-row-mods configuration detailed on [[https://precondition.github.io/home-row-mods#kmonad-home-row-mods-code-generator][this page]].
@@ -329,8 +331,8 @@ l = l_ralt
 
 We want to disable the homerow mods whenever we explicitly hit a modifier key.
 #+begin_src kbdx
-lshift = (around (layer-toggle qwerty) lshift)
-rshift = (around (layer-toggle qwerty) rshift)
+lshift = (around (layer-toggle qwerty) @lshift-or-caps-lock)
+rshift = (around (layer-toggle qwerty) @rshift-or-caps-lock)
 lctrl = (around (layer-toggle qwerty) lctrl)
 #+end_src
 * Base Leader Key Layer
