@@ -337,6 +337,7 @@ o = open-preset # (ref:open-preset)
 c = org-capture # (ref:org-capture)
 s = scroll:enter # (ref:scroll)
 tab = switch_focus_composite
+f1 = vim
 backslash = 'backslash' # (ref:local-leader)
 #+end_src
 * Program Paths
@@ -1259,6 +1260,34 @@ switch_mouse_screen = (cmd-button "$SWITCH_MOUSE_SCREEN_SCRIPT")
 switch_focus_screen = (cmd-button "qdbus org.kde.kglobalaccel /component/kwin invokeShortcut \"Switch to Next Screen\"")
 
 switch_focus_composite = (tap-hold 200 @switch_focus_screen @switch_mouse_screen)
+#+end_src
+* [[(vim)][Vim]]
+- ~NVIM~ ::
+  #+NAME: NVIM
+  #+begin_src text
+/home/sridaran/Packages/neovim/nvim0-6-0.appimage
+  #+end_src
+- ~NVIM_SCRIPT~ ::
+  #+NAME: NVIM_SCRIPT
+  #+begin_src text
+/home/sridaran/.config/kmonad/vim/run_neovim.sh
+  #+end_src
+
+#+begin_src kbdx
+[aliases]
+NVIM_SCRIPT = "|>NVIM_SCRIPT<|"
+vim = (cmd-button "kitty fish -C \"$NVIM_SCRIPT\"")
+#+end_src
+** Run Neovim Script
+:PROPERTIES:
+:header-args:sh:  :tangle ~/.config/kmonad/vim/run_neovim.sh :tangle-mode (identity #o744) :mkdirp yes :padline no
+:END:
+
+#+begin_src sh
+#!/bin/dash
+
+ELAPSED_TIME=$(/bin/time -f '%E' |>NEOVIM<|)
+zenity --text "Ran for $ELAPSED_TIME" --notification
 #+end_src
 * TODO [[(local-leader)][Local Leader]]
 
