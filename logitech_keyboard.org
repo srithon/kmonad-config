@@ -268,6 +268,7 @@ leader-key = (tap-hold-next-release 250 (around-next (layer-toggle leader)) lmet
 [[keys]]
 lmet = leader-key
 grave = (tap-hold $tap-hold-delay-min grave @simple-datetime-overlay) # (ref:simple-datetime-overlay)
+lalt = (tap-hold-next-release $tap-hold-delay XX (around lalt (around-next (layer-toggle leader-no-block))))
 #+end_src
 
 #+begin_src kbdx
