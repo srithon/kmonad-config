@@ -476,9 +476,9 @@ l = 'Right'
 * Program Paths
 #+begin_src kbdx
 [aliases]
-ROFI = "~/.local/bin/rofi"
-DISCORD = "/usr/bin/Discord"
-EMACSCLIENT = "/usr/bin/emacsclient"
+ROFI = "|>ROFI<|"
+DISCORD = "|>DISCORD<|"
+EMACSCLIENT = "|>EMACSCLIENT<|"
 #+end_src
 * [[(window-switcher)][Window Switcher]]
 Opens the Window Switcher
