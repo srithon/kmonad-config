@@ -29,12 +29,12 @@ Variable names are all uppercase, and their definitions will mirror the structur
 - ~ROFI~ ::
  #+NAME: ROFI
  #+begin_src text
-~/.local/bin/rofi
+/usr/bin/rofi
  #+end_src
 - ~EMACSCLIENT~ ::
   #+NAME: EMACSCLIENT
   #+begin_src text
-/usr/local/bin/emacsclient
+/usr/bin/emacsclient
   #+end_src
 - ~DISCORD~ ::
   #+NAME: DISCORD
