@@ -41,11 +41,6 @@ Variable names are all uppercase, and their definitions will mirror the structur
   #+begin_src text
 /usr/bin/Discord
   #+end_src
-- ~TASKWARRIOR_TUI~ ::
-  #+NAME: TASKWARRIOR_TUI
-  #+begin_src text
-~/.local/bin/taskwarrior-tui
-  #+end_src
 - ~BROTAB~ ::
   #+NAME: BROTAB
   #+begin_src text
@@ -484,7 +479,6 @@ l = 'Right'
 ROFI = "~/.local/bin/rofi"
 DISCORD = "/usr/bin/Discord"
 EMACSCLIENT = "/usr/bin/emacsclient"
-TASKWARRIOR_TUI = "~/.local/bin/taskwarrior-tui"
 #+end_src
 * [[(window-switcher)][Window Switcher]]
 Opens the Window Switcher
@@ -842,7 +836,7 @@ We should aim for a more robust solution.
 * [[(agenda)][Agenda]]
 #+begin_src kbdx
 [aliases]
-agenda = (cmd-button "kitty $TASKWARRIOR_TUI")
+agenda = (cmd-button "$EMACSCLIENT -ce '(org-agenda-list)'")
 #+end_src
 ** TODO Open a floating, semi-transparent window
 Instead of a fullscreen, opaque window.
