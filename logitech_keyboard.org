@@ -235,6 +235,20 @@ tap-hold-delay-min = 160
 
 kwin_shortcut_cmd = "qdbus org.kde.kglobalaccel /component/kwin invokeShortcut"
 #+end_src
+* Keyboard Backlight Aliases
+Let's define buttons for increasing/decreasing the keyboard backlight.
+These will be used in other layers so that I can easily see when I'm in the base layer and when I'm in a custom layer, like [[id:8c4c7835-b189-47cb-8a07-6f38f808c797][Volume]].
+This will be done by turning on the backlight when in the layers, and turning it back off when leaving the layers.
+#+begin_src kbdx
+[aliases]
+kbd-set-backlight-command = "dbus-send --system --print-reply --dest=\"org.freedesktop.UPower\" /org/freedesktop/UPower/KbdBacklight org.freedesktop.UPower.KbdBacklight.SetBrightness"
+kbd-set-backlight-on-command = "$kbd-set-backlight-command int32:1"
+kbd-set-backlight-off-command = "$kbd-set-backlight-command int32:0"
+
+kbd-set-backlight-on = (cmd-button "$kbd-set-backlight-command int32:1")
+kbd-set-backlight-off = (cmd-button "$kbd-set-backlight-command int32:0")
+kbd-toggle-backlight = (cmd-button "$kbd-set-backlight-on-command" "$kbd-set-backlight-off-command")
+#+end_src
 * Default Layer
 #+begin_quote
 Optional: as many layers as you please
@@ -583,9 +597,9 @@ wmctrl -a "$title"
 QUEUE_DIGIT_SCRIPT = "|>QUEUE_DIGIT_SCRIPT<|"
 CHANGE_BRIGHTNESS_SCRIPT = "|>CHANGE_BRIGHTNESS_SCRIPT<|"
 
-exit = (layer-rem brightness)
+exit = #((layer-rem brightness) @kbd-set-backlight-off)
 [[public]]
-enter = (tap-hold-next-release $tap-hold-delay (layer-add brightness) (layer-toggle brightness))
+enter = (tap-hold-next-release $tap-hold-delay #((layer-add brightness) @kbd-set-backlight-on) (around @kbd-toggle-backlight (layer-toggle brightness)))
 
 up = (cmd-button "$CHANGE_BRIGHTNESS_SCRIPT +")
 down = (cmd-button "$CHANGE_BRIGHTNESS_SCRIPT -")
@@ -750,13 +764,13 @@ When the run layer is added, the layer beneath it is qwerty.
 [[private]]
 runner_script = "~/.config/kmonad/runner/runner.sh"
 [[public]]
-enter = #((cmd-button "$runner_script") (layer-add run))
+enter = #((cmd-button "$runner_script") (layer-add run) @kbd-set-backlight-on)
 #+end_src
 
 To exit the run mode, we remove the ~run~ layer and then kill all instances of ~st~: the terminal we are using for the runner (and nothing else).
 #+begin_src kbdx
 [[private]]
-exit = #((layer-rem run) (cmd-button "killall st"))
+exit = #((layer-rem run) (cmd-button "killall st") @kbd-set-backlight-off)
 [[keys]]
 lmet = exit
 #+end_src
@@ -896,9 +910,9 @@ speed-up   = (cmd-button "$speed_script 50"
 speed-down = (cmd-button "$speed_script 200"
                          "$speed_script 0")
 
-exit = (layer-rem scroll)
+exit = #((layer-rem scroll) @kbd-set-backlight-off)
 [[public]]
-enter = (tap-hold-next-release $tap-hold-delay (layer-add scroll) (layer-toggle scroll))
+enter = (tap-hold-next-release $tap-hold-delay #((layer-add scroll) @kbd-set-backlight-on) (around @kbd-toggle-backlight (layer-toggle scroll)))
 [[keys]]
 h = left
 l = right
@@ -1102,6 +1116,9 @@ Whenever you scroll a scrollbar on your mouse, the speed at which you scroll det
 I believe the reason the vertical scrolling was not working is because KMonad was repeating the keypresses too quickly.
 Because of this, it probably did not register as scrolling and was simply ignored.
 * [[(volume)][Volume]]
+:PROPERTIES:
+:ID:       8c4c7835-b189-47cb-8a07-6f38f808c797
+:END:
 - ~VOLUME_SCRIPT~ ::
   #+NAME: VOLUME_SCRIPT
   #+begin_src text
@@ -1135,9 +1152,9 @@ mute = (cmd-button "qdbus org.kde.kglobalaccel /component/kmix invokeShortcut mu
 
 play-pause = 'PlayPause'
 
-exit = (layer-rem volume)
+exit = #((layer-rem volume) @kbd-set-backlight-off)
 [[public]]
-enter = (tap-hold-next-release $tap-hold-delay (layer-add volume) (layer-toggle volume))
+enter = (tap-hold-next-release $tap-hold-delay #((layer-add volume) @kbd-set-backlight-on) (around @kbd-toggle-backlight (layer-toggle volume)))
 [[keys]]
 k = up
 j = down
