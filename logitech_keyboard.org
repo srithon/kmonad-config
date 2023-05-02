@@ -472,6 +472,9 @@ h = 'Left'
 j = 'Down'
 k = 'Up'
 l = 'Right'
+
+semicolon = 'Home'
+apostrophe = 'End'
 #+end_src
 * Program Paths
 #+begin_src kbdx
