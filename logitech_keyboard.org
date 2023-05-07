@@ -31,6 +31,11 @@ Variable names are all uppercase, and their definitions will mirror the structur
  #+begin_src text
 /usr/bin/rofi
  #+end_src
+- ~EMACS~ ::
+  #+NAME: EMACS
+  #+begin_src text
+/usr/bin/emacs
+  #+end_src
 - ~EMACSCLIENT~ ::
   #+NAME: EMACSCLIENT
   #+begin_src text
@@ -556,6 +561,7 @@ apostrophe = 'End'
 [aliases]
 ROFI = "|>ROFI<|"
 DISCORD = "|>DISCORD<|"
+EMACS = "|>EMACS<|"
 EMACSCLIENT = "|>EMACSCLIENT<|"
 #+end_src
 * [[(window-switcher)][Window Switcher]]
@@ -591,11 +597,11 @@ discord = (cmd-button "$DISCORD_SCRIPT")
 #+end_src
 ** TODO Switch back to the previous window when invoked a second time
 * [[(emacs)][Emacs]]
-Opens Emacs: specifically an ~emacsclient~ instance.
+Opens Emacs: ~emacsclient~ on tap, ~emacs~ process on hold.
 
 #+begin_src kbdx
 [aliases]
-emacs = (cmd-button "$EMACSCLIENT --create-frame")
+emacs = (tap-hold $tap-hold-delay-min (cmd-button "$EMACSCLIENT --create-frame") (cmd-button "$EMACS"))
 #+end_src
 * [[(firefox)][Firefox]]
 Opens a new Firefox window
