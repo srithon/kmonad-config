@@ -350,7 +350,7 @@ lctrl = (around (layer-toggle qwerty) lctrl)
 [leader]
 parent = block
 [[keys]]
-q = window-switcher # (ref:window-switcher)
+q = window-switcher:activate # (ref:window-switcher)
 d = discord # (ref:discord)
 e = emacs # (ref:emacs)
 f = firefox_composite # (ref:firefox)
@@ -562,9 +562,18 @@ EMACSCLIENT = "|>EMACSCLIENT<|"
 Opens the Window Switcher
 
 #+begin_src kbdx
-[aliases]
-window-switcher = (cmd-button "$ROFI -noplugins -modi window -show window -lines 5 --normal-window -sort -sorting-method fzf -monitor -4 -matching fuzzy")
+[window-switcher]
+[[private]]
+rofi-args = "-noplugins -lines 5 --normal-window -sort -sorting-method fzf -monitor -4 -matching fuzzy -modi window -show window"
+jump-to-window = (cmd-button "$ROFI $rofi-args")
+pull-window = (cmd-button "$ROFI $rofi-args -window-command 'wmctrl -iR {window}' -kb-accept-entry '' -kb-accept-alt 'Return'")
+[[public]]
+activate = (tap-hold $tap-hold-delay-min @jump-to-window @pull-window)
 #+end_src
+
+I made this into a layer purely for organizational purposes.
+When tapped, ~activate~ will yield a Rofi window switcher which will switch to the selected window.
+When held, ~activate~ will yield a Rofi window switcher which will move the selected window to the current desktop before selecting it.
 
 I compiled ~rofi~ from source and put it in ~~/.local/bin~ because the RPM version was too slow for my taste.
 Some of the flags are also there for optimization reasons: ~-modi~, ~-noplugins~ and ~--normal-window~.
