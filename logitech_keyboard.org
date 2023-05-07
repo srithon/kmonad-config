@@ -563,7 +563,7 @@ Opens the Window Switcher
 
 #+begin_src kbdx
 [aliases]
-window-switcher = (cmd-button "$ROFI -noplugins -modi window -show window -lines 5 --normal-window -sort -sorting-method fzf -matching fuzzy")
+window-switcher = (cmd-button "$ROFI -noplugins -modi window -show window -lines 5 --normal-window -sort -sorting-method fzf -monitor -4 -matching fuzzy")
 #+end_src
 
 I compiled ~rofi~ from source and put it in ~~/.local/bin~ because the RPM version was too slow for my taste.
@@ -571,6 +571,7 @@ Some of the flags are also there for optimization reasons: ~-modi~, ~-noplugins~
 I noticed that the startup animation was faster with ~--normal-window~, and the other 2 flags stop ~rofi~ from doing unnecessary work.
 ~-matching fuzzy~ makes it use fuzzy matching instead of only matching the raw string.
 ~-sort~ and ~-sorting-method fzf~ make the selections a lot more intelligent.
+~-monitor -4~ makes it open ~rofi~ on the monitor of the currently focused window.
 * [[(discord)][Discord]]
 This command uses ~wmctrl~ to switch to a currently-existing Discord window, and if it fails opens a new instance of Discord.
 
