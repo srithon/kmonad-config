@@ -434,9 +434,9 @@ MONITOR_MOVE_RELATIVE_SCRIPT = "|>MONITOR_MOVE_RELATIVE_SCRIPT<|"
 9 = (tap-hold $tap-hold-delay-min (cmd-button "$kwin_shortcut_cmd \"Switch to Desktop 9\"") (cmd-button "$kwin_shortcut_cmd \"Window to Desktop 9\""))
 
 # go to previous desktop
-semicolon = (tap-hold-next-release $tap-hold-delay-min (cmd-button "$kwin_shortcut_cmd \"Switch to Previous Desktop\"") (cmd-button "$MONITOR_MOVE_RELATIVE_SCRIPT -1"))
+semicolon = (tap-hold $tap-hold-delay-min (cmd-button "$kwin_shortcut_cmd \"Switch to Previous Desktop\"") (cmd-button "$MONITOR_MOVE_RELATIVE_SCRIPT -1"))
 # go to next desktop
-apostrophe = (tap-hold-next-release $tap-hold-delay-min (cmd-button "$kwin_shortcut_cmd \"Switch to Next Desktop\"") (cmd-button "$MONITOR_MOVE_RELATIVE_SCRIPT 1"))
+apostrophe = (tap-hold $tap-hold-delay-min (cmd-button "$kwin_shortcut_cmd \"Switch to Next Desktop\"") (cmd-button "$MONITOR_MOVE_RELATIVE_SCRIPT 1"))
 
 Minus = (cmd-button "$SWAP_MONITOR_WINDOWS_SCRIPT")
 Equal = (cmd-button "$kwin_shortcut_cmd \"Window to Next Screen\"")
