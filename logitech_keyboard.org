@@ -920,7 +920,8 @@ agenda = (cmd-button "$EMACSCLIENT -ce '(org-agenda-list)'")
 #+end_src
 ** TODO Open a floating, semi-transparent window
 Instead of a fullscreen, opaque window.
-** TODO Maybe switch to org-agenda
+** DONE Maybe switch to org-agenda
+CLOSED: [2023-04-06 Thu 23:42]
 * [[(open-preset)][Open Preset]]
 - ~OPEN_PRESET_SCRIPT~ ::
   #+NAME: OPEN_PRESET_SCRIPT
