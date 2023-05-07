@@ -394,10 +394,7 @@ j = (around lmet (around lalt Down))
 k = (around lmet (around lalt Up))
 l = (around lmet (around lalt Right))
 
-# go to previous desktop
-semicolon = (tap-hold-next-release $tap-hold-delay-min (cmd-button "$kwin_shortcut_cmd \"Switch to Previous Desktop\"") @show_desktop_grid)
-# go to next desktop
-apostrophe = (tap-hold-next-release $tap-hold-delay-min (cmd-button "$kwin_shortcut_cmd \"Switch to Next Desktop\"") @show_desktop_grid)
+backslash = show_desktop_grid
 #+end_src
 * Numeric Desktop Switching Layer
 This is a layer where the numeric keys are mapped to buttons that switch to that numbered desktop.
@@ -408,10 +405,17 @@ This is a layer where the numeric keys are mapped to buttons that switch to that
 ~/.config/kmonad/windows/swap_monitor_windows.sh
   #+end_src
 
+- ~MONITOR_MOVE_RELATIVE_SCRIPT~ ::
+  #+NAME: MONITOR_MOVE_RELATIVE_SCRIPT
+  #+begin_src text
+~/.config/kmonad/windows/monitor_move_relative.sh
+  #+end_src
+
 #+begin_src kbdx
 [numeric-desktop-switching]
 [[private]]
 SWAP_MONITOR_WINDOWS_SCRIPT = "|>SWAP_MONITOR_WINDOWS_SCRIPT<|"
+MONITOR_MOVE_RELATIVE_SCRIPT = "|>MONITOR_MOVE_RELATIVE_SCRIPT<|"
 [[keys]]
 1 = (tap-hold $tap-hold-delay-min (cmd-button "$kwin_shortcut_cmd \"Switch to Desktop 1\"") (cmd-button "$kwin_shortcut_cmd \"Window to Desktop 1\""))
 2 = (tap-hold $tap-hold-delay-min (cmd-button "$kwin_shortcut_cmd \"Switch to Desktop 2\"") (cmd-button "$kwin_shortcut_cmd \"Window to Desktop 2\""))
@@ -422,6 +426,12 @@ SWAP_MONITOR_WINDOWS_SCRIPT = "|>SWAP_MONITOR_WINDOWS_SCRIPT<|"
 7 = (tap-hold $tap-hold-delay-min (cmd-button "$kwin_shortcut_cmd \"Switch to Desktop 7\"") (cmd-button "$kwin_shortcut_cmd \"Window to Desktop 7\""))
 8 = (tap-hold $tap-hold-delay-min (cmd-button "$kwin_shortcut_cmd \"Switch to Desktop 8\"") (cmd-button "$kwin_shortcut_cmd \"Window to Desktop 8\""))
 9 = (tap-hold $tap-hold-delay-min (cmd-button "$kwin_shortcut_cmd \"Switch to Desktop 9\"") (cmd-button "$kwin_shortcut_cmd \"Window to Desktop 9\""))
+
+# go to previous desktop
+semicolon = (tap-hold-next-release $tap-hold-delay-min (cmd-button "$kwin_shortcut_cmd \"Switch to Previous Desktop\"") (cmd-button "$MONITOR_MOVE_RELATIVE_SCRIPT -1"))
+# go to next desktop
+apostrophe = (tap-hold-next-release $tap-hold-delay-min (cmd-button "$kwin_shortcut_cmd \"Switch to Next Desktop\"") (cmd-button "$MONITOR_MOVE_RELATIVE_SCRIPT 1"))
+
 Minus = (cmd-button "$SWAP_MONITOR_WINDOWS_SCRIPT")
 Equal = (cmd-button "$kwin_shortcut_cmd \"Window to Next Screen\"")
 #+end_src
@@ -456,6 +466,56 @@ xdotool windowfocus "$WINDOW_ID"
 sleep 0.05
 
 runShortcut "Window to Next Screen"
+#+end_src
+** Monitor Relative Move Script
+:PROPERTIES:
+:header-args:sh: :tangle ~/.config/kmonad/windows/monitor_move_relative.sh :mkdirp yes :tangle-mode (identity #o744)
+:END:
+
+#+begin_src sh
+#!/bin/bash
+
+# pass in the relative change in desktop numbers; i.e 1, -1
+relative_change=$1
+
+runShortcut() {
+    qdbus org.kde.kglobalaccel /component/kwin invokeShortcut "$1"
+}
+
+# first, let's get the current desktop
+wmctrl_output=$(wmctrl -d)
+
+desktop_regex="^([0-9]+)"
+active_desktop_regex="([0-9]+)  \\*"
+
+# 1. find the current desktop
+if [[ $wmctrl_output =~ $active_desktop_regex ]]
+then
+    # this is zero-based
+    active_desktop="${BASH_REMATCH[1]}"
+
+    last_desktop_line=$(echo "$wmctrl_output" | tail -n 1)
+
+    # let's take that line and extract the number from it
+    if [[ $last_desktop_line =~ $desktop_regex ]]
+    then
+        # this is zero-based
+        highest_desktop="${BASH_REMATCH[1]}"
+        num_desktops=$((highest_desktop + 1))
+
+        new_desktop=$(((active_desktop + relative_change) % num_desktops))
+        if [[ $new_desktop -lt 0 ]]
+        then
+            new_desktop=$((new_desktop + num_desktops))
+        fi
+
+        # take it from zero-based to one-based
+        new_desktop=$((new_desktop + 1))
+
+        # finally, move the window
+        runShortcut "Window to Desktop $new_desktop"
+    fi
+fi
 #+end_src
 * Alphabetic Window Tiling Layer
 #+begin_src kbdx
