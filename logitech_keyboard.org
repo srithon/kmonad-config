@@ -377,6 +377,7 @@ parent = { source, leader }
 parent = { block, numeric-desktop-switching }
 [[private]]
 show_desktop_grid = (cmd-button "$kwin_shortcut_cmd \"ShowDesktopGrid\"")
+show_current_desktop_windows = (cmd-button "$kwin_shortcut_cmd \"Expose\"")
 [[keys]]
 # this binding interferes with rolls
 # t = (around lshift 5)
@@ -394,7 +395,7 @@ j = (around lmet (around lalt Down))
 k = (around lmet (around lalt Up))
 l = (around lmet (around lalt Right))
 
-backslash = show_desktop_grid
+backslash = (tap-hold-next-release $tap-hold-delay-min @show_current_desktop_windows @show_desktop_grid)
 #+end_src
 * Numeric Desktop Switching Layer
 This is a layer where the numeric keys are mapped to buttons that switch to that numbered desktop.
