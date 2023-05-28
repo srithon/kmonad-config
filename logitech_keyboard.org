@@ -1559,7 +1559,7 @@ SWITCH_MOUSE_SCREEN_SCRIPT = "|>SWITCH_MOUSE_SCREEN_SCRIPT<|"
 switch_mouse_screen = (cmd-button "$SWITCH_MOUSE_SCREEN_SCRIPT")
 switch_focus_screen = (cmd-button "qdbus org.kde.kglobalaccel /component/kwin invokeShortcut \"Switch to Next Screen\"")
 
-switch_focus_composite = (tap-hold 200 @switch_focus_screen @switch_mouse_screen)
+switch_focus_composite = (tap-hold $tap-hold-delay-min @switch_focus_screen @switch_mouse_screen)
 #+end_src
 * [[(vim)][Vim]]
 - ~NVIM~ ::
