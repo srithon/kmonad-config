@@ -677,7 +677,7 @@ CHANGE_BRIGHTNESS_SCRIPT = "|>CHANGE_BRIGHTNESS_SCRIPT<|"
 
 exit = #((layer-rem brightness) @kbd-set-backlight-off)
 [[public]]
-enter = (tap-hold-next-release $tap-hold-delay #((layer-add brightness) @kbd-set-backlight-on) (around @kbd-toggle-backlight (layer-toggle brightness)))
+enter = (tap-hold-next-release $tap-hold-delay #((layer-add brightness) @kbd-set-backlight-on) (layer-toggle brightness))
 
 up = (cmd-button "$CHANGE_BRIGHTNESS_SCRIPT +")
 down = (cmd-button "$CHANGE_BRIGHTNESS_SCRIPT -")
@@ -991,7 +991,7 @@ speed-down = (cmd-button "$speed_script 200"
 
 exit = #((layer-rem scroll) @kbd-set-backlight-off)
 [[public]]
-enter = (tap-hold-next-release $tap-hold-delay #((layer-add scroll) @kbd-set-backlight-on) (around @kbd-toggle-backlight (layer-toggle scroll)))
+enter = (tap-hold-next-release $tap-hold-delay #((layer-add scroll) @kbd-set-backlight-on) (layer-toggle scroll))
 [[keys]]
 h = left
 l = right
@@ -1233,7 +1233,7 @@ play-pause = 'PlayPause'
 
 exit = #((layer-rem volume) @kbd-set-backlight-off)
 [[public]]
-enter = (tap-hold-next-release $tap-hold-delay #((layer-add volume) @kbd-set-backlight-on) (around @kbd-toggle-backlight (layer-toggle volume)))
+enter = (tap-hold-next-release $tap-hold-delay #((layer-add volume) @kbd-set-backlight-on) (layer-toggle volume))
 [[keys]]
 k = up
 j = down
