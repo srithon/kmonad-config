@@ -675,7 +675,8 @@ wmctrl -a "$title"
 QUEUE_DIGIT_SCRIPT = "|>QUEUE_DIGIT_SCRIPT<|"
 CHANGE_BRIGHTNESS_SCRIPT = "|>CHANGE_BRIGHTNESS_SCRIPT<|"
 
-exit = #((layer-rem brightness) @kbd-set-backlight-off)
+exit_internal = (layer-rem brightness)
+exit = #(@exit_internal @kbd-set-backlight-off)
 [[public]]
 enter = (tap-hold-next-release $tap-hold-delay #((layer-add brightness) @kbd-set-backlight-on) (layer-toggle brightness))
 
@@ -848,7 +849,8 @@ enter = #((cmd-button "$runner_script") (layer-add run) @kbd-set-backlight-on)
 To exit the run mode, we remove the ~run~ layer and then kill all instances of ~st~: the terminal we are using for the runner (and nothing else).
 #+begin_src kbdx
 [[private]]
-exit = #((layer-rem run) (cmd-button "killall st") @kbd-set-backlight-off)
+exit_internal = #((layer-rem run) (cmd-button "killall st"))
+exit = #(@exit_internal @kbd-set-backlight-off)
 [[keys]]
 lmet = exit
 #+end_src
@@ -989,7 +991,8 @@ speed-up   = (cmd-button "$speed_script 50"
 speed-down = (cmd-button "$speed_script 200"
                          "$speed_script 0")
 
-exit = #((layer-rem scroll) @kbd-set-backlight-off)
+exit_internal = (layer-rem scroll)
+exit = #(@exit_internal @kbd-set-backlight-off)
 [[public]]
 enter = (tap-hold-next-release $tap-hold-delay #((layer-add scroll) @kbd-set-backlight-on) (layer-toggle scroll))
 [[keys]]
@@ -1231,7 +1234,8 @@ mute = (cmd-button "qdbus org.kde.kglobalaccel /component/kmix invokeShortcut mu
 
 play-pause = 'PlayPause'
 
-exit = #((layer-rem volume) @kbd-set-backlight-off)
+exit_internal = (layer-rem volume)
+exit = #(@exit_internal @kbd-set-backlight-off)
 [[public]]
 enter = (tap-hold-next-release $tap-hold-delay #((layer-add volume) @kbd-set-backlight-on) (layer-toggle volume))
 [[keys]]
