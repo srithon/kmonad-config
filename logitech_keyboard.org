@@ -919,34 +919,31 @@ terminal_y_offset=$((y_padding + Y_OFFSET))
 
     See [[https://manpages.debian.org/testing/libx11-doc/XParseGeometry.3.en.html][this link]] for more details
 
-Using ~tmux~ to maintain a single shell session through each ~runner~ invocation.
-I was initially using ~screen~, but ~screen~ is extremely broken on Arch: when I run the following commands, it results in a ~screen caught signal 11~ error from the following sequence of commands
-1. ~st /bin/bash -c 'screen -S runner'~
-2. ~killall st~
-3. ~screen -r runner~
+Using ~screen~ to maintain a single shell session through each ~runner~ invocation.
 
-
-- ~-f ...~ ::
-  Uses the corresponding configuration file.
-- ~new-session -At runner~ ::
+- ~-DR runner~ ::
   Attaches to a session called ~runner~, creating it if necessary.
+  Some of ~screen~'s flag combinations seem a little arbitrary.
+- ~-s /bin/fish~ ::
+  Tells ~screen~ to start new sessions with the ~fish~ shell.
 
 #+begin_src sh
-|>ST<| -c "rounded st-runner" -g "116x8+${terminal_x_offset}+${terminal_y_offset}" tmux -f ~/.config/kmonad/runner/tmux.conf new-session -At runner
+|>ST<| -m 15 -c "rounded st-runner" -g "116x8+${terminal_x_offset}+${terminal_y_offset}" screen -c ~/.config/kmonad/runner/screenrc -DR runner -s /bin/fish
 #+end_src
 
 After ~st~ closes, we scroll down our runner so we no longer see the commands/output from earlier.
 We do this by telling screen to send ~Control+L~ keystrokes to the ~runner~ session's first pane.
 Since it's the same shell, we /will/ still be in the same working directory and have the same history as before.
 #+begin_src sh
-tmux send -t runner.0 "C-l"
+screen -S runner -X stuff ""
 #+end_src
 
-This is the configuration we are using for ~tmux~.
-We disable the statusline and also set the default shell to Fish.
-#+begin_src text :tangle ~/.config/kmonad/runner/tmux.conf
-set -g status off
-set -g default-shell /bin/fish
+- ~term screen-256color~ ::
+  This line fixes the colors in the ~screen~ window.
+  Before, I was getting a lot of text that wasn't being highlighted.
+#+begin_src text :tangle ~/.config/kmonad/runner/screenrc
+term screen-256color
+msgwait 0
 #+end_src
 ** TODO Cleanup exit command
 Right now, we are doing ~killall st~, which only does what we want because we do not use ~st~ for anything else.
