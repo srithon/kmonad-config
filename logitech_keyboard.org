@@ -861,9 +861,9 @@ lmet = exit
 # we want the owner to be able to read, write and execute the file
 # we are also giving read access to the group and everyone else
 
-Using the ~dash~ shell for speed
+Using the ~bash~ shell so we can use arithmetic.
 #+begin_src sh
-#!/bin/dash
+#!/bin/bash
 #+end_src
 
 Setting environment variables for the ~fish~ process to inherit.
@@ -884,6 +884,27 @@ Sets the working directory back to home
 cd
 #+end_src
 
+Now, let's determine the geometry for our terminal window.
+First, we want the terminal to be placed on the active directory.
+#+begin_src sh
+FOCUSED_WINDOW=$(xdotool getwindowfocus)
+eval $(xdotool getwindowgeometry --shell "$FOCUSED_WINDOW")
+eval $(monitor-utils --shell --at-point $X $Y --geometry)
+#+end_src
+
+This will give us the geometry of the monitor we have focused.
+Now, we want to have 10% padding on the top, and have the terminal be centered in the middle of the screen.
+From experimentation, 116 terminal columns translates to about 1660 pixels.
+#+begin_src sh
+TERMINAL_WIDTH=1660
+
+y_padding=$((HEIGHT / 10))
+x_margin=$(((WIDTH - TERMINAL_WIDTH) / 2))
+
+terminal_x_offset=$((x_margin + X_OFFSET))
+terminal_y_offset=$((y_padding + Y_OFFSET))
+#+end_src
+
 - ~|>ST<|~ ::
   ~st~ is the terminal emulator
   - ~-c "..."~ ::
@@ -897,32 +918,35 @@ cd
     The offset, however, appears to be in pixels.
 
     See [[https://manpages.debian.org/testing/libx11-doc/XParseGeometry.3.en.html][this link]] for more details
-  - ~screen~ ::
-    Using ~screen~ to maintain a single shell session through each ~runner~ invocation.
-    - ~-DR runner~ ::
-      Attaches to a session called ~runner~, creating it if necessary.
-      Some of ~screen~'s flag combinations seem a little arbitrary.
-    - ~-s /bin/fish~ ::
-      Tells ~screen~ to start new sessions with the ~fish~ shell.
+
+Using ~tmux~ to maintain a single shell session through each ~runner~ invocation.
+I was initially using ~screen~, but ~screen~ is extremely broken on Arch: when I run the following commands, it results in a ~screen caught signal 11~ error from the following sequence of commands
+1. ~st /bin/bash -c 'screen -S runner'~
+2. ~killall st~
+3. ~screen -r runner~
+
+
+- ~-f ...~ ::
+  Uses the corresponding configuration file.
+- ~new-session -At runner~ ::
+  Attaches to a session called ~runner~, creating it if necessary.
 
 #+begin_src sh
-|>ST<| -c "rounded st-runner" -g 100x8+225+50 screen -c ~/.config/kmonad/runner/screenrc -DR runner -s /bin/fish
+|>ST<| -c "rounded st-runner" -g "116x8+${terminal_x_offset}+${terminal_y_offset}" tmux -f ~/.config/kmonad/runner/tmux.conf new-session -At runner
 #+end_src
 
 After ~st~ closes, we scroll down our runner so we no longer see the commands/output from earlier.
-We do this by telling screen to send ~Control+L~ keystrokes to the ~runner~ session.
-Since it's the same shell, we /will/ still be in the same working directory and have the same history as before
+We do this by telling screen to send ~Control+L~ keystrokes to the ~runner~ session's first pane.
+Since it's the same shell, we /will/ still be in the same working directory and have the same history as before.
 #+begin_src sh
-screen -r runner -X stuff ""
+tmux send -t runner.0 "C-l"
 #+end_src
 
-The configuration we are using for ~screen~.
-
-- ~term screen-256color~ ::
-  This line fixes the colors in the ~screen~ window.
-  Before, I was getting a lot of text that wasn't being highlighted.
-#+begin_src text :tangle ~/.config/kmonad/runner/screenrc
-term screen-256color
+This is the configuration we are using for ~tmux~.
+We disable the statusline and also set the default shell to Fish.
+#+begin_src text :tangle ~/.config/kmonad/runner/tmux.conf
+set -g status off
+set -g default-shell /bin/fish
 #+end_src
 ** TODO Cleanup exit command
 Right now, we are doing ~killall st~, which only does what we want because we do not use ~st~ for anything else.
