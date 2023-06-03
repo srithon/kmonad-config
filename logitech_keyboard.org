@@ -843,7 +843,7 @@ When the run layer is added, the layer beneath it is qwerty.
 [[private]]
 runner_script = "~/.config/kmonad/runner/runner.sh"
 [[public]]
-enter = #((cmd-button "$runner_script") (layer-add run) @kbd-set-backlight-on)
+enter = #((cmd-button "$runner_script") (layer-add run))
 #+end_src
 
 To exit the run mode, we remove the ~run~ layer and then kill all instances of ~st~: the terminal we are using for the runner (and nothing else).
