@@ -388,12 +388,12 @@ show_current_desktop_windows = (cmd-button "$kwin_shortcut_cmd \"Expose\"")
 # t = (around lshift 5)
 
 # these are just the special characters above them
-y = (around lshift 6)
-u = (around lshift 7)
-i = (around lshift 8)
+y = (around lshift 6) # ^
+u = (around lshift 7) # &
+i = (around lshift 8) # *
 
-o = (around lshift ')
-p = (around lshift =)
+o = (around lshift ') # "
+p = (around lshift =) # +
 
 h = (around lmet (around lalt Left))
 j = (around lmet (around lalt Down))
