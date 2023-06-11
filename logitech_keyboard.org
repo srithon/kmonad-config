@@ -688,16 +688,20 @@ sub addJumpEntry {
     }
 }
 
-sub addJumpEntryIfAwayFromActive {
+sub updateJumpListBasedOnFocus {
     # if we have moved away from the active jump list entry, then add this to the top of the jump list
     my ($activeEntryDesktop, $activeEntryWindow) = @{ $currentJumpList[$activeEntryNum] };
-    if ($activeEntryWindow eq $focusedWindow) {
+
+    my $sameWindow = $activeEntryWindow eq $focusedWindow;
+    my $sameDesktop = $activeEntryDesktop eq $currentDesktop;
+    if ($sameWindow && not $sameDesktop) {
         # if we are focused on the current window, then overwrite the entry's desktop
-        if (not ($activeEntryDesktop eq $currentDesktop)) {
-            $currentJumpList[$activeEntryNum][0] = $currentDesktop;
-        }
+        $currentJumpList[$activeEntryNum][0] = $currentDesktop;
+    } elsif ($sameDesktop) {
+        # then, just update the window instead of making a whole new entry
+        $currentJumpList[$activeEntryNum][1] = $focusedWindow;
     } else {
-        # otherwise, add a jump list entry
+        # (different window, different desktop)
         addJumpEntry 1;
 
         # if offset is negative, then we need to skip past the entry we just created;
@@ -712,7 +716,7 @@ sub addJumpEntryIfAwayFromActive {
 sub shiftStackPointer {
     my ($offset) = @_;
 
-    addJumpEntryIfAwayFromActive;
+    updateJumpListBasedOnFocus;
 
     $activeEntryNum += $offset;
 
@@ -738,7 +742,7 @@ sub shiftStackPointer {
 }
 
 sub prevEntry {
-    addJumpEntryIfAwayFromActive;
+    updateJumpListBasedOnFocus;
 
     if ($activeEntryNum > 0) {
         shiftStackPointer -1;
