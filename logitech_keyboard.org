@@ -553,6 +553,154 @@ DISCORD = "|>DISCORD<|"
 EMACS = "|>EMACS<|"
 EMACSCLIENT = "|>EMACSCLIENT<|"
 #+end_src
+* [[(jump-list)][Jump List]]
+The idea of the Jump List is to emulate Vim behavior and allow for switching between different positions.
+In a windowing system context, each entry in the Jump List is an active window (+ Desktop).
+Vim has a ton of operations which modify the Jump List, but for our purposes, we will have two main modes of modification:
+1. [[id:df9e0ef9-cbed-40da-bdb0-79f8cf0d0b33][Window Switcher]]
+   - using the window switcher will automatically add entries to the Jump List
+2. Manual Marks
+   - to fill in for the Vim operations, we will provide an easy way to mark an entry in the Jump List through a direct keybinding
+
+#+begin_src kbdx
+[jump-list]
+[[public]]
+# adds current window as entry to the jump list
+add = ""
+
+# jumps to the next entry in the jump list
+next = ""
+# jumps to the previous entry in the jump list
+prev = ""
+#+end_src
+
+** Underlying Implementation
+:PROPERTIES:
+:header-args:perl: :tangle ~/.config/kmonad/jump-list/jump_list.pl :mkdirp yes :tangle-mode (identity #o744)
+:END:
+To make the underlying implementation work, we need to maintain a stack of jump list entries, where each entry contains a Window ID as well as a desktop number + monitor so that if the window is closed, we can still go back to it.
+Actually, it may make sense to simply skip an entry if the window has been closed.
+
+- When using ~prev~ from a monitor which is different from the active jump list entry (this means that you manually moved away), we can either go back to the active entry OR ignore the current monitor and simply go back an entry
+  - Similarly, when using ~next~ from a monitor which is different from the active jump list entry, we can either go back to the active entry OR ignore the current monitor and simply go back an entry
+  - I think we will have to see what is more useful in practice, but I think to begin with it'll be good to have it go back to the active entry in the ~prev~ scenario
+    - If it gets in the way, we'll get rid of it
+
+- ~add~ should get the current focused window id and desktop, and add it to the jump list
+  - If the current entry is not the latest entry, then delete anything that came after it (this appears to be Vim's behavior, too)
+
+- ~prev~ should shift the pointer back
+
+- ~next~ should move the pointer forward, and do nothing if it isn't relevant
+
+#+begin_src perl
+#!/bin/env perl
+#+end_src
+
+#+begin_src perl :comments link
+use v5.10;
+use strict;
+
+# first, let's get the current window configuration: current window id and desktop
+my $focusedWindow = `xdotool getwindowfocus`;
+
+sub getCurrentDesktop {
+    my $cmd = "wmctrl -d |";
+    open FH, $cmd;
+
+    my $currentDesktop;
+    while (<FH>) {
+        if ($_ =~ m/^(?<n>\d)  \*/) {
+            $currentDesktop = $+{n};
+            last;
+        }
+    }
+
+    close FH;
+    return $currentDesktop;
+}
+
+my $currentDesktop = getCurrentDesktop();
+
+# now, let's define the path for the jump list file.
+my $jumpListPath = "/tmp/kmonad_jump_list";
+my $fileExists = open(FH, '<', $jumpListPath);
+
+my $activeEntryNum;
+my @currentJumpList;
+if ($fileExists) {
+    $activeEntryNum = <FH>;
+    # source: https://stackoverflow.com/questions/1877330/how-can-i-read-the-lines-of-a-file-into-an-array-in-perl
+    chomp(@currentJumpList = <FH>);
+} else {
+    $activeEntryNum = -1;
+    @currentJumpList = ();
+}
+
+# this function takes in no args.
+# it will mutate the @currentJumpList array, setting the current window
+# configuration as the latest entry.
+sub addJumpEntry {
+    $activeEntryNum += 1;
+    @currentJumpList[$activeEntryNum] = "$currentDesktop $focusedWindow";
+
+    # remove all elements after
+    splice @currentJumpList, $activeEntryNum + 1;
+}
+
+# this function takes in an offset, and modifies the count accordingly
+sub shiftStackPointer {
+    my ($offset) = @_;
+    $activeEntryNum += $offset;
+
+    # MISTAKE: when given only one argument, it will treat the argument as the /pattern/, and use $_ as the expression to split.
+    my ($desktop, $window) = split / /, $currentJumpList[$activeEntryNum];
+
+    # now, let's switch the window
+    my $exitCode = system("wmctrl -ia $window");
+
+    if (not ($exitCode eq 0)) {
+        # TODO: focus correct monitor
+        system("wmctrl -s $desktop");
+    }
+}
+
+sub prevEntry {
+    if ($activeEntryNum > 0) {
+        shiftStackPointer -1;
+    } else {
+        print "No previous entry!";
+        exit 1;
+    }
+}
+
+sub nextEntry {
+    if ($activeEntryNum < $#currentJumpList) {
+        shiftStackPointer 1;
+    } else {
+        print "No next entry!";
+        exit 1;
+    }
+}
+
+# now, let's do a dispatch list
+given ($ARGV[0]) {
+    when (m/add/) { addJumpEntry }
+    when (m/next/) { nextEntry }
+    when (m/prev/) { prevEntry }
+    default {
+        print 'Please specify `add`, `next`, or `prev` as the first argument.';
+        exit 1;
+    }
+}
+
+# now, let's yield the new jump list
+open FH, ">", $jumpListPath;
+print FH $activeEntryNum;
+print FH "\n";
+print FH join("\n", @currentJumpList);
+close FH;
+#+end_src
 * [[(window-switcher)][Window Switcher]]
 Opens the Window Switcher
 
