@@ -786,7 +786,7 @@ Opens the Window Switcher
 [window-switcher]
 [[private]]
 rofi-args = "-noplugins -lines 5 --normal-window -sort -sorting-method fzf -monitor -4 -matching fuzzy -modi window -show window"
-jump-to-window = (cmd-button "$ROFI $rofi-args")
+jump-to-window = (cmd-button "$ROFI $rofi-args -window-command \"/bin/dash -c '$jump-list-mark; wmctrl -ia {window}'\" -kb-accept-entry '' -kb-accept-alt 'Return'")
 pull-window = (cmd-button "$ROFI $rofi-args -window-command 'wmctrl -iR {window}' -kb-accept-entry '' -kb-accept-alt 'Return'")
 [[public]]
 activate = (tap-hold $tap-hold-delay-min @jump-to-window @pull-window)
