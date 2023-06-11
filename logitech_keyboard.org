@@ -562,16 +562,30 @@ Vim has a ton of operations which modify the Jump List, but for our purposes, we
 2. Manual Marks
    - to fill in for the Vim operations, we will provide an easy way to mark an entry in the Jump List through a direct keybinding
 
+- JUMP_LIST_SCRIPT ::
+  #+NAME: JUMP_LIST_SCRIPT
+  #+begin_src text
+/home/sridaran/.config/kmonad/jump-list/jump_list.pl
+  #+end_src
+
+We move the command to the global scope so we can use it within other layers.
+#+begin_src kbdx
+[aliases]
+jump-list-mark = "|>JUMP_LIST_SCRIPT<| add-shift"
+#+end_src
+
 #+begin_src kbdx
 [jump-list]
+[[private]]
+script = "|>JUMP_LIST_SCRIPT<|"
 [[public]]
 # adds current window as entry to the jump list
-add = ""
+add = (cmd-button "$script add-replace")
 
 # jumps to the next entry in the jump list
-next = ""
+next = (cmd-button "$script next")
 # jumps to the previous entry in the jump list
-prev = ""
+prev = (cmd-button "$script prev")
 #+end_src
 
 ** Underlying Implementation
