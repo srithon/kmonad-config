@@ -670,11 +670,32 @@ sub addJumpEntry {
     }
 }
 
+sub addJumpEntryIfAwayFromActive {
+    # if we have moved away from the active jump list entry, then add this to the top of the jump list
+    my ($activeEntryDesktop, $activeEntryWindow) = @{ $currentJumpList[$activeEntryNum] };
+    if ($activeEntryWindow eq $focusedWindow) {
+        # if we are focused on the current window, then overwrite the entry's desktop
+        if (not ($activeEntryDesktop eq $currentDesktop)) {
+            $currentJumpList[$activeEntryNum][0] = $currentDesktop;
+        }
+    } else {
+        # otherwise, add a jump list entry
+        addJumpEntry 1;
+
+        # if offset is negative, then we need to skip past the entry we just created;
+        # ACTUALLY, our current desired behavior is that if we go backwards and we aren't on the active entry, it will go to the active entry
+        # if ($offset < 0) {
+        #     $offset -= 1;
+        # }
+    }
 }
 
 # this function takes in an offset, and modifies the count accordingly
 sub shiftStackPointer {
     my ($offset) = @_;
+
+    addJumpEntryIfAwayFromActive;
+
     $activeEntryNum += $offset;
 
     # MISTAKE: when given only one argument, it will treat the argument as the /pattern/, and use $_ as the expression to split.
@@ -699,6 +720,8 @@ sub shiftStackPointer {
 }
 
 sub prevEntry {
+    addJumpEntryIfAwayFromActive;
+
     if ($activeEntryNum > 0) {
         shiftStackPointer -1;
     } else {
