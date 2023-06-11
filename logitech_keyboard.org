@@ -793,15 +793,18 @@ for ($ARGV[0]) {
     exit 1;
 }
 
-# now, let's yield the new jump list
-open FH, ">", $jumpListPath;
-print FH $activeEntryNum;
-print FH "\n";
-print FH join("\n", map { join(" ", @{$_}) } @currentJumpList);
-close FH;
+# if empty, then we did not add any entries
+if (@currentJumpList) {
+    # now, let's yield the new jump list
+    open FH, ">", $jumpListPath;
+    print FH $activeEntryNum;
+    print FH "\n";
+    print FH join("\n", map { join(" ", @{$_}) } @currentJumpList);
+    close FH;
 
-for (@commandQueue) {
-    system($_);
+    for (@commandQueue) {
+        system($_);
+    }
 }
 #+end_src
 * [[(window-switcher)][Window Switcher]]
