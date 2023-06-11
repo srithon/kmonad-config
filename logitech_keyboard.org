@@ -598,11 +598,13 @@ Actually, it may make sense to simply skip an entry if the window has been close
 #+end_src
 
 #+begin_src perl :comments link
-use v5.10;
+use v5.28;
 use strict;
+use warnings;
 
 # first, let's get the current window configuration: current window id and desktop
 my $focusedWindow = `xdotool getwindowfocus`;
+chomp $focusedWindow;
 
 sub getCurrentDesktop {
     my $cmd = "wmctrl -d |";
@@ -611,7 +613,7 @@ sub getCurrentDesktop {
     my $currentDesktop;
     while (<FH>) {
         if ($_ =~ m/^(?<n>\d)  \*/) {
-            $currentDesktop = $+{n};
+            $currentDesktop = chomp($+{n});
             last;
         }
     }
@@ -626,23 +628,32 @@ my $currentDesktop = getCurrentDesktop();
 my $jumpListPath = "/tmp/kmonad_jump_list";
 my $fileExists = open(FH, '<', $jumpListPath);
 
-my $activeEntryNum;
-my @currentJumpList;
+my $activeEntryNum = -1;
+my @currentJumpList = ();
 if ($fileExists) {
     $activeEntryNum = <FH>;
     # source: https://stackoverflow.com/questions/1877330/how-can-i-read-the-lines-of-a-file-into-an-array-in-perl
-    chomp(@currentJumpList = <FH>);
-} else {
-    $activeEntryNum = -1;
-    @currentJumpList = ();
+
+    while (<FH>) {
+        chomp;
+        my @items = split / /;
+        # MISTAKE: `push @list @other` actually pushes the ELEMENTS of @other onto @list.
+        # to remedy this, we push a scalar reference to the array
+        push @currentJumpList, \@items;
+    }
 }
+
+close FH;
+
+# we use a queue for our commands so that we can run them after updating the file
+my @commandQueue = ();
 
 # this function takes in no args.
 # it will mutate the @currentJumpList array, setting the current window
 # configuration as the latest entry.
 sub addJumpEntry {
     $activeEntryNum += 1;
-    @currentJumpList[$activeEntryNum] = "$currentDesktop $focusedWindow";
+    $currentJumpList[$activeEntryNum] = [$currentDesktop, $focusedWindow];
 
     # remove all elements after
     splice @currentJumpList, $activeEntryNum + 1;
@@ -654,12 +665,21 @@ sub shiftStackPointer {
     $activeEntryNum += $offset;
 
     # MISTAKE: when given only one argument, it will treat the argument as the /pattern/, and use $_ as the expression to split.
-    my ($desktop, $window) = split / /, $currentJumpList[$activeEntryNum];
+    my ($desktop, $window) = @{ ($currentJumpList[$activeEntryNum]) };
 
     # now, let's switch the window
     my $exitCode = system("wmctrl -ia $window");
 
-    if (not ($exitCode eq 0)) {
+    if ($exitCode eq 0) {
+        # move cursor to center of window
+        push @commandQueue, "xdotool mousemove --window $window --sync --polar 0 0";
+
+        # trackmouse flash
+        my $toggleTrackMouse = "qdbus org.kde.kglobalaccel /component/kwin org.kde.kglobalaccel.Component.invokeShortcut TrackMouse";
+        push @commandQueue, $toggleTrackMouse;
+        push @commandQueue, "sleep 0.50";
+        push @commandQueue, $toggleTrackMouse;
+    } else {
         # TODO: focus correct monitor
         system("wmctrl -s $desktop");
     }
@@ -684,22 +704,25 @@ sub nextEntry {
 }
 
 # now, let's do a dispatch list
-given ($ARGV[0]) {
-    when (m/add/) { addJumpEntry }
-    when (m/next/) { nextEntry }
-    when (m/prev/) { prevEntry }
-    default {
-        print 'Please specify `add`, `next`, or `prev` as the first argument.';
-        exit 1;
-    }
+for ($ARGV[0]) {
+    /add/ && do { addJumpEntry; last };
+    /next/ && do { nextEntry; last };
+    /prev/ && do { prevEntry; last };
+
+    print 'Please specify `add`, `next`, or `prev` as the first argument.';
+    exit 1;
 }
 
 # now, let's yield the new jump list
 open FH, ">", $jumpListPath;
 print FH $activeEntryNum;
 print FH "\n";
-print FH join("\n", @currentJumpList);
+print FH join("\n", map { join(" ", @{$_}) } @currentJumpList);
 close FH;
+
+for (@commandQueue) {
+    system($_);
+}
 #+end_src
 * [[(window-switcher)][Window Switcher]]
 Opens the Window Switcher
