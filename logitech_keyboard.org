@@ -613,7 +613,9 @@ sub getCurrentDesktop {
     my $currentDesktop;
     while (<FH>) {
         if ($_ =~ m/^(?<n>\d)  \*/) {
-            $currentDesktop = chomp($+{n});
+            # MISTAKE: `chomp(lval)` yields the number of removed characters from the end;
+            # also, chomp wasn't even necessary here.
+            $currentDesktop = $+{n};
             last;
         }
     }
