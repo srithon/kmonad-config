@@ -689,7 +689,7 @@ sub prevEntry {
     if ($activeEntryNum > 0) {
         shiftStackPointer -1;
     } else {
-        print "No previous entry!";
+        print STDERR "No previous entry!";
         exit 1;
     }
 }
@@ -698,7 +698,7 @@ sub nextEntry {
     if ($activeEntryNum < $#currentJumpList) {
         shiftStackPointer 1;
     } else {
-        print "No next entry!";
+        print STDERR "No next entry!";
         exit 1;
     }
 }
@@ -709,7 +709,7 @@ for ($ARGV[0]) {
     /next/ && do { nextEntry; last };
     /prev/ && do { prevEntry; last };
 
-    print 'Please specify `add`, `next`, or `prev` as the first argument.';
+    print STDERR "Please specify 'add-replace', 'add-shift', 'next', or 'prev' as the first argument; received $ARGV[0]";
     exit 1;
 }
 
