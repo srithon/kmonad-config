@@ -668,41 +668,62 @@ close FH;
 # we use a queue for our commands so that we can run them after updating the file
 my @commandQueue = ();
 
+sub addJumpPredicate {
+    # check if it's the KDE desktop background window
+    my $classOutput = `xprop -notype -id $focusedWindow WM_CLASS`;
+    die if not $classOutput =~ m/WM_CLASS = "(?<CLASS>[^"]+)",/;
+
+    return ($+{CLASS} !~ m/plasmashell/);
+}
+
 # this function takes in no args.
 # it will mutate the @currentJumpList array, setting the current window
 # configuration as the latest entry.
 sub addJumpEntry {
     my ($keepLaterEntries) = @_;
 
-    $activeEntryNum += 1;
+    if (addJumpPredicate) {
+        $activeEntryNum += 1;
 
-    my $newEntry = [$currentDesktop, $focusedWindow];
-    if ($keepLaterEntries) {
-        # push back everything after
-        splice @currentJumpList, $activeEntryNum, 0, $newEntry;
-    } else {
-        $currentJumpList[$activeEntryNum] = $newEntry;
+        my $newEntry = [$currentDesktop, $focusedWindow];
+        if ($keepLaterEntries) {
+            # push back everything after
+            splice @currentJumpList, $activeEntryNum, 0, $newEntry;
+        } else {
+            $currentJumpList[$activeEntryNum] = $newEntry;
 
-        # remove all elements after
-        splice @currentJumpList, $activeEntryNum + 1;
+            # remove all elements after
+            splice @currentJumpList, $activeEntryNum + 1;
+        }
     }
 }
 
 sub updateJumpListBasedOnFocus {
-    # if we have moved away from the active jump list entry, then add this to the top of the jump list
-    my ($activeEntryDesktop, $activeEntryWindow) = @{ $currentJumpList[$activeEntryNum] };
+    my ($keepLaterEntriesIfAdding) = @_;
 
-    my $sameWindow = $activeEntryWindow eq $focusedWindow;
-    my $sameDesktop = $activeEntryDesktop eq $currentDesktop;
-    if ($sameWindow && not $sameDesktop) {
-        # if we are focused on the current window, then overwrite the entry's desktop
-        $currentJumpList[$activeEntryNum][0] = $currentDesktop;
-    } elsif ($sameDesktop) {
-        # then, just update the window instead of making a whole new entry
-        $currentJumpList[$activeEntryNum][1] = $focusedWindow;
+    my $doAddEntry = 0;
+    if (@currentJumpList) {
+        # if we have moved away from the active jump list entry, then add this to the top of the jump list
+        my ($activeEntryDesktop, $activeEntryWindow) = @{ $currentJumpList[$activeEntryNum] };
+
+        my $sameWindow = $activeEntryWindow eq $focusedWindow;
+        my $sameDesktop = $activeEntryDesktop eq $currentDesktop;
+        if ($sameWindow && not $sameDesktop) {
+            # if we are focused on the current window, then overwrite the entry's desktop
+            $currentJumpList[$activeEntryNum][0] = $currentDesktop;
+        } elsif ($sameDesktop) {
+            # then, just update the window instead of making a whole new entry
+            $currentJumpList[$activeEntryNum][1] = $focusedWindow;
+        } else {
+            $doAddEntry = 1;
+        }
     } else {
+        $doAddEntry = 1;
+    }
+
+    if ($doAddEntry) {
         # (different window, different desktop)
-        addJumpEntry 1;
+        addJumpEntry $keepLaterEntriesIfAdding;
 
         # if offset is negative, then we need to skip past the entry we just created;
         # ACTUALLY, our current desired behavior is that if we go backwards and we aren't on the active entry, it will go to the active entry
@@ -716,7 +737,7 @@ sub updateJumpListBasedOnFocus {
 sub shiftStackPointer {
     my ($offset) = @_;
 
-    updateJumpListBasedOnFocus;
+    updateJumpListBasedOnFocus 1;
 
     $activeEntryNum += $offset;
 
@@ -742,7 +763,7 @@ sub shiftStackPointer {
 }
 
 sub prevEntry {
-    updateJumpListBasedOnFocus;
+    updateJumpListBasedOnFocus 1;
 
     if ($activeEntryNum > 0) {
         shiftStackPointer -1;
@@ -763,8 +784,8 @@ sub nextEntry {
 
 # now, let's do a dispatch list
 for ($ARGV[0]) {
-    /add-replace/ && do { addJumpEntry 0; last };
-    /add-shift/ && do { addJumpEntry 1; last };
+    /add-replace/ && do { updateJumpListBasedOnFocus 0; last };
+    /add-shift/ && do { updateJumpListBasedOnFocus 1; last };
     /next/ && do { nextEntry; last };
     /prev/ && do { prevEntry; last };
 
