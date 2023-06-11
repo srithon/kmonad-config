@@ -389,6 +389,10 @@ j = (around lmet (around lalt Down))
 k = (around lmet (around lalt Up))
 l = (around lmet (around lalt Right))
 
+i = jump-list:next
+o = jump-list:prev
+p = jump-list:add
+
 backslash = (tap-hold-next-release $tap-hold-delay-min @show_current_desktop_windows @show_desktop_grid)
 #+end_src
 * Numeric Desktop Switching Layer
