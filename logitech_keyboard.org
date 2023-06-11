@@ -652,11 +652,22 @@ my @commandQueue = ();
 # it will mutate the @currentJumpList array, setting the current window
 # configuration as the latest entry.
 sub addJumpEntry {
-    $activeEntryNum += 1;
-    $currentJumpList[$activeEntryNum] = [$currentDesktop, $focusedWindow];
+    my ($keepLaterEntries) = @_;
 
-    # remove all elements after
-    splice @currentJumpList, $activeEntryNum + 1;
+    $activeEntryNum += 1;
+
+    my $newEntry = [$currentDesktop, $focusedWindow];
+    if ($keepLaterEntries) {
+        # push back everything after
+        splice @currentJumpList, $activeEntryNum, 0, $newEntry;
+    } else {
+        $currentJumpList[$activeEntryNum] = $newEntry;
+
+        # remove all elements after
+        splice @currentJumpList, $activeEntryNum + 1;
+    }
+}
+
 }
 
 # this function takes in an offset, and modifies the count accordingly
@@ -705,7 +716,8 @@ sub nextEntry {
 
 # now, let's do a dispatch list
 for ($ARGV[0]) {
-    /add/ && do { addJumpEntry; last };
+    /add-replace/ && do { addJumpEntry 0; last };
+    /add-shift/ && do { addJumpEntry 1; last };
     /next/ && do { nextEntry; last };
     /prev/ && do { prevEntry; last };
 
