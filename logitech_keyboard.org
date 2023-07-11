@@ -416,6 +416,17 @@ This is a layer where the numeric keys are mapped to buttons that switch to that
 SWAP_MONITOR_WINDOWS_SCRIPT = "|>SWAP_MONITOR_WINDOWS_SCRIPT<|"
 MONITOR_MOVE_RELATIVE_SCRIPT = "|>MONITOR_MOVE_RELATIVE_SCRIPT<|"
 [[keys]]
+#+end_src
+
+Let's generate this repetitive code with Python.
+#+begin_src python :wrap src kbdx
+return '\n'.join(
+    map(lambda n: f'{n} = (tap-hold $tap-hold-delay-min (cmd-button "$kwin_shortcut_cmd \\"Switch to Desktop {n}\\"") (cmd-button "$kwin_shortcut_cmd \\"Window to Desktop {n}\\""))',
+        range(1, 10)))
+#+end_src
+
+#+RESULTS:
+#+begin_src kbdx
 1 = (tap-hold $tap-hold-delay-min (cmd-button "$kwin_shortcut_cmd \"Switch to Desktop 1\"") (cmd-button "$kwin_shortcut_cmd \"Window to Desktop 1\""))
 2 = (tap-hold $tap-hold-delay-min (cmd-button "$kwin_shortcut_cmd \"Switch to Desktop 2\"") (cmd-button "$kwin_shortcut_cmd \"Window to Desktop 2\""))
 3 = (tap-hold $tap-hold-delay-min (cmd-button "$kwin_shortcut_cmd \"Switch to Desktop 3\"") (cmd-button "$kwin_shortcut_cmd \"Window to Desktop 3\""))
@@ -425,7 +436,9 @@ MONITOR_MOVE_RELATIVE_SCRIPT = "|>MONITOR_MOVE_RELATIVE_SCRIPT<|"
 7 = (tap-hold $tap-hold-delay-min (cmd-button "$kwin_shortcut_cmd \"Switch to Desktop 7\"") (cmd-button "$kwin_shortcut_cmd \"Window to Desktop 7\""))
 8 = (tap-hold $tap-hold-delay-min (cmd-button "$kwin_shortcut_cmd \"Switch to Desktop 8\"") (cmd-button "$kwin_shortcut_cmd \"Window to Desktop 8\""))
 9 = (tap-hold $tap-hold-delay-min (cmd-button "$kwin_shortcut_cmd \"Switch to Desktop 9\"") (cmd-button "$kwin_shortcut_cmd \"Window to Desktop 9\""))
+#+end_src
 
+#+begin_src kbdx
 # go to previous desktop
 semicolon = (tap-hold $tap-hold-delay-min (cmd-button "$kwin_shortcut_cmd \"Switch to Previous Desktop\"") (cmd-button "$MONITOR_MOVE_RELATIVE_SCRIPT -1"))
 # go to next desktop
@@ -928,6 +941,15 @@ down = (cmd-button "$CHANGE_BRIGHTNESS_SCRIPT -")
 
 toggle_nightlight = (cmd-button "$CHANGE_BRIGHTNESS_SCRIPT '*'")
 [[keys]]
+#+end_src
+
+This is repetitive, so let's abstract it away by generating the code with Python.
+#+begin_src python :wrap src kbdx
+return '\n'.join(map(lambda n: f'{n} = (cmd-button "$QUEUE_DIGIT_SCRIPT {n}")', range(0, 10)))
+#+end_src
+
+#+RESULTS:
+#+begin_src kbdx
 0 = (cmd-button "$QUEUE_DIGIT_SCRIPT 0")
 1 = (cmd-button "$QUEUE_DIGIT_SCRIPT 1")
 2 = (cmd-button "$QUEUE_DIGIT_SCRIPT 2")
@@ -938,7 +960,9 @@ toggle_nightlight = (cmd-button "$CHANGE_BRIGHTNESS_SCRIPT '*'")
 7 = (cmd-button "$QUEUE_DIGIT_SCRIPT 7")
 8 = (cmd-button "$QUEUE_DIGIT_SCRIPT 8")
 9 = (cmd-button "$QUEUE_DIGIT_SCRIPT 9")
+#+end_src
 
+#+begin_src kbdx
 k = up
 j = down
 
