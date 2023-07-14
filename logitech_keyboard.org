@@ -562,6 +562,12 @@ j = 'Down'
 k = 'Up'
 l = 'Right'
 
+b = 'PageUp'
+f = 'PageDown'
+
+e = (around lctl Right)
+w = (around lctl Left)
+
 semicolon = 'Home'
 apostrophe = 'End'
 #+end_src
