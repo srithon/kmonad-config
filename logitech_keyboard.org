@@ -287,7 +287,9 @@ lalt = (tap-hold-next-release $tap-hold-delay XX (around-next (layer-toggle lead
 
 #+begin_src kbdx
 [qwerty]
-parent = base
+# we inherit from source before base so that we can add the `qwerty` on top of
+# other layers and overwrite other mappings
+parent = { source, base }
 [[private]]
 enable-homerow-mods = (layer-switch qwerty-homerow-mods)
 [[keys]]
