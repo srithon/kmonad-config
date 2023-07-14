@@ -1124,10 +1124,21 @@ enter = #((cmd-button "$runner_script") (layer-add run))
 
 To exit the run mode, we remove the ~run~ layer and then kill all instances of ~st~: the terminal we are using for the runner (and nothing else).
 #+begin_src kbdx
-[[private]]
 exit_internal = #((layer-rem run) (cmd-button "killall st"))
+#+end_src
+
+I want to modify the ~a~ key behavior so that ~a+Enter~ hits enter and then closes the terminal.
+#+begin_src kbdx
 [[keys]]
+a = (tap-hold $hmod-delay a (layer-toggle run.home-row-chord))
 lmet = exit
+#+end_src
+** Runner Home Row Chord Layer
+#+begin_src kbdx
+[[home-row-chord]]
+parent = home-row-chord
+[[[keys]]]
+return = #('enter' @run:exit)
 #+end_src
 ** Runner Script
 :PROPERTIES:
