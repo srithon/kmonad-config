@@ -1962,6 +1962,30 @@ esac
 
 |>SIMPLE_DATETIME_OVERLAY<| $PARAMS
 #+end_src
+* Buffer Procedures
+** Tangle and Compile
+#+begin_src emacs-lisp :results none
+(progn
+  (org-babel-tangle)
+  (let* ((error-bufname "KMonadX Compilation Output")
+         (display-buffer-alist '((".*" display-buffer-at-bottom))))
+    (progn
+      (get-buffer-create error-bufname)
+      (with-current-buffer error-bufname
+        (erase-buffer))
+
+      (call-process "fish" nil (get-buffer error-bufname) nil "-c ./compile.sh")
+      (if (not (eq (buffer-size (get-buffer error-bufname)) 0))
+          (progn
+            (display-buffer (get-buffer error-bufname) nil)
+            (switch-to-buffer-other-window error-bufname)
+            (ansi-color-apply-on-region (point-min) (point-max)))
+        (progn
+          (message "%s" "Compilation completed successfully!")
+          (when (y-or-n-p "Restart KMonad?")
+            (srithon/spawn-process "systemctl" "--user" "restart" "kmonad")))))))
+#+end_src
+
 * TODO [[(local-leader)][Local Leader]]
 
 # Local Variables:
