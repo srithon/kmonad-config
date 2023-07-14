@@ -56,15 +56,22 @@ I want to be able to use Super like a leader key when tapped.
 Each headline represents a key to be pressed after tapping Super.
 ** Q :: Window Switcher
 Launches the window switcher.
+*** Tap
+- On accepting a window, switches to it
+*** Hold
+- On accepting a window, pulls it to the current desktop
 ** D :: Discord
 Opens Discord.
 ** E :: Emacs
-Opens Emacs
+Opens Emacs.
+*** Tap
+Opens an Emacs client instance.
+*** Hold
+Opens a new Emacs standalone instance.
 ** F :: Firefox
 Opens Firefox
 ** B :: Brightness
-Opens ~BrightnessControl~ GUI *OR* initiates ~BrightnessControl~ layer, where we can manipulate brightness with ~hjkl~.
-Also look into [[https://github.com/maoserr/redshiftgui][redshiftgui]] to see if we can use this instead. I left it alone because building it requires a library that isn't in the Fedora repos called "[[https://sourceforge.net/projects/iup/files/3.30/Linux%20Libraries/][IUP]]".
+Initiates ~BrightnessControl~ layer, where we can manipulate brightness with ~hjkl~.
 *** BrightnessControl Layer
 **** TODO H
 Rotate active monitor to the left.
@@ -78,9 +85,9 @@ Brightness Down.
 Used to change brightness by a percentage; typing ~5k~ will raise the brightness by 5.
 **** Tab
 Switches focus per the base leader behavior.
-**** Esc | Super
+**** Super
 Exit layer.
-** T :: Terminal (Scratchpad)
+** TODO T :: Terminal (Scratchpad)
 Opens terminal scratchpad.
 *** Hold
 Opens menu with all of the available scratchpads.
@@ -98,16 +105,15 @@ Show all open scratchpads and prompt for which one to open.
 **** V :: Vim
 Create a Vim scratchpad that will be deleted immediately after Vim closes.
 ** R :: Run
-Run a single command in a small popup window.
-
-Have it appear at the top of the screen, and have the window expand down as the output fills.
-
-This could be super useful for things like ~remind-in 10m Do something~.
+Intended to run commands in a small terminal window.
+Appears at the top of the screen, and expands down as the output fills.
 *** Layer
-**** Super, Esc (in sequence)
-Exit layer and close ~run~ window.
-**** E
+**** TODO E
 Make window taller.
+**** Super
+Exit layer.
+**** a+Enter
+Hits enter and then exits the layer.
 *** Notes
 **** Keybindings
 In the spawned window, bind Ctrl+R to resize the window to the necessary length, Esc/Enter to revert the size.
@@ -131,12 +137,14 @@ If called a second time, disables both of these.
 ** A :: Agenda
 Opens agenda.
 ** O :: Open Preset
-*** Tap
+Just opens a ~rofi~ selection menu for selecting between different windowing presets.
+
+*** TODO Tap
 Gives you preset-local shortcuts.
 
 Automatically show help for it (this is hard to memorize).
 Emacs ~which-key~ style help.
-*** Hold
+*** TODO Hold
 Opens ~rofi~ with list of available "presets".
 
 If currently in a preset, exit the preset.
@@ -159,12 +167,12 @@ Add support for virtual-desktop-local presets in the future.
 2. Navigate to "problems.org".
 3. Select a problem.
 4. When you press enter, open the link in our firefox window and then close emacs.
-***** Preset-Local Shortcuts
+***** TODO Preset-Local Shortcuts
 ****** O :: Open Problem List
 Opens the ~emacs~ window once again and loops from step #1.
 ** C :: Org-Capure
 Opens org-capture.
-I already have this bound to ~Super+C~, but having it on ~Super, C~ would make it easier to invoke.
+I already have this bound to ~Super+C~, but having it on ~Super, C~ makes it easier to invoke.
 ** S :: Scroll
 Layer that lets you emulate mouse wheel scrolling using vim keys
 *** Scroll Layer
@@ -207,11 +215,11 @@ I also looked into [[https://github.com/brndnmtthws/conky][conky]], assuming tha
 
 I ended up using KDE's ~osd~ with its DBus interface, emulating the normal volume popups that you get with the stock volume keys.
 This has the benefit of fitting in with the system theme, and only took a single line to implement
-** \ :: Local Leader Key
+** TODO \ :: Local Leader Key
 Use this in conjunction with presets to have local preset keybindings.
 ** Tab :: Switch Focus
-When tapped, should switch the focus between monitors.
-When held for more than a certain duration, should move the cursor over to the next monitor.
+When tapped, switches the focus between monitors.
+When held for more than a certain duration, moves the cursor over to the next monitor.
 ** Super :: Super
 Acts as a regular press of Super (hands it to KDE).
 * Configuration
