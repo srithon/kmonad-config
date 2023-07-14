@@ -238,6 +238,8 @@ starting-layer = qwerty-homerow-mods
 tap-hold-delay = 200
 tap-hold-delay-min = 160
 
+hmod-delay = $tap-hold-delay
+
 kwin_shortcut_cmd = "qdbus org.kde.kglobalaccel /component/kwin invokeShortcut"
 #+end_src
 * Keyboard Backlight Aliases
@@ -317,8 +319,6 @@ rshift-or-caps-lock = (tap-hold-next-release 125 caps (around (layer-toggle qwer
 This is a ~GACS~ home-row-mods configuration detailed on [[https://precondition.github.io/home-row-mods#kmonad-home-row-mods-code-generator][this page]].
 ~k~ is bound to ~lctl~ rather than ~rctl~ because ~rctl~ is the compose key on my system.
 #+begin_src kbdx
-hmod-delay = $tap-hold-delay
-
 a_homerow_chords = (tap-hold $hmod-delay a (layer-toggle home-row-chord))
 q_homerow_movement = (tap-hold $hmod-delay q (layer-toggle home-row-movement))
 backslash_desktop_window = (tap-hold-next-release $hmod-delay \ (layer-toggle desktop-window))
