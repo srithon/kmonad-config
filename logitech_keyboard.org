@@ -1223,7 +1223,7 @@ We should aim for a more robust solution.
 * [[(agenda)][Agenda]]
 #+begin_src kbdx
 [aliases]
-agenda = (cmd-button "$EMACSCLIENT -ce '(org-agenda-list)'")
+agenda = (cmd-button "$EMACSCLIENT -ce '(org-agenda nil \"o\")'")
 #+end_src
 ** TODO Open a floating, semi-transparent window
 Instead of a fullscreen, opaque window.
