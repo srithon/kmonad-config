@@ -1215,7 +1215,7 @@ Using ~screen~ to maintain a single shell session through each ~runner~ invocati
   Tells ~screen~ to start new sessions with the ~fish~ shell.
 
 #+begin_src sh
-|>ST<| -m 15 -c "rounded st-runner" -g "116x8+${terminal_x_offset}+${terminal_y_offset}" screen -c ~/.config/kmonad/runner/screenrc -DR runner -s /bin/fish
+|>ST<| -m 15 -c "rounded st-runner" -g "116x8+${terminal_x_offset}+${terminal_y_offset}" screen -c ~/.config/kmonad/runner/screenrc -DR runner
 #+end_src
 
 After ~st~ closes, we scroll down our runner so we no longer see the commands/output from earlier.
@@ -1231,6 +1231,33 @@ screen -S runner -X stuff ""
 #+begin_src text :tangle ~/.config/kmonad/runner/screenrc
 term screen-256color
 msgwait 0
+shell /home/sridaran/.config/kmonad/runner/run_fish.sh
+#+end_src
+
+#+begin_src sh :tangle ~/.config/kmonad/runner/run_fish.sh
+#!/bin/dash
+exec fish --init-command="source $HOME/.config/kmonad/runner/config.fish"
+#+end_src
+** Autoresizing on commands
+I want my terminal to go full-height for certain commands, like ~fzf~.
+To do this, I will wrap the commands using functions which will emit a control code to the terminal emulator, telling it to resize.
+#+begin_src fish :tangle ~/.config/kmonad/runner/config.fish
+function __wrap_fullsize -d "Given a command, wraps it into a function with the same name, which will resize the terminal before running the command"
+    set WRAPPED_COMMAND $argv[1]
+    function $argv[1] -V WRAPPED_COMMAND -d "Runs $1 after resizing the terminal"
+        # get path of the wrapped command
+        set command_path (which $WRAPPED_COMMAND)
+
+        # tell terminal to resize;
+        # source: https://unix.stackexchange.com/questions/575337/using-terminal-escape-sequences-within-gnu-screen
+        echo -e '\eP\005\e\\' > /dev/tty
+
+        # run command with the args
+        $command_path $argv
+    end
+end
+
+__wrap_fullsize fzf
 #+end_src
 ** TODO Cleanup exit command
 Right now, we are doing ~killall st~, which only does what we want because we do not use ~st~ for anything else.
