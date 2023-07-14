@@ -302,9 +302,16 @@ caps = 'lctrl'
 parent = base
 [[private]]
 disable-homerow-mods = (layer-switch qwerty)
-lctrl-or-escape = (tap-hold-next-release 125 esc lctl)
-lshift-or-caps-lock = (tap-hold-next-release 125 caps lshift)
-rshift-or-caps-lock = (tap-hold-next-release 125 caps rshift)
+#+end_src
+
+We want this key to act as escape when tapped, and lctrl when held.
+However, while holding the key, we want to disable home row modifiers.
+We do this by adding the stock qwerty layer on top of the stack /and/ holding lctl while holding the key.
+To do this,
+#+begin_src kbdx
+lctrl-or-escape = (tap-hold-next-release 125 esc (around (layer-toggle qwerty) lctl))
+lshift-or-caps-lock = (tap-hold-next-release 125 caps (around (layer-toggle qwerty) lshift))
+rshift-or-caps-lock = (tap-hold-next-release 125 caps (around (layer-toggle qwerty) rshift))
 #+end_src
 
 This is a ~GACS~ home-row-mods configuration detailed on [[https://precondition.github.io/home-row-mods#kmonad-home-row-mods-code-generator][this page]].
@@ -323,12 +330,6 @@ k_lctrl = (tap-hold-next-release $hmod-delay k lctl)
 j_rshift = (tap-hold-next-release $hmod-delay j rshift)
 l_ralt = (tap-hold-next-release $hmod-delay l ralt)
 #+end_src
-
-- TODO:
-  Use ~caps~ key to enable key repeat on home row modifiers
-- TODO:
-  While holding caps, disable home row modifiers?
-  Disable home-row modifiers while ~rshift~ or ~lshift~ are being held; basically any explicit modifier
 
 #+begin_src kbdx
 [[keys]]
