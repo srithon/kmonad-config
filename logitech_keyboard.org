@@ -426,6 +426,8 @@ This is a layer where the numeric keys are mapped to buttons that switch to that
 [[private]]
 SWAP_MONITOR_WINDOWS_SCRIPT = "|>SWAP_MONITOR_WINDOWS_SCRIPT<|"
 MONITOR_MOVE_RELATIVE_SCRIPT = "|>MONITOR_MOVE_RELATIVE_SCRIPT<|"
+
+window_to_next_screen = (cmd-button "$kwin_shortcut_cmd \"Window to Next Screen\"")
 [[keys]]
 #+end_src
 
@@ -456,7 +458,8 @@ semicolon = (tap-hold $tap-hold-delay-min (cmd-button "$kwin_shortcut_cmd \"Swit
 apostrophe = (tap-hold $tap-hold-delay-min (cmd-button "$kwin_shortcut_cmd \"Switch to Next Desktop\"") (cmd-button "$MONITOR_MOVE_RELATIVE_SCRIPT 1"))
 
 Minus = (cmd-button "$SWAP_MONITOR_WINDOWS_SCRIPT")
-Equal = (cmd-button "$kwin_shortcut_cmd \"Window to Next Screen\"")
+# NOTE: this approach only works with 2 monitors
+Equal = (tap-hold $tap-hold-delay-min @window_to_next_screen #(@window_to_next_screen @switch_focus_screen))
 #+end_src
 ** Swap Monitors Script
 :PROPERTIES:
