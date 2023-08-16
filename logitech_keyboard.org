@@ -215,6 +215,8 @@ I also looked into [[https://github.com/brndnmtthws/conky][conky]], assuming tha
 
 I ended up using KDE's ~osd~ with its DBus interface, emulating the normal volume popups that you get with the stock volume keys.
 This has the benefit of fitting in with the system theme, and only took a single line to implement
+** Y :: Yank
+Copies the focused window's title to the clipboard.
 ** TODO \ :: Local Leader Key
 Use this in conjunction with presets to have local preset keybindings.
 ** Tab :: Switch Focus
@@ -379,6 +381,7 @@ a = agenda # (ref:agenda)
 o = open-preset # (ref:open-preset)
 c = org-capture # (ref:org-capture)
 s = scroll:enter # (ref:scroll)
+y = yank # (ref:yank)
 tab = switch_focus_composite # (ref:switch-focus)
 f1 = vim # (ref:vim)
 backslash = 'backslash' # (ref:local-leader)
@@ -1896,6 +1899,34 @@ tr '01' '10' < $DISPLAY_OSD_FILE | sponge $DISPLAY_OSD_FILE
 The volume layer would remap hjkl to control the volume.
 ** TODO Volume Next/Prev
 Rotate to next/previous output with h/l
+* [[(yank)][Yank]]
+- Yank Script ::
+  #+NAME: YANK_SCRIPT
+  #+begin_src text
+~/.config/kmonad/yank/yank_active_window.sh
+  #+end_src
+
+Copies the actively focused window title to the clipboard.
+#+begin_src kbdx
+[aliases]
+yank_script = "|>YANK_SCRIPT<|"
+yank = (cmd-button "$yank_script")
+#+end_src
+** Yank Script
+:PROPERTIES:
+:header-args:sh:  :tangle (+org/named-block-contents "YANK_SCRIPT") :tangle-mode (identity #o744) :mkdirp yes :padline no
+:END:
+
+This script copies the title to the clipboard, and also emits a notification to the screen.
+#+begin_src sh
+#!/bin/dash
+window_title=$(xdotool getactivewindow getwindowname)
+
+# copy to clipboard
+echo "$window_title" | xclip -selection c -r
+# send notification
+notify-send "Copied window title" "$window_title"
+#+end_src
 * [[(switch-focus)][Switch Focus]]
 - ~SWITCH_MOUSE_SCREEN_SCRIPT~ ::
   #+NAME: SWITCH_MOUSE_SCREEN_SCRIPT
