@@ -1982,7 +1982,7 @@ This is a simple button that spawns my program and then kills all instances of i
 #+begin_src kbdx
 [aliases]
 SIMPLE_DATETIME_OVERLAY = "|>SDO_SCRIPT_PATH<|"
-simple-datetime-overlay = (cmd-button "/bin/dash -c '$SIMPLE_DATETIME_OVERLAY'" "sleep 0.15; killall simple-datetime-overlay")
+simple-datetime-overlay = (cmd-button "/bin/dash -c '$SIMPLE_DATETIME_OVERLAY'" "sleep 0.15; kill \$(pgrep -f simple-datetime-overlay)")
 #+end_src
 
 Here are my issues with ~simple-datetime-overlay~:
@@ -2011,29 +2011,31 @@ Ideally, show up on all monitors when we are on max performance, active monitor 
 This script checks what my current cpu profile is, and if it is on max performance, then it displays the datetime overlay on all monitors.
 Otherwise, it displays it only on the active monitor.
 
-*TODO*: also disable pretty effects like fading on lower performance profiles
+On medium performance mode and below, use the ~tock~ command-line program to render a clock in the ~st~ terminal.
 #+begin_src sh
 #!/bin/dash
 
 CURRENT_CPUFREQ_PROFILE=$(cat "|>CPUFREQ_ACTIVE_PROFILE<|")
 
+PROGRAM=|>SIMPLE_DATETIME_OVERLAY<|
 PARAMS="--only-monitor 0"
 
 case "$CURRENT_CPUFREQ_PROFILE" in
     "Max Performance")
         PARAMS=""
         ;;
-     "High Performance")
-         PARAMS="-a"
-         ;;
-     "Low Performance")
-         PARAMS="$PARAMS --no-fade"
-         ;;
-     ,*)
-       ;;
+    "High Performance")
+        PARAMS="-a"
+        ;;
+    ,*)
+        PROGRAM=st
+
+        PARAMS="-c simple-datetime-overlay-tock -g 95x15 -t 'simple-datetime-overlay' -- /home/sridaran/.cargo/bin/tock --seconds --center --format '%A, %B %d, %Y'"
+        ;;
 esac
 
-|>SIMPLE_DATETIME_OVERLAY<| $PARAMS
+# source: https://superuser.com/questions/1529226/get-bash-to-respect-quotes-when-word-splitting-subshell-output
+echo $PARAMS | xargs $PROGRAM
 #+end_src
 * Buffer Procedures
 ** Tangle and Compile
