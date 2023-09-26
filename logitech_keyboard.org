@@ -565,7 +565,7 @@ dot = (cmd-button "$kwin_shortcut_cmd 'Window Quick Tile Bottom Right'")
 * Desktop/Window Layer
 #+begin_src kbdx
 [desktop-window]
-parent = { numeric-desktop-switching, alphabetic-window-tiling }
+parent = { leader, numeric-desktop-switching, alphabetic-window-tiling }
 #+end_src
 * Home Row Movement Layer
 #+begin_src kbdx
