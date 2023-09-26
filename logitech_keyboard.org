@@ -331,7 +331,7 @@ This is a ~GACS~ home-row-mods configuration detailed on [[https://precondition.
 #+begin_src kbdx
 a_homerow_chords = (tap-hold $hmod-delay a (layer-toggle home-row-chord))
 q_homerow_movement = (tap-hold $hmod-delay q (layer-toggle home-row-movement))
-backslash_desktop_window = (tap-hold-next-release $hmod-delay \ (layer-toggle desktop-window))
+backslash_layer = (tap-hold-next-release $hmod-delay \ (layer-toggle backslash))
 s_lalt = (tap-hold-next-release $hmod-delay s lalt)
 d_lctrl = (tap-hold-next-release $hmod-delay d lctl)
 f_lshift = (tap-hold-next-release $hmod-delay f lshift)
@@ -348,7 +348,7 @@ caps = lctrl-or-escape
 
 a = a_homerow_chords
 q = q_homerow_movement
-backslash = backslash_desktop_window
+backslash = backslash_layer
 s = s_lalt
 d = d_lctrl
 f = f_lshift
@@ -562,9 +562,10 @@ m = (cmd-button "$kwin_shortcut_cmd 'Window Quick Tile Bottom Left'")
 comma = (cmd-button "$kwin_shortcut_cmd 'Window Quick Tile Bottom'")
 dot = (cmd-button "$kwin_shortcut_cmd 'Window Quick Tile Bottom Right'")
 #+end_src
-* Desktop/Window Layer
+* Backslash Layer
+This used to be the "Desktop/Window" layer, but after adding leader key functionality, the backslash key now constitutes its own dedicated layer name.
 #+begin_src kbdx
-[desktop-window]
+[backslash]
 parent = { leader, numeric-desktop-switching, alphabetic-window-tiling }
 #+end_src
 * Home Row Movement Layer
