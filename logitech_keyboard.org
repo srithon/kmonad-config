@@ -2002,7 +2002,7 @@ vim = (cmd-button "kitty fish -C \"$NVIM_SCRIPT\"")
 #+end_src
 ** Run Neovim Script
 :PROPERTIES:
-:header-args:sh:  :tangle ~/.config/kmonad/vim/run_neovim.sh :tangle-mode (identity #o744) :mkdirp yes :padline no
+:header-args:sh:  :tangle (+org/named-block-contents "NVIM_SCRIPT") :tangle-mode (identity #o744) :mkdirp yes :padline no
 :END:
 
 #+begin_src sh
