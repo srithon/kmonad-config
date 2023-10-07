@@ -566,7 +566,7 @@ dot = (cmd-button "$kwin_shortcut_cmd 'Window Quick Tile Bottom Right'")
 This used to be the "Desktop/Window" layer, but after adding leader key functionality, the backslash key now constitutes its own dedicated layer name.
 #+begin_src kbdx
 [backslash]
-parent = { leader, numeric-desktop-switching, alphabetic-window-tiling }
+parent = { numeric-desktop-switching, alphabetic-window-tiling, leader }
 #+end_src
 * Home Row Movement Layer
 #+begin_src kbdx
