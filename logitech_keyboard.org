@@ -1300,15 +1300,19 @@ exec fish --init-command="source $HOME/.config/kmonad/runner/config.fish"
 I want my terminal to go full-height for certain commands, like ~fzf~.
 To do this, I will wrap the commands using functions which will emit a control code to the terminal emulator, telling it to resize.
 #+begin_src fish :tangle ~/.config/kmonad/runner/config.fish
+function __fullsize_terminal -d "Emits a control code which causes the runner terminal to resize"
+    # tell terminal to resize;
+    # source: https://unix.stackexchange.com/questions/575337/using-terminal-escape-sequences-within-gnu-screen
+    echo -e '\eP\005\e\\' > /dev/tty
+end
+
 function __wrap_fullsize -d "Given a command, wraps it into a function with the same name, which will resize the terminal before running the command"
     set WRAPPED_COMMAND $argv[1]
     function $argv[1] -V WRAPPED_COMMAND -d "Runs $1 after resizing the terminal"
         # get path of the wrapped command
         set command_path (which $WRAPPED_COMMAND)
 
-        # tell terminal to resize;
-        # source: https://unix.stackexchange.com/questions/575337/using-terminal-escape-sequences-within-gnu-screen
-        echo -e '\eP\005\e\\' > /dev/tty
+        __fullsize_terminal
 
         # run command with the args
         $command_path $argv
