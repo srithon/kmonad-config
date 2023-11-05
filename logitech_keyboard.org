@@ -576,6 +576,9 @@ This used to be the "Desktop/Window" layer, but after adding leader key function
 #+begin_src kbdx
 [backslash]
 parent = { numeric-desktop-switching, alphabetic-window-tiling, leader }
+[[keys]]
+RightBrace = window-focusing:focus-right
+LeftBrace = window-focusing:focus-left
 #+end_src
 * Home Row Movement Layer
 #+begin_src kbdx
