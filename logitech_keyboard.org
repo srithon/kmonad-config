@@ -390,19 +390,28 @@ lmet = 'lmet'
 [leader-no-block]
 parent = { source, leader }
 #+end_src
+* Window Focusing Layer
+#+begin_src kbdx
+[window-focusing]
+[[public]]
+focus-left = (around lmet (around lalt Left))
+focus-down = (around lmet (around lalt Down))
+focus-up = (around lmet (around lalt Up))
+focus-right = (around lmet (around lalt Right))
+[[keys]]
+h = focus-left
+j = focus-down
+k = focus-up
+l = focus-right
+#+end_src
 * Home Row Chord Layer
 #+begin_src kbdx
 [home-row-chord]
-parent = { block, numeric-desktop-switching }
+parent = { block, numeric-desktop-switching, window-focusing }
 [[private]]
 show_desktop_grid = (cmd-button "$kwin_shortcut_cmd \"ShowDesktopGrid\"")
 show_current_desktop_windows = (cmd-button "$kwin_shortcut_cmd \"Expose\"")
 [[keys]]
-h = (around lmet (around lalt Left))
-j = (around lmet (around lalt Down))
-k = (around lmet (around lalt Up))
-l = (around lmet (around lalt Right))
-
 i = jump-list:next
 o = jump-list:prev
 p = jump-list:add
