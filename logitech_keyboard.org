@@ -857,6 +857,9 @@ if (@currentJumpList) {
 }
 #+end_src
 * [[(window-switcher)][Window Switcher]]
+:PROPERTIES:
+:ID:       df9e0ef9-cbed-40da-bdb0-79f8cf0d0b33
+:END:
 Opens the Window Switcher
 
 #+begin_src kbdx
