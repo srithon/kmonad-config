@@ -375,7 +375,7 @@ f = firefox_composite # (ref:firefox)
 b = brightness:enter # (ref:brightness)
 v = volume:enter # (ref:volume)
 t = 't' # (ref:terminal)
-r = run:enter # (ref:run)
+r = run:entrypoint # (ref:run)
 p = 'p' # (ref:prompt)
 a = agenda # (ref:agenda)
 o = open-preset # (ref:open-preset)
@@ -1179,36 +1179,16 @@ qdbus org.kde.Solid.PowerManagement /org/kde/Solid/PowerManagement/Actions/Brigh
 
 * TODO [[(terminal)][Terminal]]
 * [[(run)][Run]]
-We use tap macros to execute the "buttons" in sequence.
-To enter the run mode, we execute the ~runner~ script and then enter the ~run~ layer.
-We can do this because the leader layer only lasts for one keypress.
-When the run layer is added, the layer beneath it is qwerty.
-
 #+begin_src kbdx
 [run]
 [[private]]
 runner_script = "~/.config/kmonad/runner/runner.sh"
+focus = (cmd-button "$runner_script focus")
+toggle = (cmd-button "$runner_script toggle")
 [[public]]
-enter = #((cmd-button "$runner_script") (layer-add run))
-#+end_src
-
-To exit the run mode, we remove the ~run~ layer and then kill all instances of ~st~: the terminal we are using for the runner (and nothing else).
-#+begin_src kbdx
-exit_internal = #((layer-rem run) (cmd-button "killall st"))
-#+end_src
-
-I want to modify the ~a~ key behavior so that ~a+Enter~ hits enter and then closes the terminal.
-#+begin_src kbdx
+entrypoint = (tap-hold-next-release $tap-hold-delay @focus (layer-toggle run))
 [[keys]]
-a = (tap-hold $hmod-delay a (layer-toggle run.home-row-chord))
-lmet = exit
-#+end_src
-** Runner Home Row Chord Layer
-#+begin_src kbdx
-[[home-row-chord]]
-parent = home-row-chord
-[[[keys]]]
-return = #('enter' @run:exit)
+t = toggle
 #+end_src
 ** Runner Script
 :PROPERTIES:
@@ -1221,6 +1201,31 @@ return = #('enter' @run:exit)
 Using the ~bash~ shell so we can use arithmetic.
 #+begin_src sh
 #!/bin/bash
+#+end_src
+
+Let's parse the command-line to figure out what we should do.
+If we want to ~focus~, then let's attempt to activate a window containing the ~st-runner~ class, and if that fails, then proceed to the rest of the code, which will create a new runner instance!
+On the other hand, if we want to ~toggle~, then let's attempt to _close_ a window containing the ~st-runner~ class, and if /that/ fails, then we leverage the same code as ~focus~ for creating the new instance!
+#+begin_src sh
+case $1 in
+    focus)
+        # when focusing, spawn new process if not open, and focus existing process if open
+        if wmctrl -x -a st-runner; then
+            # successfully focused!
+            exit 0
+        fi
+    ;;
+    toggle)
+        # when toggling, spawn new process if not open, and KILL existing process if open
+        if wmctrl -x -c st-runner; then
+            # successfully closed!
+            exit 0
+        fi
+    ;;
+    ,*)
+        echo "Invalid argument: please pass in focus|toggle" >&2
+        exit 1
+esac
 #+end_src
 
 Setting environment variables for the ~fish~ process to inherit.
