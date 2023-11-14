@@ -1,0 +1,9 @@
+#+TITLE: KMonad
+#+SETUPFILE: ./theme-bigblow.setup
+
+* Configuration
+#+PROPERTY: header-args:kbd :noweb yes
+#+PROPERTY: header-args:python :noweb yes
+#+INCLUDE: "./logitech_keyboard.org" :minlevel 2
+* KMonad Documentation
+#+INCLUDE: "./documentation.org" :minlevel 2
