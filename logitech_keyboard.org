@@ -412,7 +412,7 @@ parent = { block, numeric-desktop-switching, window-focusing }
 show_desktop_grid = (cmd-button "$kwin_shortcut_cmd \"ShowDesktopGrid\"")
 show_current_desktop_windows = (cmd-button "$kwin_shortcut_cmd \"Expose\"")
 [[keys]]
-i = jump-list:next
+i = jump-list:next # (ref:jump-list)
 o = jump-list:prev
 p = jump-list:add
 
