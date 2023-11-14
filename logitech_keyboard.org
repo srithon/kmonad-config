@@ -51,179 +51,6 @@ Variable names are all uppercase, and their definitions will mirror the structur
   #+begin_src text
 ~/.local/bin/brotab
   #+end_src
-* Super Keybindings
-I want to be able to use Super like a leader key when tapped.
-Each headline represents a key to be pressed after tapping Super.
-** Q :: Window Switcher
-Launches the window switcher.
-*** Tap
-- On accepting a window, switches to it
-*** Hold
-- On accepting a window, pulls it to the current desktop
-** D :: Discord
-Opens Discord.
-** E :: Emacs
-Opens Emacs.
-*** Tap
-Opens an Emacs client instance.
-*** Hold
-Opens a new Emacs standalone instance.
-** F :: Firefox
-Opens Firefox
-** B :: Brightness
-Initiates ~BrightnessControl~ layer, where we can manipulate brightness with ~hjkl~.
-*** BrightnessControl Layer
-**** TODO H
-Rotate active monitor to the left.
-**** TODO L
-Rotate active monitor to the right.
-**** K
-Brightness Up.
-**** J
-Brightness Down.
-**** 0-9
-Used to change brightness by a percentage; typing ~5k~ will raise the brightness by 5.
-**** Tab
-Switches focus per the base leader behavior.
-**** Super
-Exit layer.
-** TODO T :: Terminal (Scratchpad)
-Opens terminal scratchpad.
-*** Hold
-Opens menu with all of the available scratchpads.
-*** Tap
-+Opens most recently opened scratchpad+.
-We can use ~yakuake~ for this basic functionality.
-Instead, dedicate this to the *Terminal Layer*?.
-*** Terminal Layer
-**** +Super,+​] :: Next
-Next terminal scratchpad (cycle).
-**** +Super,+​[ :: Previous
-Last terminal scratchpad (cycle).
-**** L :: List
-Show all open scratchpads and prompt for which one to open.
-**** V :: Vim
-Create a Vim scratchpad that will be deleted immediately after Vim closes.
-** R :: Run
-Intended to run commands in a small terminal window.
-Appears at the top of the screen, and expands down as the output fills.
-*** Layer
-**** TODO E
-Make window taller.
-**** Super
-Exit layer.
-**** a+Enter
-Hits enter and then exits the layer.
-*** Notes
-**** Keybindings
-In the spawned window, bind Ctrl+R to resize the window to the necessary length, Esc/Enter to revert the size.
-
-After you press enter "for real", hand the scrollback buffer to ~pee resizing_program.sh less~
-Might have to use kitty for this.
-**** Window Properties
-Source: https://www.reddit.com/r/kde/comments/d5ne9s/can_you_have_no_titlebar_and_frame_but_keep_the/
-Made a window-specific override for the window class "st-runner" that disabled the title bar.
-This lets us havae the nice shadow but without the title bar.
-** P :: Prompt
-Opens prompt to open ~rofi~ and launch custom actions by typing.
-*** thyme
-Opens ~rofi~ with list of ~thyme~ files.
-Choose a date and then view the breakdown for that date.
-*** incognito
-Turns on VPN.
-Disables ~thyme~.
-
-If called a second time, disables both of these.
-** A :: Agenda
-Opens agenda.
-** O :: Open Preset
-Just opens a ~rofi~ selection menu for selecting between different windowing presets.
-
-*** TODO Tap
-Gives you preset-local shortcuts.
-
-Automatically show help for it (this is hard to memorize).
-Emacs ~which-key~ style help.
-*** TODO Hold
-Opens ~rofi~ with list of available "presets".
-
-If currently in a preset, exit the preset.
-Currently loaded presets should be at the top!.
-If you select a preset while another is currently active, disable the old preset.
-
-Add support for virtual-desktop-local presets in the future.
-*** Presets
-**** leetcode
-***** Left Monitor
-1. Open fullscreen terminal.
-2. ~cd ~/Development/leetcode/problems~.
-***** Right Monitor
-+1. Open firefox+.
-+2. Navigate to [[https://www.teamblind.com/post/New-Year-Gift---Curated-List-of-Top-75-LeetCode-Questions-to-Save-Your-Time-OaM1orEU][New Year Gift - Curated List of Top 75 LeetCode Questions to Save Your Time]]+.
-+3.+
-0. Open firefox?.
-   This would be so that when you press enter in emacs, it would open the link in the right firefox window.
-1. Open ~emacs~.
-2. Navigate to "problems.org".
-3. Select a problem.
-4. When you press enter, open the link in our firefox window and then close emacs.
-***** TODO Preset-Local Shortcuts
-****** O :: Open Problem List
-Opens the ~emacs~ window once again and loops from step #1.
-** C :: Org-Capure
-Opens org-capture.
-I already have this bound to ~Super+C~, but having it on ~Super, C~ makes it easier to invoke.
-** S :: Scroll
-Layer that lets you emulate mouse wheel scrolling using vim keys
-*** Scroll Layer
-**** H
-Scroll to the left
-**** J
-Scroll down
-**** K
-Scroll up
-**** L
-Scroll to the right
-**** Shift
-Increase scroll speed while held
-**** Ctrl
-Decrease scroll speed while held
-** V :: Volume
-Layer that allows you to easily change the volume using the keyboard
-*** Volume Layer
-**** H
-Rotate current output left.
-**** J
-Rotate current output right.
-**** K
-Volume up by 5.
-**** L
-Volume down by 5.
-**** M
-Toggles the muteness (?) of the current output and exits the Volume Layer
-**** Q
-Toggles volume ~osd~ visibility.
-*** DONE Figure out which library to use to create the volume applet
-#+begin_quote
-I did a bunch of research into GUI overlays on Linux that can render over fullscreen applications.
-There is a significant lack of resources on the topic, but one thing I did get working was a demo using the [[https://github.com/davidmaamoaix/overlay][overlay]] Python library, which is built on ~tkinter~.
-The downside is that ~overlay~ is unmaintained and doesn't work on Linux without [[https://github.com/davidmaamoaix/overlay/issues/2#issuecomment-650091963][changing the source]].
-I have yet to see if what I am trying to accomplish is possible with this library, but it /can/ render over fullscreen, which is a good start.
-
-I also looked into [[https://github.com/brndnmtthws/conky][conky]], assuming that it would be able to render over fullscreen applications, but it turns out it cannot.
-#+end_quote
-
-I ended up using KDE's ~osd~ with its DBus interface, emulating the normal volume popups that you get with the stock volume keys.
-This has the benefit of fitting in with the system theme, and only took a single line to implement
-** Y :: Yank
-Copies the focused window's title to the clipboard.
-** TODO \ :: Local Leader Key
-Use this in conjunction with presets to have local preset keybindings.
-** Tab :: Switch Focus
-When tapped, switches the focus between monitors.
-When held for more than a certain duration, moves the cursor over to the next monitor.
-** Super :: Super
-Acts as a regular press of Super (hands it to KDE).
 * Configuration
 #+PROPERTY: header-args :tangle yes :noweb tangle
 #+begin_src kbdx
@@ -1606,7 +1433,6 @@ Send ~USR1~ signals to both the vertical and horizontal processes, so that they 
 kill -s USR1 $(cat |>SCROLL_VERTICAL<|)
 kill -s USR1 $(cat |>SCROLL_HORIZONTAL<|)
 #+end_src
-** DONE Use ~shift~ to control scroll speed
 ** Original Approach
 This was my original idea, but I am now implementing scrolling through a shell script
 #+begin_quote
@@ -1730,34 +1556,6 @@ Only run the code if the direction is non-zero
 if ! [ "$VOLUME_CHANGE_DIRECTION" = "0" ]; then
 #+end_src
 
-Get the current volume using KMix's DBus interface.
-
-#+begin_quote
-I'm doing it this way because [[https://unix.stackexchange.com/questions/132230/read-out-pulseaudio-volume-from-commandline-i-want-pactl-get-sink-volume][this]] StackOverflow post about getting the current volume from ~pactl/pacmd~ did not yield a clean enough solution.
-[[https://unix.stackexchange.com/questions/132230/read-out-pulseaudio-volume-from-commandline-i-want-pactl-get-sink-volume][This]] StackOverflow post details several solutions to get the volume from ~pacmd~, but none of them are pretty.
-Unfortunately, these programs do not allow you to /get/ values cleanly, only set them.
-To me, although this ~qdbus~ solution is verbose, it beats having to parse text output, which the ~pa*~ solutions all had in common.
-
-All of the following ~qdbus~ commands are listed in this [[https://gist.github.com/srithon/3cd297bdfdd157c0a7e00ff1aeb2690c][gist]].
-
-*NOTE*: This code caches the value of ~ACTIVE_CONTROL~ to reduce delay before the volume modulation can begin.
-I found that the delay was just long enough to bother me, and a benchmark showed that everything before the ~python2~ invocation took around 60 milliseconds to run before caching.
-/With/ caching, this became around 25 milliseconds
-I /believe/ that this cached value will be valid so long as you do not change sound cards.
-#+begin_src sh :tangle no
-    ACTIVE_CONTROL_CACHE_FILE=/tmp/kmonad_volume_script_active_control
-
-    # I'm not exactly sure what a control is
-    if [ -e $ACTIVE_CONTROL_CACHE_FILE ]; then
-        ACTIVE_CONTROL=$(cat $ACTIVE_CONTROL_CACHE_FILE)
-    else
-        ACTIVE_CONTROL=$(qdbus org.kde.kded5 /Mixers/PulseAudio__Playback_Devices_1 org.kde.KMix.Mixer.controls)
-        # OPTIMIZATION: spawn in the background
-        echo $ACTIVE_CONTROL > $ACTIVE_CONTROL_CACHE_FILE &
-    fi
-#+end_src
-#+end_quote
-
 Reads whether or not to display ~osd~ popups from the disk
 #+begin_src sh
     DISPLAY_OSD_FILE=|>VOLUME_SCRIPT_OSD_FILE<|
@@ -1770,13 +1568,6 @@ Reads whether or not to display ~osd~ popups from the disk
         echo $DISPLAY_OSD > $DISPLAY_OSD_FILE &
     fi
 #+end_src
-
-#+begin_quote
-#+begin_src sh :tangle no
-    # Use the active control path and read the volume property from it
-    CURRENT_VOLUME=$(qdbus org.kde.kded5 "$ACTIVE_CONTROL" org.kde.KMix.Control.volume)
-#+end_src
-#+end_quote
 
 I had to go to the dark side and use text parsing to get the volume because when I revisited Arch Linux, I saw that the DBus interface for getting the audio control and manipulating the volume no longer existed.
 
@@ -1865,83 +1656,6 @@ while True:
 #+end_src
 This code could be further optimized by spawning the system commands with ~subprocess.Popen~, saving the handles to a list and polling/filtering them on each iteration of the loop.
 The [[https://pypi.org/project/subprocess32/][subprocess32]] package is recommended when using ~subprocess~ in ~python2~, since the stock version of ~subprocess~ that ships with it has several issues.
-**** Lua Implementation
-I originally wrote the helper script in Lua because I thought that Python would be too slow.
-However, upon further inspection of the startup time link, python2's startup time is under 3 milliseconds, which is certainly acceptable for this usecase.
-
-I ran my own benchmarks to compare Lua's startup time without python2's and these were the results
-#+begin_example
-$ hyperfine 'lua -E -e ""' 'python2 -S -c ""'
-Benchmark #1: lua -E -e ""
-  Time (mean ± σ):       0.4 ms ±   0.2 ms    [User: 0.4 ms, System: 0.4 ms]
-  Range (min … max):     0.1 ms …   2.2 ms    1214 runs
-
-  Warning: Command took less than 5 ms to complete. Results might be inaccurate.
-
-Benchmark #2: python2 -S -c ""
-  Time (mean ± σ):       2.9 ms ±   0.5 ms    [User: 2.1 ms, System: 0.9 ms]
-  Range (min … max):     2.3 ms …   5.3 ms    649 runs
-
-  Warning: Command took less than 5 ms to complete. Results might be inaccurate.
-
-Summary
-  'lua -E -e ""' ran
-    7.45 ± 4.81 times faster than 'python2 -S -c ""'
-#+end_example
-
-As mentioned earlier, Lua's startup time is many times faster,  but python2's 3 milliseconds is still an acceptable speed.
-I ran my own benchmarks to compare my Lua implementation and my Python implementation (for 100 iterations of the loop) and these were the results.
-#+begin_example
-$ hyperfine 'lua -E change_volume.lua 0 1' 'python2 -S change_volume.py 0 1'
-Benchmark #1: lua -E change_volume.lua 0 1
-  Time (mean ± σ):      6.747 s ±  0.066 s    [User: 1.056 s, System: 0.913 s]
-  Range (min … max):    6.685 s …  6.899 s    10 runs
-
-Benchmark #2: python2 -S change_volume.py 0 1
-  Time (mean ± σ):      6.664 s ±  0.038 s    [User: 1.060 s, System: 0.887 s]
-  Range (min … max):    6.613 s …  6.730 s    10 runs
-
-Summary
-  'python2 -S change_volume.py 0 1' ran
-    1.01 ± 0.01 times faster than 'lua -E change_volume.lua 0 1'
-#+end_example
-
-When taking everything into account, python2 was actually a tiny bit faster than Lua.
-This difference may have just been chance, but it shows that in the grand scheme of things, Lua's superior startup time does not make a super big impact on the overall runtime.
-
-The python2 implementation also has the advantage of not requiring any external dependencies, so it was the clear winner. Many distributions actually require python2 for their own internal packages, so it's much more likely to not have to install anything new
-
-#+begin_quote
-Replaces the running shell process with a Lua script that modulates the volume in a loop.
-The reason I wrote this section in Lua is because it requires a loop to run with a subsecond delay.
-If this were written as part of the shell script, we would be calling out to ~/bin/sleep~ tens of times per second, and the interval could be visibly erratic and inconsistent.
-With the ~socket~ module, Lua lets you sleep without calling out to an external process.
-
-I chose Lua over Python because Python's startup time is significantly higher (see [[https://github.com/bdrung/startup-time][this]]).
-I chose it over C and other compiled languages because I didn't want to have to compile and store an executable.
-
-*Note* that ~socket~ may not be shipped with your distribution by default.
-For Fedora, I had to install the ~lua-socket~ and ~lua-socket-devel~ packages to get it working. Installing both /may/ not be necessary.
-
-In this code, the ~lua~ process inherits the PID of the shell since we are using ~exec~
-#+end_quote
-
-#+begin_src lua :tangle no
-local socket = require('socket')
-local os = require('os')
-
-local volume = tonumber(arg[1])
-local increment = tonumber(arg[2])
-
-while true do
-  volume = volume + increment
-
-  os.execute('pactl set-sink-volume @DEFAULT_SINK@ ' .. volume .. '%')
-  os.execute('qdbus org.kde.plasmashell /org/kde/osdService org.kde.osdService.volumeChanged ' .. volume)
-
-  socket.select(nil, nil, 0.04)
-end
-#+end_src
 ** Volume OSD Toggle Script
 :PROPERTIES:
 :header-args:sh:  :tangle ~/.config/kmonad/volume/volume_popup_toggle.sh :tangle-mode (identity #o744) :padline no
