@@ -4,6 +4,6 @@
 * Configuration
 #+PROPERTY: header-args:kbd :noweb yes
 #+PROPERTY: header-args:python :noweb yes
-#+INCLUDE: "./logitech_keyboard.org" :minlevel 2
+#+INCLUDE: "./logitech_keyboard.org" :minlevel 2 :lines "2-"
 * KMonad Documentation
-#+INCLUDE: "./documentation.org" :minlevel 2
+#+INCLUDE: "./documentation.org" :minlevel 2 :lines "2-"
