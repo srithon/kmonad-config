@@ -1135,9 +1135,7 @@ chdir("~");
 Now, let's determine the geometry for our terminal window.
 First, we want the terminal to be placed on the active directory.
 #+begin_src perl
-my $focusedWindow = `xdotool getwindowfocus`;
-
-my $windowGeometryOutput = `xdotool getwindowgeometry --shell "$focusedWindow"`;
+my $windowGeometryOutput = `xdotool getwindowfocus getwindowgeometry --shell`;
 chomp($windowGeometryOutput);
 my %windowGeometry = map { split /=/, $_, 2 } split /\n/, $windowGeometryOutput;
 my ($X, $Y) = @windowGeometry{("X", "Y")};
