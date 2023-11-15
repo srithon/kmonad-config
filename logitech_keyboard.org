@@ -1014,7 +1014,7 @@ qdbus org.kde.Solid.PowerManagement /org/kde/Solid/PowerManagement/Actions/Brigh
 #+begin_src kbdx
 [run]
 [[private]]
-runner_script = "~/.config/kmonad/runner/runner.sh"
+runner_script = "~/.config/kmonad/runner/runner.pl"
 toggle = (cmd-button "$toggle_cmd runner")
 dwim = (cmd-button "$toggle_cmd runner")
 [[public]]
@@ -1027,7 +1027,7 @@ t = toggle
 #+end_src
 ** Runner Script
 :PROPERTIES:
-:header-args:sh: :tangle ~/.config/kmonad/runner/runner.sh :mkdirp yes :tangle-mode (identity #o744)
+:header-args:perl: :tangle ~/.config/kmonad/runner/runner.pl :mkdirp yes :tangle-mode (identity #o744) :comments both :shebang #!/bin/perl
 :END:
 # :tangle-mode sets the unix file permissions for the tangled file
 # we want the owner to be able to read, write and execute the file
@@ -1037,25 +1037,22 @@ Arguments:
 - ~$1~: /action/; could be ~focus|toggle|dwim~
 - ~$2~: /type/; could be ~runner|terminal~
 
-Using the ~bash~ shell so we can use arithmetic.
-#+begin_src sh
-#!/bin/bash
-#+end_src
-
 Let's first process our command-line argument to determine what to do.
 First, let's assert that the ~type~ is either ~runner~ or ~terminal~.
-#+begin_src sh
-if [[ ("$2" != "runner") && ("$2" != "terminal") ]]; then
-    echo "Invalid second argument: should be runner|terminal" >&2
-    exit 1
-fi
+#+begin_src perl
+my ($action, $runType) = @ARGV;
+
+if (!($runType =~ /terminal/ || $runType =~ /runner/)) {
+    print "Invalid second argument: should be runner|terminal\n";
+    exit(1);
+}
 #+end_src
 
 #+RESULTS:
 
 Our target X11 classname is now ~st-<type>~.
-#+begin_src sh
-target_classname="st-${2}"
+#+begin_src perl
+my $targetClassname = "st-${runType}";
 #+end_src
 
 If we want to ~focus~, then let's attempt to activate a window containing the ~st-runner~ class, and if that fails, then proceed to the rest of the code, which will create a new runner instance!
@@ -1063,42 +1060,55 @@ If we want to ~dwim~ (do-what-I-mean), then IF the runner is /currently focused/
 This is usually what we want, since it doesn't make sense to try to re-focus the window if it's already focused!
 
 On the other hand, if we want to ~toggle~, then let's first attempt to _close_ a window containing the ~st-runner~ class, and if /that/ fails, then we proceed to the code for making a new instance!
-#+begin_src sh
-processAction() {
-    case $1 in
-        focus)
+#+begin_src perl
+sub processAction {
+    my ($actionType) = @_;
+
+    my %dispatchTable = (
+        focus => sub {
             # when focusing, spawn new process if not open, and focus existing process if open
-            if wmctrl -x -a $target_classname; then
-                # successfully focused!
-                exit 0
-            fi
-            ;;
-        toggle)
+            # successfully focused!
+            if (system("wmctrl -x -a $targetClassname") eq 0) {
+                exit(0);
+            }
+        },
+
+        toggle => sub {
             # when toggling, spawn new process if not open, and KILL existing process if open
-            if wmctrl -x -c $target_classname; then
+            if (system("wmctrl -x -c $targetClassname") eq 0) {
                 # successfully closed!
-                exit 0
-            fi
-            ;;
-        dwim)
-            focused_window=$(xdotool getwindowfocus)
+                exit(0);
+            }
+        },
+
+        dwim => sub {
+            my $focusedWindow = `xdotool getwindowfocus`;
             # if focused window is the runner, exit code will be zero
-            if xprop -notype -id "$focused_window" WM_CLASS | grep -q "$target_classname"; then
+            my $focusedWindowClass = `xprop -notype -id "$focusedWindow" WM_CLASS`;
+
+            if ($focusedWindowClass =~ m/$targetClassname/) {
                 # close window
-                wmctrl -ic "$focused_window"
-                exit 0
-            else
+                if (system("wmctrl -ic '$focusedWindow'") eq 0) {
+                    exit(0);
+                }
+            }
+            else {
                 # https://stackoverflow.com/questions/4827690/how-to-change-a-command-line-argument-in-bash
-                processAction "focus"
-            fi
-            ;;
-        ,*)
-            echo "Invalid first argument: please pass in focus|toggle|dwim" >&2
-            exit 1
-    esac
+                processAction("focus");
+            }
+        }
+    );
+
+    my $proc = $dispatchTable{$actionType};
+    if (defined $proc) {
+        $proc->();
+    } else {
+        print STDERR "Invalid first argument: please pass in focus|toggle|dwim\n";
+        exit(1);
+    }
 }
 
-processAction "$1"
+processAction($action);
 
 # If control reaches past this point without exiting, that means we have to make
 # a new instance of the runner.
@@ -1112,22 +1122,30 @@ Setting environment variables for the ~fish~ process to inherit.
 - ~STARSHIP_CONFIG~ ::
   [[https://github.com/starship/starship/][Starship]] is the shell prompt I am using.
 
-#+begin_src sh
-export SKIP_FISH_GREETING=1
-export STARSHIP_CONFIG=|>STARSHIP_RUNNER_CONFIG<|
+#+begin_src perl
+$ENV{"SKIP_FISH_GREETING"} = 1;
+$ENV{"STARSHIP_CONFIG"} = "~/.config/starship_runner.toml";
 #+end_src
 
 Sets the working directory back to home
-#+begin_src sh
-cd
+#+begin_src perl
+chdir("~");
 #+end_src
 
 Now, let's determine the geometry for our terminal window.
 First, we want the terminal to be placed on the active directory.
-#+begin_src sh
-FOCUSED_WINDOW=$(xdotool getwindowfocus)
-eval $(xdotool getwindowgeometry --shell "$FOCUSED_WINDOW")
-eval $(monitor-utils --shell --at-point $X $Y --geometry)
+#+begin_src perl
+my $focusedWindow = `xdotool getwindowfocus`;
+
+my $windowGeometryOutput = `xdotool getwindowgeometry --shell "$focusedWindow"`;
+chomp($windowGeometryOutput);
+my %windowGeometry = map { split /=/, $_, 2 } split /\n/, $windowGeometryOutput;
+my ($X, $Y) = @windowGeometry{("X", "Y")};
+
+my $monitorUtilsOutput = `monitor-utils --shell --at-point $X $Y --geometry`;
+chomp($monitorUtilsOutput);
+my %monitorUtils = map { split /=/, $_, 2 } split /\n/, $monitorUtilsOutput;
+my ($X_OFFSET, $Y_OFFSET, $WIDTH, $HEIGHT) = @monitorUtils{("X_OFFSET", "Y_OFFSET", "WIDTH", "HEIGHT")};
 #+end_src
 
 This will give us the geometry of the monitor we have focused.
@@ -1200,27 +1218,30 @@ Next, let's come up with our equation for computing the terminal height!
 : Expected, actual measure for 1080: (755, 755.0000000000007)
 : Expected, actual measure for 2160: (1580, 1580.0000000000011)
 
-#+begin_src sh
-if [[ "$2" == "runner" ]]; then
-    TERMINAL_ROWS=8
-    TERMINAL_COLS=116
-    TERMINAL_WIDTH=1660
-    y_padding=$((HEIGHT / 10))
-else
-    printf -v "TERMINAL_WIDTH" "%.0f" $(echo "0.369792 * $WIDTH + 750" | bc)
-    printf -v "TERMINAL_HEIGHT" "%.0f" $(echo "0.76389 * $HEIGHT - 70" | bc)
+#+begin_src perl
+my ($terminalRows, $terminalCols, $terminalWidth, $yPadding);
+if ($runType =~ m/runner/) {
+    $terminalRows = 8;
+    $terminalCols = 116;
+    $terminalWidth = 1660;
+    $yPadding = ($HEIGHT / 10);
+} else {
+    $terminalWidth = int(0.369792 * $WIDTH + 750 + 0.5);
+
+    my $terminalHeight = int(0.76389 * $HEIGHT - 70 + 0.5);
     # measured: 36 pixels per line
     # we need to specify scale=3 because the input is all integers, so bc will default to integer arithmetic.
-    printf -v "TERMINAL_ROWS" "%.0f" $(echo "scale=3; $TERMINAL_HEIGHT / 36.0" | bc)
+    $terminalRows = int($terminalHeight / 36 + 0.5);
+
     # measured: 14.26 pixels per column
-    printf -v "TERMINAL_COLS" "%.0f" $(echo "scale=3; $TERMINAL_WIDTH / 14.26" | bc)
-    y_padding=$(((HEIGHT - TERMINAL_HEIGHT) / 2))
-fi
+    $terminalCols = int($terminalWidth / 14.26 + 0.5);
+    $yPadding = int(($HEIGHT - $terminalHeight) / 2 + 0.5);
+}
 
-x_margin=$(((WIDTH - TERMINAL_WIDTH) / 2))
+my $xMargin = ($WIDTH - $terminalWidth) / 2;
 
-terminal_x_offset=$((x_margin + X_OFFSET))
-terminal_y_offset=$((y_padding + Y_OFFSET))
+my $terminalXOffset = $xMargin + $X_OFFSET;
+my $terminalYOffset = $yPadding + $Y_OFFSET;
 #+end_src
 
 Now, let's determine the arguments to start our terminal with, depending on the type.
@@ -1245,16 +1266,16 @@ Now, let's determine the arguments to start our terminal with, depending on the 
 
   - tmux new -As kmonad-terminal ::
     Attaches to a session called ~kmonad-terminal~, creating it if necessary.
-#+begin_src sh
-st_args=()
-st_command=()
-if [[ "$2" = "runner" ]]; then
-    st_args=(-m 15 -c "rounded $target_classname")
-    st_command=(screen -c ~/.config/kmonad/runner/screenrc -DR runner)
-else
-    st_args=(-c "$target_classname")
-    st_command=(tmux new -As kmonad-terminal)
-fi
+#+begin_src perl
+my @st_args = ();
+my @st_command = ();
+if ($runType =~ /runner/) {
+    @st_args = ("-m", "15", "-c", "rounded $targetClassname");
+    @st_command = qw(screen -c ~/.config/kmonad/runner/screenrc -DR runner);
+} else {
+    @st_args = ("-c", $targetClassname);
+    @st_command = qw(tmux new -As kmonad-terminal);
+}
 #+end_src
 
 - ~|>ST<|~ ::
@@ -1268,17 +1289,22 @@ fi
 
     See [[https://manpages.debian.org/testing/libx11-doc/XParseGeometry.3.en.html][this link]] for more details
 
-#+begin_src sh
-|>ST<| "${st_args[@]}" -g "${TERMINAL_COLS}x${TERMINAL_ROWS}+${terminal_x_offset}+${terminal_y_offset}" "${st_command[@]}"
+#+begin_src perl
+my @all_args = ();
+push @all_args, @st_args;
+push @all_args, ("-g", "${terminalCols}x${terminalRows}+${terminalXOffset}+${terminalYOffset}");
+push @all_args, @st_command;
+
+system("$ENV{'HOME'}/.local/bin/st", @all_args);
 #+end_src
 
 After ~st~ closes, we scroll down our runner so we no longer see the commands/output from earlier.
 We do this by telling screen to send ~Control+L~ keystrokes to the ~runner~ session's first pane.
 Since it's the same shell, we /will/ still be in the same working directory and have the same history as before.
-#+begin_src sh
-if [[ "$2" = "runner" ]]; then
-    screen -S runner -X stuff ""
-fi
+#+begin_src perl
+if ($runType =~ /runner/) {
+    `screen -S runner -X stuff ""`;
+}
 #+end_src
 
 - ~term screen-256color~ ::
