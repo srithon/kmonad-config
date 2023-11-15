@@ -1347,7 +1347,7 @@ __wrap_fullsize fzf
 Right now, we are doing ~killall st~, which only does what we want because we do not use ~st~ for anything else.
 We should aim for a more robust solution.
 ** DONE Reuse the ~runner~ terminal and shell between invocations
-* TODO [[(terminal)][Terminal]]
+* [[(terminal)][Terminal]]
 Similar to our [[id:342e67b0-6f58-4f72-9ff7-03c5c56e5a41][Runner]] setup, it would be nice to have a full-size terminal scratchpad for other use-cases.
 We can use the same ~st~ build for both, and simply disable the auto-resizing for this one!
 #+begin_src kbdx
