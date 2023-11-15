@@ -1016,7 +1016,7 @@ qdbus org.kde.Solid.PowerManagement /org/kde/Solid/PowerManagement/Actions/Brigh
 [[private]]
 runner_script = "~/.config/kmonad/runner/runner.pl"
 toggle = (cmd-button "$toggle_cmd runner")
-dwim = (cmd-button "$toggle_cmd runner")
+dwim = (cmd-button "$dwim_cmd runner")
 [[public]]
 toggle_cmd = "$runner_script toggle"
 dwim_cmd = "$runner_script dwim"
