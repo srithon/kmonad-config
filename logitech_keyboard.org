@@ -201,7 +201,7 @@ e = emacs # (ref:emacs)
 f = firefox_composite # (ref:firefox)
 b = brightness:enter # (ref:brightness)
 v = volume:enter # (ref:volume)
-t = 't' # (ref:terminal)
+t = terminal:entrypoint # (ref:terminal)
 r = run:entrypoint # (ref:run)
 p = 'p' # (ref:prompt)
 a = agenda # (ref:agenda)
@@ -1007,15 +1007,20 @@ fi
 qdbus org.kde.Solid.PowerManagement /org/kde/Solid/PowerManagement/Actions/BrightnessControl org.kde.Solid.PowerManagement.Actions.BrightnessControl.setBrightness $new_brightness
 #+end_src
 
-* TODO [[(terminal)][Terminal]]
 * [[(run)][Run]]
+:PROPERTIES:
+:ID:       342e67b0-6f58-4f72-9ff7-03c5c56e5a41
+:END:
 #+begin_src kbdx
 [run]
 [[private]]
 runner_script = "~/.config/kmonad/runner/runner.sh"
-toggle = (cmd-button "$runner_script toggle")
-dwim = (cmd-button "$runner_script dwim")
+toggle = (cmd-button "$toggle_cmd runner")
+dwim = (cmd-button "$toggle_cmd runner")
 [[public]]
+toggle_cmd = "$runner_script toggle"
+dwim_cmd = "$runner_script dwim"
+
 entrypoint = (tap-hold-next-release $tap-hold-delay @dwim (layer-toggle run))
 [[keys]]
 t = toggle
@@ -1028,30 +1033,49 @@ t = toggle
 # we want the owner to be able to read, write and execute the file
 # we are also giving read access to the group and everyone else
 
+Arguments:
+- ~$1~: /action/; could be ~focus|toggle|dwim~
+- ~$2~: /type/; could be ~runner|terminal~
+
 Using the ~bash~ shell so we can use arithmetic.
 #+begin_src sh
 #!/bin/bash
 #+end_src
 
 Let's first process our command-line argument to determine what to do.
+First, let's assert that the ~type~ is either ~runner~ or ~terminal~.
+#+begin_src sh
+if [[ ("$2" != "runner") && ("$2" != "terminal") ]]; then
+    echo "Invalid second argument: should be runner|terminal" >&2
+    exit 1
+fi
+#+end_src
+
+#+RESULTS:
+
+Our target X11 classname is now ~st-<type>~.
+#+begin_src sh
+target_classname="st-${2}"
+#+end_src
+
 If we want to ~focus~, then let's attempt to activate a window containing the ~st-runner~ class, and if that fails, then proceed to the rest of the code, which will create a new runner instance!
 If we want to ~dwim~ (do-what-I-mean), then IF the runner is /currently focused/, close the window, and /otherwise/, ~focus~ it.
 This is usually what we want, since it doesn't make sense to try to re-focus the window if it's already focused!
 
 On the other hand, if we want to ~toggle~, then let's first attempt to _close_ a window containing the ~st-runner~ class, and if /that/ fails, then we proceed to the code for making a new instance!
 #+begin_src sh
-processArg() {
+processAction() {
     case $1 in
         focus)
             # when focusing, spawn new process if not open, and focus existing process if open
-            if wmctrl -x -a st-runner; then
+            if wmctrl -x -a $target_classname; then
                 # successfully focused!
                 exit 0
             fi
             ;;
         toggle)
             # when toggling, spawn new process if not open, and KILL existing process if open
-            if wmctrl -x -c st-runner; then
+            if wmctrl -x -c $target_classname; then
                 # successfully closed!
                 exit 0
             fi
@@ -1059,22 +1083,22 @@ processArg() {
         dwim)
             focused_window=$(xdotool getwindowfocus)
             # if focused window is the runner, exit code will be zero
-            if xprop -notype -id "$focused_window" WM_CLASS | grep -q "st-runner"; then
+            if xprop -notype -id "$focused_window" WM_CLASS | grep -q "$target_classname"; then
                 # close window
                 wmctrl -ic "$focused_window"
                 exit 0
             else
                 # https://stackoverflow.com/questions/4827690/how-to-change-a-command-line-argument-in-bash
-                processArg "focus"
+                processAction "focus"
             fi
             ;;
         ,*)
-            echo "Invalid argument: please pass in focus|toggle|dwim" >&2
+            echo "Invalid first argument: please pass in focus|toggle|dwim" >&2
             exit 1
     esac
 }
 
-processArg "$1"
+processAction "$1"
 
 # If control reaches past this point without exiting, that means we have to make
 # a new instance of the runner.
@@ -1109,21 +1133,132 @@ eval $(monitor-utils --shell --at-point $X $Y --geometry)
 This will give us the geometry of the monitor we have focused.
 Now, we want to have 10% padding on the top, and have the terminal be centered in the middle of the screen.
 From experimentation, 116 terminal columns translates to about 1660 pixels.
-#+begin_src sh
-TERMINAL_WIDTH=1660
+Also, 23 terminal rows translates to about 823 pixels.
 
-y_padding=$((HEIGHT / 10))
+Through experimentation, I found that I want the following terminal sizes on each of my monitors:
+- For my 1920x1080 monitor, I want my terminal to be 1460x755
+- For a hypothetical 2765x1580 monitor, I found that I would want my terminal to be 1865x1250
+  - I'm currently ignoring this measurement to make it easier to fit the equations
+- For my 3840x2160 monitor, I want my terminal to be 2170x1580
+
+Let's use ~numpy.linalg.lstsq~ (Least-Squares approximation) with slightly tuned numbers to come up with equations for arbitrary display sizes!
+#+NAME: approximate-coefficients
+#+begin_src python :exports both :results output :var monitor_measure_coefficients=monitor-widths :var expected_measures=terminal-widths
+import numpy as np
+monitor_measure_coefficients = np.array([[w, 1] for w in monitor_measure_coefficients])
+expected_measures = np.array(expected_measures)
+res = np.linalg.lstsq(monitor_measure_coefficients, expected_measures, rcond=None)
+
+weights = res[0]
+squared_error = res[1]
+
+print(f"Coefficients: {weights}")
+print(f"Squared error: {squared_error}")
+
+for expected_measure, monitor_coefficients in zip(expected_measures, monitor_measure_coefficients):
+    monitor_measure = monitor_coefficients[0]
+    print(f"Expected, actual measure for {monitor_measure}: {(expected_measure, np.matmul(monitor_coefficients, weights))}")
+#+end_src
+
+First, let's come up with our equation for computing the terminal width.
+
+Monitor widths:
+#+NAME: monitor-widths
+- 1920
+- 3840
+
+Expected terminal widths:
+#+NAME: terminal-widths
+- 1460
+- 2170
+
+#+CALL: approximate-coefficients(monitor-widths, terminal-widths)
+
+#+RESULTS:
+: Coefficients: [3.69791667e-01 7.50000000e+02]
+: Squared error: []
+: Expected, actual measure for 1920: (1460, 1459.999999999999)
+: Expected, actual measure for 3840: (2170, 2169.9999999999995)
+
+Monitor heights:
+#+NAME: monitor-heights
+- 1080
+- 2160
+
+Expected terminal heights:
+#+NAME: terminal-heights
+- 755
+- 1580
+
+Next, let's come up with our equation for computing the terminal height!
+
+#+CALL: approximate-coefficients(monitor-heights, terminal-heights)
+
+#+RESULTS:
+: Coefficients: [  0.76388889 -70.        ]
+: Squared error: []
+: Expected, actual measure for 1080: (755, 755.0000000000007)
+: Expected, actual measure for 2160: (1580, 1580.0000000000011)
+
+#+begin_src sh
+if [[ "$2" == "runner" ]]; then
+    TERMINAL_ROWS=8
+    TERMINAL_COLS=116
+    TERMINAL_WIDTH=1660
+    y_padding=$((HEIGHT / 10))
+else
+    printf -v "TERMINAL_WIDTH" "%.0f" $(echo "0.369792 * $WIDTH + 750" | bc)
+    printf -v "TERMINAL_HEIGHT" "%.0f" $(echo "0.76389 * $HEIGHT - 70" | bc)
+    # measured: 36 pixels per line
+    # we need to specify scale=3 because the input is all integers, so bc will default to integer arithmetic.
+    printf -v "TERMINAL_ROWS" "%.0f" $(echo "scale=3; $TERMINAL_HEIGHT / 36.0" | bc)
+    # measured: 14.26 pixels per column
+    printf -v "TERMINAL_COLS" "%.0f" $(echo "scale=3; $TERMINAL_WIDTH / 14.26" | bc)
+    y_padding=$(((HEIGHT - TERMINAL_HEIGHT) / 2))
+fi
+
 x_margin=$(((WIDTH - TERMINAL_WIDTH) / 2))
 
 terminal_x_offset=$((x_margin + X_OFFSET))
 terminal_y_offset=$((y_padding + Y_OFFSET))
 #+end_src
 
-- ~|>ST<|~ ::
-  ~st~ is the terminal emulator
+Now, let's determine the arguments to start our terminal with, depending on the type.
+- ~runner~ ::
+  For the ~runner~, we use ~screen~ to maintain a single shell session through each ~runner~ invocation, since my auto-resizing patch breaks with ~tmux~.
+
+  ~st~ arguments:
   - ~-c "..."~ ::
     This sets the X11 classnames for the window.
     My KDE config contains window rules that rounds the corners of windows with the ~rounded~ class and gives transparency and several other properties to the ~st-runner~ class
+
+  ~screen~ arguments:
+  - ~-DR runner~ ::
+    Attaches to a session called ~runner~, creating it if necessary.
+    Some of ~screen~'s flag combinations seem a little arbitrary.
+  - ~-s /bin/fish~ ::
+    Tells ~screen~ to start new sessions with the ~fish~ shell.
+
+  We also specify ~-m 15~ so that it will resize to a max height of 15 rows.
+- ~terminal~ ::
+  For the ~terminal~, we don't need the auto-resizing functionality, so we are free to use ~tmux~, which is superior in every other way.
+
+  - tmux new -As kmonad-terminal ::
+    Attaches to a session called ~kmonad-terminal~, creating it if necessary.
+#+begin_src sh
+st_args=()
+st_command=()
+if [[ "$2" = "runner" ]]; then
+    st_args=(-m 15 -c "rounded $target_classname")
+    st_command=(screen -c ~/.config/kmonad/runner/screenrc -DR runner)
+else
+    st_args=(-c "$target_classname")
+    st_command=(tmux new -As kmonad-terminal)
+fi
+#+end_src
+
+- ~|>ST<|~ ::
+  ~st~ is the terminal emulator
   - ~-g ...~ ::
     This sets the initial window dimensions for the terminal window.
 
@@ -1133,23 +1268,17 @@ terminal_y_offset=$((y_padding + Y_OFFSET))
 
     See [[https://manpages.debian.org/testing/libx11-doc/XParseGeometry.3.en.html][this link]] for more details
 
-Using ~screen~ to maintain a single shell session through each ~runner~ invocation.
-
-- ~-DR runner~ ::
-  Attaches to a session called ~runner~, creating it if necessary.
-  Some of ~screen~'s flag combinations seem a little arbitrary.
-- ~-s /bin/fish~ ::
-  Tells ~screen~ to start new sessions with the ~fish~ shell.
-
 #+begin_src sh
-|>ST<| -m 15 -c "rounded st-runner" -g "116x8+${terminal_x_offset}+${terminal_y_offset}" screen -c ~/.config/kmonad/runner/screenrc -DR runner
+|>ST<| "${st_args[@]}" -g "${TERMINAL_COLS}x${TERMINAL_ROWS}+${terminal_x_offset}+${terminal_y_offset}" "${st_command[@]}"
 #+end_src
 
 After ~st~ closes, we scroll down our runner so we no longer see the commands/output from earlier.
 We do this by telling screen to send ~Control+L~ keystrokes to the ~runner~ session's first pane.
 Since it's the same shell, we /will/ still be in the same working directory and have the same history as before.
 #+begin_src sh
-screen -S runner -X stuff ""
+if [[ "$2" = "runner" ]]; then
+    screen -S runner -X stuff ""
+fi
 #+end_src
 
 - ~term screen-256color~ ::
@@ -1194,6 +1323,19 @@ __wrap_fullsize fzf
 Right now, we are doing ~killall st~, which only does what we want because we do not use ~st~ for anything else.
 We should aim for a more robust solution.
 ** DONE Reuse the ~runner~ terminal and shell between invocations
+* TODO [[(terminal)][Terminal]]
+Similar to our [[id:342e67b0-6f58-4f72-9ff7-03c5c56e5a41][Runner]] setup, it would be nice to have a full-size terminal scratchpad for other use-cases.
+We can use the same ~st~ build for both, and simply disable the auto-resizing for this one!
+#+begin_src kbdx
+[terminal]
+[[private]]
+toggle = (cmd-button "$run:toggle_cmd terminal")
+dwim = (cmd-button "$run:dwim_cmd terminal")
+[[public]]
+entrypoint = (tap-hold-next-release $tap-hold-delay @dwim (layer-toggle terminal))
+[[keys]]
+t = toggle
+#+end_src
 * TODO [[(prompt)][Prompt]]
 * [[(agenda)][Agenda]]
 #+begin_src kbdx
