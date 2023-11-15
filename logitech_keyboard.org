@@ -1272,7 +1272,7 @@ if ($runType =~ /runner/) {
     @st_command = qw(screen -c ~/.config/kmonad/runner/screenrc -DR runner);
 } else {
     @st_args = ("-c", $targetClassname);
-    @st_command = qw(tmux new -As kmonad-terminal);
+    @st_command = qw(tmux new -As scratch);
 }
 #+end_src
 
