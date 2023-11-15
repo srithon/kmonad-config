@@ -1358,7 +1358,8 @@ dwim = (cmd-button "$run:dwim_cmd terminal")
 [[public]]
 entrypoint = (tap-hold-next-release $tap-hold-delay @dwim (layer-toggle terminal))
 [[keys]]
-t = toggle
+# using r instead of t because t is the key for this layer
+r = toggle
 #+end_src
 * TODO [[(prompt)][Prompt]]
 * [[(agenda)][Agenda]]
