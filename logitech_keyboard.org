@@ -1308,10 +1308,13 @@ if ($runType =~ /runner/) {
 - ~term screen-256color~ ::
   This line fixes the colors in the ~screen~ window.
   Before, I was getting a lot of text that wasn't being highlighted.
+- ~altscreen on~ ::
+  Opens ~vim~ and other similar programs on the alternate screen, so that their text doesn't remain after closing.
 #+begin_src text :tangle ~/.config/kmonad/runner/screenrc
 term screen-256color
 msgwait 0
 shell /home/sridaran/.config/kmonad/runner/run_fish.sh
+altscreen on
 #+end_src
 
 #+begin_src sh :tangle ~/.config/kmonad/runner/run_fish.sh
