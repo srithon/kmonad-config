@@ -234,7 +234,7 @@ l = focus-right
 * Home Row Chord Layer
 #+begin_src kbdx
 [home-row-chord]
-parent = { block, numeric-desktop-switching, window-focusing }
+parent = { block, leader, numeric-desktop-switching, window-focusing }
 [[private]]
 show_desktop_grid = (cmd-button "$kwin_shortcut_cmd \"ShowDesktopGrid\"")
 show_current_desktop_windows = (cmd-button "$kwin_shortcut_cmd \"Expose\"")
