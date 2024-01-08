@@ -1027,6 +1027,7 @@ dwim_cmd = "$runner_script dwim"
 entrypoint = (tap-hold-next-release $tap-hold-delay @dwim (layer-toggle run))
 [[keys]]
 t = toggle
+enter = #('Enter' @toggle)
 #+end_src
 ** Runner Script
 :PROPERTIES:
