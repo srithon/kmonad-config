@@ -1607,33 +1607,6 @@ Send ~USR1~ signals to both the vertical and horizontal processes, so that they 
 kill -s USR1 $(cat |>SCROLL_VERTICAL<|)
 kill -s USR1 $(cat |>SCROLL_HORIZONTAL<|)
 #+end_src
-** Original Approach
-This was my original idea, but I am now implementing scrolling through a shell script
-#+begin_quote
-We are using keys F13-F16 to represent scrolling.
-We need to do this because KMonad does not support sending mouse events.
-Because these keys are not used for anything else (they aren't actually on the keyboard), we can safely remap them to buttons using ~xmodmap~, which /does/ support mouse buttons.
-#+end_quote
-
-This was in my ~~/.Xmodmap~
-#+begin_src text :tangle no
-keycode 191 = Left
-keycode 192 = Pointer_Button5
-keycode 193 = Pointer_Button4
-keycode 194 = Right
-#+end_src
-
-First of all, ~xmodmap~ did not let me bind ~191~ and ~194~ to ~Pointer_Button6~ and ~Pointer_Button7~ (pushing the scroll wheel left/right), saying that it did not recognize either keysym.
-As a workaround, I tried setting these to the arrow keys.
-
-The horizontal arrow keys worked, but the up/down scrolling did not.
-In most applications, the up/down arrow keys do selection in addition to scrolling, so binding ~j~ and ~k~ to arrow keys was not an acceptable solution
-
-Scrolling works by repeatedly "clicking" the scroll buttons.
-Whenever you scroll a scrollbar on your mouse, the speed at which you scroll determines how fast the scrolling occurs on your screen.
-
-I believe the reason the vertical scrolling was not working is because KMonad was repeating the keypresses too quickly.
-Because of this, it probably did not register as scrolling and was simply ignored.
 * [[(volume)][Volume]]
 :PROPERTIES:
 :ID:       8c4c7835-b189-47cb-8a07-6f38f808c797
