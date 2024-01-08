@@ -2032,9 +2032,8 @@ echo $PARAMS | xargs $PROGRAM
         (progn
           (message "%s" "Compilation completed successfully!")
           (when (y-or-n-p "Restart KMonad?")
-            (srithon/spawn-process "systemctl" "--user" "restart" "kmonad")))))))
+            (srithon/spawn-process "systemctl" "--user" "restart" "kmonad.target")))))))
 #+end_src
-
 * TODO [[(local-leader)][Local Leader]]
 
 # Local Variables:
