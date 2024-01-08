@@ -272,9 +272,12 @@ window_to_next_screen = (cmd-button "$kwin_shortcut_cmd \"Window to Next Screen\
 
 Let's generate this repetitive code with Python.
 #+begin_src python :wrap src kbdx
-return '\n'.join(
-    map(lambda n: f'{n} = (tap-hold $tap-hold-delay-min (cmd-button "$kwin_shortcut_cmd \\"Switch to Desktop {n}\\"") (cmd-button "$kwin_shortcut_cmd \\"Window to Desktop {n}\\""))',
-        range(1, 10)))
+def generate_binding(n: int) -> str:
+    switch_button = f'(cmd-button "$kwin_shortcut_cmd \\"Switch to Desktop {n}\\"")'
+    move_window_button = f'(cmd-button "$kwin_shortcut_cmd \\"Window to Desktop {n}\\"")'
+    return f'{n} = (tap-hold $tap-hold-delay-min {switch_button} {move_window_button})'
+
+return '\n'.join(map(generate_binding, range(1, 10)))
 #+end_src
 
 #+RESULTS:
