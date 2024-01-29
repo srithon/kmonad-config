@@ -1044,7 +1044,7 @@ Arguments:
 Let's first process our command-line argument to determine what to do.
 First, let's assert that the ~type~ is either ~runner~ or ~terminal~.
 #+begin_src perl
-my ($action, $runType) = @ARGV;
+my ($action, $runType, $maybeSession) = @ARGV;
 
 if (!($runType =~ /terminal/ || $runType =~ /runner/)) {
     print "Invalid second argument: should be runner|terminal\n";
@@ -1273,10 +1273,11 @@ my @st_args = ();
 my @st_command = ();
 if ($runType =~ /runner/) {
     @st_args = ("-m", "15", "-c", "rounded $targetClassname");
-    @st_command = qw(screen -c ~/.config/kmonad/runner/screenrc -DR runner);
+    # https://stackoverflow.com/questions/48920868/merge-arrays-to-make-a-new-array-in-perl
+    @st_command = (qw(screen -c ~/.config/kmonad/runner/screenrc -DR), ($maybeSession ? $maybeSession : "runner"));
 } else {
     @st_args = ("-c", $targetClassname);
-    @st_command = qw(tmux new -As scratch);
+    @st_command = (qw(tmux new -As), ($maybeSession ? $maybeSession : "default"));
 }
 #+end_src
 
@@ -1361,12 +1362,14 @@ We can use the same ~st~ build for both, and simply disable the auto-resizing fo
 [terminal]
 [[private]]
 toggle = (cmd-button "$run:toggle_cmd terminal")
+toggle_scratch = (cmd-button "$run:toggle_cmd terminal scratch")
 dwim = (cmd-button "$run:dwim_cmd terminal")
 [[public]]
 entrypoint = (tap-hold-next-release $tap-hold-delay @dwim (layer-toggle terminal))
 [[keys]]
 # using r instead of t because t is the key for this layer
 r = toggle
+s = toggle_scratch
 #+end_src
 * TODO [[(prompt)][Prompt]]
 * [[(agenda)][Agenda]]
