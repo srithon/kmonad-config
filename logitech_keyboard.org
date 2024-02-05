@@ -190,6 +190,13 @@ lshift = (around (layer-toggle qwerty) @lshift-or-caps-lock)
 rshift = (around (layer-toggle qwerty) @rshift-or-caps-lock)
 lctrl = (around (layer-toggle qwerty) lctrl)
 #+end_src
+
+Let's also bind our volume up/down keys to those from our volume layer!
+This way we don't have to go into the layer in order to change our brightness.
+#+begin_src kbdx
+VolumeUp = volume:up
+VolumeDown = volume:down
+#+end_src
 * Base Leader Key Layer
 #+begin_src kbdx
 [leader]
