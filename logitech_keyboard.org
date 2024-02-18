@@ -702,7 +702,7 @@ Opens the Window Switcher
 #+begin_src kbdx
 [window-switcher]
 [[private]]
-rofi-args = "-noplugins -lines 5 --normal-window -dpi 1 -sort -sorting-method fzf -monitor -4 -matching fuzzy -modi window -show window"
+rofi-args = "-noplugins -lines 5 -dpi 1 -sort -sorting-method fzf -monitor -4 -matching fuzzy -modi window -show window"
 
 # note that in Posix SH, & acts as a separator between commands, and a semicolon
 # after it is invalid syntax.
@@ -718,8 +718,7 @@ When tapped, ~activate~ will yield a Rofi window switcher which will switch to t
 When held, ~activate~ will yield a Rofi window switcher which will move the selected window to the current desktop before selecting it.
 
 I compiled ~rofi~ from source and put it in ~~/.local/bin~ because the RPM version was too slow for my taste.
-Some of the flags are also there for optimization reasons: ~-modi~, ~-noplugins~ and ~--normal-window~.
-I noticed that the startup animation was faster with ~--normal-window~, and the other 2 flags stop ~rofi~ from doing unnecessary work.
+Some of the flags are also there for optimization reasons: ~-modi~, ~-noplugins~.
 ~-matching fuzzy~ makes it use fuzzy matching instead of only matching the raw string.
 ~-sort~ and ~-sorting-method fzf~ make the selections a lot more intelligent.
 ~-monitor -4~ makes it open ~rofi~ on the monitor of the currently focused window.
