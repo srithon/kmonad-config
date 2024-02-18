@@ -26,10 +26,10 @@ Variable names are all uppercase, and their definitions will mirror the structur
  #+begin_src text
 ~/.local/bin/st
  #+end_src
-- ~ROFI~ ::
- #+NAME: ROFI
+- ~ROFI_PRIMARY~ ::
+ #+NAME: ROFI_PRIMARY
  #+begin_src text
-/usr/bin/rofi
+~/.config/rofi/curated-themes/primary.sh
  #+end_src
 - ~EMACS~ ::
   #+NAME: EMACS
@@ -438,7 +438,7 @@ apostrophe = 'End'
 * Program Paths
 #+begin_src kbdx
 [aliases]
-ROFI = "|>ROFI<|"
+ROFI_PRIMARY = "|>ROFI_PRIMARY<|"
 DISCORD = "|>DISCORD<|"
 EMACS = "|>EMACS<|"
 EMACSCLIENT = "|>EMACSCLIENT<|"
@@ -702,13 +702,13 @@ Opens the Window Switcher
 #+begin_src kbdx
 [window-switcher]
 [[private]]
-rofi-args = "-noplugins -lines 5 --normal-window -sort -sorting-method fzf -monitor -4 -matching fuzzy -modi window -show window"
+rofi-args = "-noplugins -lines 5 --normal-window -dpi 1 -sort -sorting-method fzf -monitor -4 -matching fuzzy -modi window -show window"
 
 # note that in Posix SH, & acts as a separator between commands, and a semicolon
 # after it is invalid syntax.
 mark-and-jump-command = "$jump-list-mark & sleep 0.15; wmctrl -ia {window}"
-jump-to-window = (cmd-button "$ROFI $rofi-args -window-command \"/bin/dash -c '$mark-and-jump-command'\" -kb-accept-entry '' -kb-accept-alt 'Return'")
-pull-window = (cmd-button "$ROFI $rofi-args -window-command 'wmctrl -iR {window}' -kb-accept-entry '' -kb-accept-alt 'Return'")
+jump-to-window = (cmd-button "$ROFI_PRIMARY $rofi-args -window-command \"/bin/dash -c '$mark-and-jump-command'\" -kb-accept-entry '' -kb-accept-alt 'Return'")
+pull-window = (cmd-button "$ROFI_PRIMARY $rofi-args -window-command 'wmctrl -iR {window}' -kb-accept-entry '' -kb-accept-alt 'Return'")
 [[public]]
 activate = (tap-hold $tap-hold-delay-min @jump-to-window @pull-window)
 #+end_src
