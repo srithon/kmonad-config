@@ -31,6 +31,8 @@ Variable names are all uppercase, and their definitions will mirror the structur
  #+begin_src text
 ~/.config/rofi/curated-themes/primary.sh
  #+end_src
+ This is a script which wraps ~rofi~ and passes flags related to theming and default behavior.
+ It's convenient to have since it lets us omit a lot of arguments when invoking it.
 - ~EMACS~ ::
   #+NAME: EMACS
   #+begin_src text
@@ -702,7 +704,7 @@ Opens the Window Switcher
 #+begin_src kbdx
 [window-switcher]
 [[private]]
-rofi-args = "-noplugins -lines 5 -dpi 1 -sort -sorting-method fzf -monitor -4 -matching fuzzy -modi window -show window"
+rofi-args = "-lines 5 -modi window -show window"
 
 # note that in Posix SH, & acts as a separator between commands, and a semicolon
 # after it is invalid syntax.
