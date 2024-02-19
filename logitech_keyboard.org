@@ -221,6 +221,8 @@ y = yank # (ref:yank)
 tab = switch_focus_composite # (ref:switch-focus)
 f1 = vim # (ref:vim)
 backslash = 'backslash' # (ref:local-leader)
+1 = mouse:left # (ref:mouse)
+2 = mouse:right
 lmet = 'lmet'
 
 [leader-no-block]
@@ -1618,6 +1620,17 @@ Send ~USR1~ signals to both the vertical and horizontal processes, so that they 
 #+begin_src sh
 kill -s USR1 $(cat |>SCROLL_VERTICAL<|)
 kill -s USR1 $(cat |>SCROLL_HORIZONTAL<|)
+#+end_src
+* [[(mouse)][Mouse]]
+This layer provides buttons for holding mouse buttons.
+#+begin_src kbdx
+[mouse]
+[[private]]
+mousedown_cmd = "xdotool mousedown"
+mouseup_cmd = "xdotool mouseup"
+[[public]]
+left = (cmd-button "$mousedown_cmd 1" "$mouseup_cmd 1")
+right = (cmd-button "$mousedown_cmd 3" "$mouseup_cmd 3")
 #+end_src
 * [[(volume)][Volume]]
 :PROPERTIES:
