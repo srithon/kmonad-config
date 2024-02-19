@@ -119,7 +119,7 @@ When we are trying to use the super key in a tap melody, we have the key down fo
 #+begin_src kbdx
 [base]
 [[private]]
-leader-key = (tap-hold-next-release 250 (around-next (layer-toggle leader)) lmet)
+leader-key = (tap-hold-next-release 250 (around-next (layer-toggle leader)) (around lmet (layer-toggle leader-held)))
 [[keys]]
 lmet = leader-key
 grave = (tap-hold $tap-hold-delay-min grave @simple-datetime-overlay) # (ref:simple-datetime-overlay)
@@ -227,6 +227,25 @@ lmet = 'lmet'
 
 [leader-no-block]
 parent = { source, leader }
+#+end_src
+* Leader-Held
+This is a special layer that gets activated when ~lmet~ is /held/ for the tap-hold duration.
+While this layer is active, we can assume that ~lmet~ is actively being held down.
+
+#+begin_src kbdx
+[leader-held]
+[[keys]]
+#+end_src
+
+With KWin (KDE's window manager), holding ~Super~ and then dragging with the left/right mouse has the effect of moving or resizing the window.
+I thought it would be convenient to be able to do this dragging without actually clicking the physical mouse button, so I added mouse bindings to the _leader layer_.
+However, because our leader key is also our ~Super~ key, having the mouse buttons bound to ~leader['1']~ means that we cannot normally /hold/ ~Super~ while pressing the ~leader['1']~ key; we could try ~lmet, 1, lmet-~ to hold ~lmet~ /after/ pressing the mouse down, but holding ~Super~ /after/ starting to drag with the mouse has _no effect_ in KWin.
+
+To work around this, I added the mouse buttons in the ~leader-held~ layer; when ~leader-held~ is active, ~lmet~ is actively being held!
+With this addition, when we use the ~1~ or ~2~ keys, we are able to move/resize our windows!
+#+begin_src kbdx
+1 = mouse:left
+2 = mouse:right
 #+end_src
 * Window Focusing Layer
 #+begin_src kbdx
