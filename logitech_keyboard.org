@@ -223,10 +223,19 @@ f1 = vim # (ref:vim)
 backslash = 'backslash' # (ref:local-leader)
 1 = mouse:left # (ref:mouse)
 2 = mouse:right
+lctl = (layer-toggle leader-ctrl)
+caps = (layer-toggle leader-ctrl)
 lmet = 'lmet'
 
 [leader-no-block]
 parent = { source, leader }
+#+end_src
+** Leader-Ctrl
+This is a sub-layer under the leader layer which is activated by the ~ctrl~ keys: ~lctl~, ~rctl~ and ~capslock~.
+#+begin_src kbdx
+[leader-ctrl]
+[[keys]]
+v = paste-clipboard
 #+end_src
 * Leader-Held
 This is a special layer that gets activated when ~lmet~ is /held/ for the tap-hold duration.
@@ -1917,6 +1926,27 @@ window_title=$(xdotool getactivewindow getwindowname)
 echo "$window_title" | xclip -selection c -r
 # send notification
 qdbus org.kde.plasmashell /org/kde/osdService org.kde.osdService.showText "document-duplicate" "$window_title"
+#+end_src
+* Paste
+- Paste Script ::
+  #+NAME: PASTE_SCRIPT
+  #+begin_src text
+~/.config/kmonad/paste/paste_clipboard.sh
+  #+end_src
+
+#+begin_src kbdx
+[aliases]
+paste_script = "|>PASTE_SCRIPT<|"
+paste-clipboard = (cmd-button "$paste_script")
+#+end_src
+** Paste Script
+:PROPERTIES:
+:header-args:sh:  :tangle (+org/named-block-contents "PASTE_SCRIPT") :tangle-mode (identity #o744) :mkdirp yes :padline no
+:END:
+#+begin_src sh
+#!/bin/dash
+
+xdotool type -- "$(xsel --clipboard)"
 #+end_src
 * [[(switch-focus)][Switch Focus]]
 - ~SWITCH_MOUSE_SCREEN_SCRIPT~ ::
