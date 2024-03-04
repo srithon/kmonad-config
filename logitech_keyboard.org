@@ -235,6 +235,7 @@ This is a sub-layer under the leader layer which is activated by the ~ctrl~ keys
 #+begin_src kbdx
 [leader-ctrl]
 [[keys]]
+c = org-capture-goto-last
 v = paste-clipboard
 #+end_src
 * Leader-Held
@@ -1437,6 +1438,16 @@ open-preset = (cmd-button "$OPEN_PRESET_SCRIPT")
 [aliases]
 org-capture = (cmd-button "~/.local/bin/org-capture")
 #+end_src
+** Jump to Last
+When provided with a prefix argument, ~org-capture~ jumps to the location where it would otherwise insert a note.
+This is something I often want to do, i.e to amend the last TODO I filed.
+#+begin_src kbdx
+[aliases]
+org-capture-goto-last = (cmd-button "emacsclient -a '' -e \"(let ((+org-capture-fn #'org-capture-goto-target)) (+org-capture/open-frame)))\"")
+#+end_src
+
+The implementation isn't ideal, but it's good enough for now.
+Mainly, I want to customize the displayed buffer so that I can exit out with ~C-c C-c~ (like in regular capture buffers) rather than using ~q f~ to close the frame.
 * [[(scroll)][Scroll]]
 We set the scroll buttons to invoke the ~scroll.sh~ script once on press and once on release.
 On release, the script will kill the instance created on press
