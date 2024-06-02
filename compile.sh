@@ -1,13 +1,14 @@
-#!/bin/sh
+#!/bin/bash
 
 temp_dir=$(mktemp -d)
-# preprocess kbdx before compilation
-perl -lne "$(cat preprocess.pl)" logitech_keyboard.kbdx > "$temp_dir/logitech_keyboard.kbdx"
+targets=(logitech_keyboard.kbdx system_keyboard.kbdx keychron_c3_pro_keyboard.kbdx)
+for target in "${targets[@]}"; do
+    # -l makes prints do newline
+    perl -l ./preprocess.pl "$(basename -s .kbdx $target)" > "$temp_dir/$target"
+done
 
-# render system_keyboard.kbdx
-sed -e 's:/dev/input/by-id/usb-Logitech_USB_Receiver-if02-event-kbd:/dev/input/by-path/platform-i8042-serio-0-event-kbd:' -e 's:Logitech KMonad Output:System KMonad Output:' "$temp_dir/logitech_keyboard.kbdx" >"$temp_dir/system_keyboard.kbdx"
-
-kmonadx "$temp_dir/logitech_keyboard.kbdx" "$temp_dir/system_keyboard.kbdx"
+# prepend "$temp_dir/" to each array item
+kmonadx "${targets[@]/#/$temp_dir\/}"
 
 mv $temp_dir/*.kbd .
 

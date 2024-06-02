@@ -9,11 +9,6 @@ When the document is tangled, these ~|>BLOCK_NAME<|~ references are replaced wit
 Variable names are all uppercase, and their definitions will mirror the structure shown in [[Global Variables]].
 
 * Global Variables
-- ~KEYBOARD~ ::
- #+NAME: KEYBOARD
- #+begin_src text
-/dev/input/by-id/usb-Logitech_USB_Receiver-if02-event-kbd
- #+end_src
 - ~STARSHIP_RUNNER_CONFIG~ ::
   I want the runner to have a different configuration than my normal shell, so this points to the other config
   #+NAME: STARSHIP_RUNNER_CONFIG
@@ -57,9 +52,16 @@ Variable names are all uppercase, and their definitions will mirror the structur
 #+PROPERTY: header-args :tangle yes :noweb tangle
 #+begin_src kbdx
 [configuration]
-input = "|>KEYBOARD<|"
+#[PP:ONLY(logitech_keyboard)]
+input = "/dev/input/by-id/usb-Logitech_USB_Receiver-if02-event-kbd"
+#[PP:ONLY(system_keyboard)]
+input = "/dev/input/by-path/platform-i8042-serio-0-event-kbd"
 
+#[PP:ONLY(logitech_keyboard)]
 output-name = "Logitech KMonad Output"
+#[PP:ONLY(system_keyboard)]
+output-name = "System Keyboard KMonad Output"
+
 output-pre-command = "/usr/bin/sleep 0.75 && /usr/bin/setxkbmap -option compose:rctrl"
 
 cmp-seq = 'rctrl'
