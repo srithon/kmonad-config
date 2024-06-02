@@ -183,7 +183,6 @@ ScrollLock = disable-homerow-mods
 a = a_homerow_chords
 backslash = backslash_layer
 
-#[PP:SKIP_START(keychron_c3_pro_keyboard)]
 caps = lctrl-or-escape
 q = q_homerow_movement
 
@@ -193,7 +192,6 @@ f = f_lshift
 k = k_lctrl
 j = j_rshift
 l = l_ralt
-#[PP:SKIP_END(keychron_c3_pro_keyboard)]
 #+end_src
 
 We want to disable the homerow mods whenever we explicitly hit a modifier key.
