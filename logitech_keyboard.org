@@ -58,6 +58,8 @@ input = "/dev/input/by-id/usb-Logitech_USB_Receiver-if02-event-kbd"
 input = "/dev/input/by-path/platform-i8042-serio-0-event-kbd"
 #[PP:ONLY(keychron_c3_pro_keyboard)]
 input = "/dev/input/by-id/usb-Keychron_Keychron_C3_Pro-if02-event-kbd"
+#[PP:ONLY(keychron_v1_max_keyboard)]
+input = "/dev/keychron-v1-max"
 
 #[PP:ONLY(logitech_keyboard)]
 output-name = "Logitech KMonad Output"
@@ -65,6 +67,8 @@ output-name = "Logitech KMonad Output"
 output-name = "System Keyboard KMonad Output"
 #[PP:ONLY(keychron_c3_pro_keyboard)]
 output-name = "Keychron C3 Pro KMonad Output"
+#[PP:ONLY(keychron_v1_max_keyboard)]
+output-name = "Keychron V1 Max KMonad Output"
 
 output-pre-command = "/usr/bin/sleep 0.75 && /usr/bin/setxkbmap -option compose:rctrl"
 
