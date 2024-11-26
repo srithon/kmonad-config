@@ -165,7 +165,7 @@ This is a ~GACS~ home-row-mods configuration detailed on [[https://precondition.
 ~k~ is bound to ~lctl~ rather than ~rctl~ because ~rctl~ is the compose key on my system.
 #+begin_src kbdx
 a_homerow_chords = (tap-hold $hmod-delay a (layer-toggle home-row-chord))
-q_homerow_movement = (tap-hold $hmod-delay q (layer-toggle home-row-movement))
+q_homerow_movement = (tap-hold-next-release $hmod-delay q (layer-toggle home-row-movement))
 backslash_layer = (tap-hold-next-release $hmod-delay \ (layer-toggle backslash))
 s_lalt = (tap-hold-next-release $hmod-delay s lalt)
 d_lctrl = (tap-hold-next-release $hmod-delay d lctl)
