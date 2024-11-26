@@ -1706,19 +1706,22 @@ right = (cmd-button "$mousedown_cmd 3" "$mouseup_cmd 3")
 volume_script = "|>VOLUME_SCRIPT<|"
 toggle_osd_script = "|>VOLUME_TOGGLE_OSD_SCRIPT<|"
 
-up   = (cmd-button "$volume_script +"
-                   "$volume_script 0")
-down = (cmd-button "$volume_script -"
-                   "$volume_script 0")
-
 toggle-osd = (cmd-button "$toggle_osd_script")
-mute = (cmd-button "qdbus org.kde.kglobalaccel /component/kmix invokeShortcut mute")
+mute_output = (cmd-button "qdbus org.kde.kglobalaccel /component/kmix invokeShortcut mute")
+mute_microphone = (cmd-button "qdbus org.kde.kglobalaccel /component/kmix invokeShortcut mic_mute")
+
+mute = (tap-hold $tap-hold-delay-min @mute_output @mute_microphone)
 
 play-pause = 'PlayPause'
 
 exit_internal = (layer-rem volume)
 [[public]]
 enter = (tap-hold-next-release $tap-hold-delay #((layer-add volume) @kbd-set-backlight-on) (layer-toggle volume))
+
+up   = (cmd-button "$volume_script +"
+                   "$volume_script 0")
+down = (cmd-button "$volume_script -"
+                   "$volume_script 0")
 [[keys]]
 k = up
 j = down
